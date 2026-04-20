@@ -314,6 +314,16 @@ const pages: CoursePage[] = [
 			'Three rules: pages redirect, endpoints 402, services stay tier-blind. One entitlement function, used everywhere.'
 	},
 	{
+		slug: 'module-7-grace-period',
+		href: '/course/modules/7/grace-period',
+		title: '7.3 · Grace period',
+		module: 'module-7',
+		moduleOrder: 7,
+		order: 2,
+		summary:
+			'One column (<code>grace_until</code>), two event handlers, one entitlement function: how a failed charge becomes a second chance instead of a hard logout.'
+	},
+	{
 		slug: 'module-8-overview',
 		href: '/course/modules/8/overview',
 		title: '8.1 · Products + pricing page',
