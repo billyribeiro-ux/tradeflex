@@ -1,17 +1,15 @@
 <script lang="ts">
 	import { enhance } from '$app/forms';
 	import type { ActionData, PageData } from './$types';
+	import { toast } from '$lib/toast/store.svelte';
 
 	let { data, form }: { data: PageData; form: ActionData } = $props();
 
 	let submitting = $state(false);
-	let toast = $state<string | null>(null);
 
 	$effect(() => {
 		if (form && 'success' in form && form.success) {
-			toast = 'Profile saved';
-			const t = setTimeout(() => (toast = null), 2500);
-			return () => clearTimeout(t);
+			toast.success('Profile saved');
 		}
 	});
 
@@ -135,10 +133,6 @@
 		{/if}
 	</div>
 </section>
-
-{#if toast}
-	<div class="toast" role="status">{toast}</div>
-{/if}
 
 <style>
 	.page-head {
@@ -283,16 +277,5 @@
 	.billing-actions a.btn-primary {
 		text-decoration: none;
 		display: inline-block;
-	}
-	.toast {
-		position: fixed;
-		bottom: var(--space-5);
-		right: var(--space-5);
-		padding: var(--space-3) var(--space-4);
-		background: var(--color-surface);
-		border: 1px solid var(--color-border);
-		border-radius: var(--radius-md);
-		box-shadow: var(--shadow-3);
-		z-index: var(--z-toast);
 	}
 </style>
