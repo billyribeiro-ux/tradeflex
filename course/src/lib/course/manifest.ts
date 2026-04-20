@@ -254,6 +254,16 @@ const pages: CoursePage[] = [
 			'POST /api/billing/checkout that redirects to Stripe, POST /api/stripe/webhook that signs + stores.'
 	},
 	{
+		slug: 'module-6-idempotent-webhook',
+		href: '/course/modules/6/idempotent-webhook',
+		title: '6.3 · Idempotent webhook handler',
+		module: 'module-6',
+		moduleOrder: 6,
+		order: 2,
+		summary:
+			'Record-first, act-second: a unique PK on the Stripe event id makes double delivery harmless. The pattern that keeps every downstream idempotent for free.'
+	},
+	{
 		slug: 'module-7-overview',
 		href: '/course/modules/7/overview',
 		title: '7.1 · Billing services',
