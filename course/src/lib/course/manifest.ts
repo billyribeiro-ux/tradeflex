@@ -354,6 +354,16 @@ const pages: CoursePage[] = [
 			'Toasts that survive redirects, preserved next= intent, Stripe branding, reduced-motion-first animation.'
 	},
 	{
+		slug: 'module-13-toasts-and-flash',
+		href: '/course/modules/13/toasts-and-flash',
+		title: '13.2 · Toasts + flash cookie',
+		module: 'module-13',
+		moduleOrder: 13,
+		order: 1,
+		summary:
+			'App-wide toast store, the flash-cookie pattern for toasts that survive redirects, and the open-redirect guard on next=.'
+	},
+	{
 		slug: 'module-bonus-custom-checkout',
 		href: '/course/modules/bonus/custom-checkout',
 		title: 'B.1 · Custom multi-step checkout',
