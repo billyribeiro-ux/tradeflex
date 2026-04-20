@@ -274,6 +274,16 @@ const pages: CoursePage[] = [
 			'Two trial flavors (card upfront 14d, no-card 7d) + using Stripe test clocks to replay a 21-day dunning cycle in seconds.'
 	},
 	{
+		slug: 'module-9-portal-and-dunning',
+		href: '/course/modules/9/portal-and-dunning',
+		title: '9.2 · Customer portal + dunning',
+		module: 'module-9',
+		moduleOrder: 9,
+		order: 1,
+		summary:
+			'Stripe-hosted portal in one redirect, grace_until pattern for payment_failed retries, and a test-clock replay of the full 21-day cycle.'
+	},
+	{
 		slug: 'module-10-tier-gating',
 		href: '/course/modules/10/tier-gating',
 		title: '10.1 · Tier-based access control',
