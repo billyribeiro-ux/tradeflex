@@ -195,6 +195,16 @@ const pages: CoursePage[] = [
 		summary: 'Paginated staff view, role-gated unsubscribe action, and every change audited.'
 	},
 	{
+		slug: 'module-4-seed-script',
+		href: '/course/modules/4/seed-script',
+		title: '4.4 · Seed script',
+		module: 'module-4',
+		moduleOrder: 4,
+		order: 3,
+		summary:
+			'200 realistic contacts in one command — what an <code>@example.test</code> address, a hostname allowlist, and <code>tsx</code> give you together.'
+	},
+	{
 		slug: 'module-5-overview',
 		href: '/course/modules/5/overview',
 		title: '5.1 · Overview',
@@ -242,6 +252,16 @@ const pages: CoursePage[] = [
 		order: 1,
 		summary:
 			'POST /api/billing/checkout that redirects to Stripe, POST /api/stripe/webhook that signs + stores.'
+	},
+	{
+		slug: 'module-6-idempotent-webhook',
+		href: '/course/modules/6/idempotent-webhook',
+		title: '6.3 · Idempotent webhook handler',
+		module: 'module-6',
+		moduleOrder: 6,
+		order: 2,
+		summary:
+			'Record-first, act-second: a unique PK on the Stripe event id makes double delivery harmless. The pattern that keeps every downstream idempotent for free.'
 	},
 	{
 		slug: 'module-7-overview',
