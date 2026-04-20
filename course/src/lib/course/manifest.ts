@@ -267,6 +267,42 @@ const pages: CoursePage[] = [
 		moduleOrder: 10,
 		order: 0,
 		summary: 'Three rules: pages redirect, endpoints 402, services stay tier-blind. One entitlement function, used everywhere.'
+	},
+	{
+		slug: 'module-11-overview',
+		href: '/course/modules/11/overview',
+		title: '11.1 · Testing',
+		module: 'module-11',
+		moduleOrder: 11,
+		order: 0,
+		summary: 'Three layers (unit, integration, E2E), each with one job — no layer fakes another layer.'
+	},
+	{
+		slug: 'module-12-overview',
+		href: '/course/modules/12/overview',
+		title: '12.1 · CI/CD + production',
+		module: 'module-12',
+		moduleOrder: 12,
+		order: 0,
+		summary: 'Two lanes (PR + main), Neon branch per PR, forward-compatible migrations, one-liner rollback.'
+	},
+	{
+		slug: 'module-13-overview',
+		href: '/course/modules/13/overview',
+		title: '13.1 · UX extras',
+		module: 'module-13',
+		moduleOrder: 13,
+		order: 0,
+		summary: 'Toasts that survive redirects, preserved next= intent, Stripe branding, reduced-motion-first animation.'
+	},
+	{
+		slug: 'module-bonus-custom-checkout',
+		href: '/course/modules/bonus/custom-checkout',
+		title: 'B.1 · Custom multi-step checkout',
+		module: 'module-bonus',
+		moduleOrder: 99,
+		order: 0,
+		summary: 'Tabbed Sign in → Billing → Payment, persistent cart sidebar w/ recurring-totals split, Stripe Payment Element.'
 	}
 ];
 
