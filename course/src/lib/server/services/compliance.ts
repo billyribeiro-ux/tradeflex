@@ -12,6 +12,9 @@ import {
 } from '$lib/server/db/schema';
 import { assertAuthenticated, assertRole, AuthzError, type Caller } from '$lib/server/authz/caller';
 import { writeAudit } from './audit';
+import { resendService } from './resend';
+import { MissingConfigError } from './settings';
+import { log } from '$lib/server/log';
 
 export type AccountDeletionRow = typeof accountDeletion.$inferSelect;
 
@@ -36,6 +39,39 @@ export interface DataExport {
 	alertsPublished: unknown[];
 	refundRequestsFiled: unknown[];
 	auditAsActor: unknown[];
+}
+
+async function sendDeletionConfirmation(userId: string, scheduledFor: Date): Promise<void> {
+	const [u] = await db
+		.select({ email: user.email, name: user.name })
+		.from(user)
+		.where(eq(user.id, userId))
+		.limit(1);
+	if (!u?.email) return;
+	const when = scheduledFor.toISOString().slice(0, 10);
+	const text =
+		`Hi${u.name ? ' ' + u.name : ''},\n\n` +
+		`We received your request to delete your Trade Flex account. ` +
+		`Your data will be removed on ${when}.\n\n` +
+		`If you change your mind, sign in and cancel the request from /account before that date.\n\n` +
+		`— Trade Flex`;
+	try {
+		const r = await resendService.send({
+			to: u.email,
+			subject: 'Your Trade Flex account deletion is scheduled',
+			text,
+			tags: [{ name: 'kind', value: 'deletion_confirmation' }]
+		});
+		if (!r.sent) {
+			log.warn('compliance.deletion.email_not_sent', { reason: r.error });
+		}
+	} catch (err) {
+		if (err instanceof MissingConfigError) {
+			log.info('compliance.deletion.email_skipped_no_key');
+			return;
+		}
+		throw err;
+	}
 }
 
 export const complianceService = {
@@ -114,6 +150,13 @@ export const complianceService = {
 			targetKind: 'user',
 			targetId: uid,
 			metadata: { scheduledFor, reason: params.reason?.trim() ?? null }
+		});
+		// Fire-and-forget confirmation. Email failure must not roll back the
+		// deletion request itself — the DB row is the source of truth for GDPR.
+		await sendDeletionConfirmation(uid, scheduledFor).catch((err) => {
+			log.warn('compliance.deletion.email_exception', {
+				reason: err instanceof Error ? err.message : String(err)
+			});
 		});
 		return row;
 	},
