@@ -46,6 +46,7 @@
 				{ href: '/admin/settings/integrations', label: 'Integrations' },
 				{ href: '/admin/settings/branding', label: 'Branding' },
 				{ href: '/admin/compliance', label: 'Compliance' },
+				{ href: '/admin/feature-flags', label: 'Feature flags' },
 				{ href: '/admin/audit', label: 'Audit log' }
 			]
 		}
