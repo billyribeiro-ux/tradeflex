@@ -77,5 +77,23 @@ export const actions: Actions = {
 			if (err instanceof ComplianceError) return fail(err.httpStatus, { message: err.message });
 			throw err;
 		}
+	},
+
+	runSweep: async ({ locals }) => {
+		try {
+			assertRole(locals.caller, 'owner');
+		} catch (err) {
+			if (err instanceof AuthzError) return fail(403, { message: err.message });
+			throw err;
+		}
+		const result = await complianceService.runSweep();
+		return {
+			success: true,
+			sweep: {
+				scanned: result.scanned,
+				deleted: result.deleted.length,
+				failed: result.failed.length
+			}
+		};
 	}
 };

@@ -10,5 +10,11 @@
 			"ORIGIN": "https://tradeflex.vercel.app",
 			"DATABASE_URL": "postgres://build:build@localhost:5432/build"
 		}
-	}
+	},
+	"crons": [
+		{
+			"path": "/api/jobs/compliance-sweep",
+			"schedule": "0 3 * * *"
+		}
+	]
 }
