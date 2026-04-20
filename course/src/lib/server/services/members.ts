@@ -10,6 +10,8 @@ export interface MemberRow {
 	email: string;
 	name: string | null;
 	displayName: string | null;
+	avatarBlobKey: string | null;
+	avatarShape: string | null;
 	createdAt: Date;
 	roles: Role[];
 }
@@ -32,6 +34,8 @@ export const membersService = {
 				email: user.email,
 				name: user.name,
 				displayName: profile.displayName,
+				avatarBlobKey: profile.avatarBlobKey,
+				avatarShape: profile.avatarShape,
 				createdAt: user.createdAt
 			})
 			.from(user)

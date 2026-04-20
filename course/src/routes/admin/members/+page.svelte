@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { enhance } from '$app/forms';
+	import Avatar from '$lib/components/common/Avatar.svelte';
 	import type { PageData } from './$types';
 
 	let { data }: { data: PageData } = $props();
@@ -43,8 +44,16 @@
 	{#each data.members as m (m.userId)}
 		<div class="row">
 			<div class="who">
-				<div class="email">{m.email}</div>
-				<div class="name">{m.displayName ?? m.name ?? '—'}</div>
+				<Avatar
+					src={m.avatarBlobKey}
+					shape={m.avatarShape}
+					label={m.displayName ?? m.name ?? m.email}
+					size={36}
+				/>
+				<div>
+					<div class="email">{m.email}</div>
+					<div class="name">{m.displayName ?? m.name ?? '—'}</div>
+				</div>
 			</div>
 			<div class="roles">
 				{#if m.roles.length}
@@ -165,6 +174,11 @@
 		text-transform: uppercase;
 		letter-spacing: 0.06em;
 		border-top: none;
+	}
+	.who {
+		display: flex;
+		align-items: center;
+		gap: var(--space-3);
 	}
 	.email {
 		font-weight: 500;
