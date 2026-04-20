@@ -304,6 +304,16 @@ const pages: CoursePage[] = [
 			'Stripe is the source of truth for amounts; lookup keys (not price IDs) live in code; form POST + 303 into checkout.'
 	},
 	{
+		slug: 'module-8-pricing-page-build',
+		href: '/course/modules/8/pricing-page-build',
+		title: '8.2 · Building the pricing page',
+		module: 'module-8',
+		moduleOrder: 8,
+		order: 1,
+		summary:
+			'The three files you actually write: a Stripe-backed load with snapshot fallback, a toggle that tells the truth about savings, and a 3-line checkout endpoint.'
+	},
+	{
 		slug: 'module-11-overview',
 		href: '/course/modules/11/overview',
 		title: '11.1 · Testing',
