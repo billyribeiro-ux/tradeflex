@@ -20,16 +20,16 @@
 		</p>
 		<ul>
 			<li>
-				<strong>Redirect</strong> — for pages a human is navigating to with a browser. Send them
-				somewhere that explains what happened and gives them a next step.
+				<strong>Redirect</strong> — for pages a human is navigating to with a browser. Send them somewhere
+				that explains what happened and gives them a next step.
 			</li>
 			<li>
-				<strong>402 Payment Required</strong> — for endpoints consumed by fetch, forms, or remote
-				functions. The client code decides what to show; the server just answers truthfully.
+				<strong>402 Payment Required</strong> — for endpoints consumed by fetch, forms, or remote functions.
+				The client code decides what to show; the server just answers truthfully.
 			</li>
 			<li>
-				<strong>Graceful degrade</strong> — for mixed pages where part of the UI is free and part
-				is gated. Render the page; hide or shade the gated bit with an explicit "upgrade" affordance.
+				<strong>Graceful degrade</strong> — for mixed pages where part of the UI is free and part is gated.
+				Render the page; hide or shade the gated bit with an explicit "upgrade" affordance.
 			</li>
 		</ul>
 	</section>
@@ -66,9 +66,9 @@ export const load: PageServerLoad = async ({ locals }) => {
 	<section>
 		<h2>Pattern 2 — 402 (endpoints)</h2>
 		<p>
-			<code>402 Payment Required</code> is a registered HTTP status specifically for this case. It
-			has sat mostly unused for 30 years and is making a comeback as SaaS enforces tiered access.
-			Use it: the semantic is exact and clients can branch on it cleanly.
+			<code>402 Payment Required</code> is a registered HTTP status specifically for this case. It has
+			sat mostly unused for 30 years and is making a comeback as SaaS enforces tiered access. Use it:
+			the semantic is exact and clients can branch on it cleanly.
 		</p>
 		<CodeBlock title="src/routes/api/alerts/stream/+server.ts" lang="ts">
 			{`import type { RequestHandler } from './$types';
@@ -93,8 +93,8 @@ export const GET: RequestHandler = async ({ locals }) => {
 		</CodeBlock>
 		<p>
 			The body shape is a contract with the client. Always include a machine-readable
-			<code>code</code>, a human-readable <code>message</code>, and a <code>upgradeUrl</code> —
-			that's enough to render a toast, an inline banner, or a modal without another request.
+			<code>code</code>, a human-readable <code>message</code>, and a <code>upgradeUrl</code> — that's
+			enough to render a toast, an inline banner, or a modal without another request.
 		</p>
 	</section>
 
@@ -118,9 +118,9 @@ export const GET: RequestHandler = async ({ locals }) => {
 		</CodeBlock>
 		<Aside type="caution">
 			<p>
-				<strong>Degrade is a UX pattern, not a security one.</strong> Even when the UI is hidden,
-				the endpoint that would update preferences must still check entitlement and return 402 on
-				denial. Never rely on "the button isn't there" as the only gate.
+				<strong>Degrade is a UX pattern, not a security one.</strong> Even when the UI is hidden, the
+				endpoint that would update preferences must still check entitlement and return 402 on denial.
+				Never rely on "the button isn't there" as the only gate.
 			</p>
 		</Aside>
 	</section>
@@ -165,8 +165,9 @@ export async function apiFetch(url: string, init?: RequestInit) {
 		</ul>
 		<Aside type="tip">
 			<p>
-				The shared rule behind all three: <strong>the server never lies and never goes silent</strong>.
-				The difference is only who consumes the truth — a browser, a script, or the page that's
+				The shared rule behind all three: <strong
+					>the server never lies and never goes silent</strong
+				>. The difference is only who consumes the truth — a browser, a script, or the page that's
 				already open.
 			</p>
 		</Aside>
@@ -179,7 +180,9 @@ export async function apiFetch(url: string, init?: RequestInit) {
 			<li>
 				<code>entitlementFor</code> stays the same; only the response shape changes per surface.
 			</li>
-			<li>402 body is a contract: <code>code</code>, <code>message</code>, <code>upgradeUrl</code>.</li>
+			<li>
+				402 body is a contract: <code>code</code>, <code>message</code>, <code>upgradeUrl</code>.
+			</li>
 			<li>Degrade is UX, not security. The endpoint under it still returns 402.</li>
 		</ul>
 	</section>

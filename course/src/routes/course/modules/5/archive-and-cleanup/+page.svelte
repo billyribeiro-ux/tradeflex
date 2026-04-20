@@ -21,8 +21,8 @@
 		<Aside type="tip">
 			<p>
 				Lookup keys are the indirection that makes this manageable. Your code references
-				<code>tradeflex_monthly</code>; the <em>actual</em> price behind that key gets rotated
-				underneath. No deploy, no downtime.
+				<code>tradeflex_monthly</code>; the <em>actual</em> price behind that key gets rotated underneath.
+				No deploy, no downtime.
 			</p>
 		</Aside>
 	</section>
@@ -55,9 +55,9 @@ stripe prices update price_OLD_ID --active=false`}
 		</CodeBlock>
 		<Aside type="caution">
 			<p>
-				<code>--transfer-lookup-keys</code> is the whole trick. Without it, the create call fails
-				with "lookup_key already in use." With it, Stripe reassigns the key to the new price in the
-				same call — no window of ambiguity.
+				<code>--transfer-lookup-keys</code> is the whole trick. Without it, the create call fails with
+				"lookup_key already in use." With it, Stripe reassigns the key to the new price in the same call
+				— no window of ambiguity.
 			</p>
 		</Aside>
 	</section>
@@ -65,10 +65,10 @@ stripe prices update price_OLD_ID --active=false`}
 	<section>
 		<h2>What happens to existing subscriptions</h2>
 		<p>
-			<strong>Nothing, immediately.</strong> A subscription is attached to a price by ID, not by
-			lookup key. Rotating the key doesn't change what existing subs pay at renewal. They keep
-			paying the old price until you explicitly migrate them — or until Stripe bills the next
-			period, where you can opt them into the new price via a subscription update with proration.
+			<strong>Nothing, immediately.</strong> A subscription is attached to a price by ID, not by lookup
+			key. Rotating the key doesn't change what existing subs pay at renewal. They keep paying the old
+			price until you explicitly migrate them — or until Stripe bills the next period, where you can opt
+			them into the new price via a subscription update with proration.
 		</p>
 		<CodeBlock title="bash" lang="bash">
 			{`# Migrate a single subscription to the new price at next renewal, no proration:
@@ -121,8 +121,8 @@ for await (const product of stripe.products.list({ active: false, limit: 100 }))
 		<ul>
 			<li>Prices are immutable. Create new, archive old, never edit.</li>
 			<li>
-				<code>--transfer-lookup-keys</code> swaps the key atomically — your code keeps working
-				through the rotation.
+				<code>--transfer-lookup-keys</code> swaps the key atomically — your code keeps working through
+				the rotation.
 			</li>
 			<li>
 				Existing subscriptions stay on the old price ID. Migrate them explicitly if you want them on

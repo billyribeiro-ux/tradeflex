@@ -16,8 +16,8 @@
 		<p>
 			The page layer should never reach into Stripe. Instead, <code>billingService.listPlans</code>
 			returns normalized <code>Plan</code> objects; the <code>+page.server.ts</code> massages them
-			into <code>PlanCard</code> view-models. If Stripe is unreachable, we fall back to a static
-			snapshot — the page still renders, only the data source changes.
+			into <code>PlanCard</code> view-models. If Stripe is unreachable, we fall back to a static snapshot
+			— the page still renders, only the data source changes.
 		</p>
 		<CodeBlock title="src/lib/server/billing/types.ts" lang="ts">
 			{`export type Plan = {
@@ -44,8 +44,7 @@ export type PlanCard = {
 		<h2>The server load</h2>
 		<p>
 			One call, one fallback branch, one return. The <code>source</code> field lets us render a small
-			"using cached pricing" badge when Stripe is down — a signal to ops, invisible to happy-path
-			users.
+			"using cached pricing" badge when Stripe is down — a signal to ops, invisible to happy-path users.
 		</p>
 		<CodeBlock title="src/routes/(marketing)/pricing/+page.server.ts" lang="ts">
 			{`import type { PageServerLoad } from './$types';
@@ -177,9 +176,9 @@ const savings    = $derived(Math.max(0, monthlyAmt * 12 - yearlyAmt));`}
 	<section>
 		<h2>The checkout endpoint</h2>
 		<p>
-			POSTed form data in, 303 redirect to Stripe out. The endpoint is <em>three</em> lines of real
-			work: resolve the caller's customer id, create a session, send the Location header. Everything
-			else — logging, auth, rate limits — belongs in middleware.
+			POSTed form data in, 303 redirect to Stripe out. The endpoint is <em>three</em> lines of real work:
+			resolve the caller's customer id, create a session, send the Location header. Everything else —
+			logging, auth, rate limits — belongs in middleware.
 		</p>
 		<CodeBlock title="src/routes/api/billing/checkout/+server.ts" lang="ts">
 			{`import type { RequestHandler } from './$types';
@@ -219,8 +218,8 @@ export const POST: RequestHandler = async ({ request, locals }) => {
 				<code>stripe listen --forward-to localhost:5173/api/stripe/webhook</code> in one terminal.
 			</li>
 			<li>
-				Load <code>/pricing</code>, click <strong>Start monthly</strong>. You land on Stripe's hosted
-				checkout with the right price.
+				Load <code>/pricing</code>, click <strong>Start monthly</strong>. You land on Stripe's
+				hosted checkout with the right price.
 			</li>
 			<li>
 				Enter test card <code>4242 4242 4242 4242</code> → you return to <code>/account</code> with
@@ -240,11 +239,15 @@ export const POST: RequestHandler = async ({ request, locals }) => {
 	<section>
 		<h2>Recap</h2>
 		<ul>
-			<li><strong>Shape data in <code>+page.server.ts</code></strong> — pages never call Stripe.</li>
+			<li>
+				<strong>Shape data in <code>+page.server.ts</code></strong> — pages never call Stripe.
+			</li>
 			<li>
 				<strong>Try/catch the Stripe call</strong> so an outage is a cosmetic downgrade, not a 500.
 			</li>
-			<li><strong>Compute savings from the real numbers</strong> — <code>$derived</code> takes care of it.</li>
+			<li>
+				<strong>Compute savings from the real numbers</strong> — <code>$derived</code> takes care of it.
+			</li>
 			<li>
 				<strong>Form POST into a 303</strong> — JS-optional purchase, no API design needed.
 			</li>

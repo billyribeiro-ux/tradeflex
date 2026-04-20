@@ -20,9 +20,9 @@
 		</p>
 		<Aside type="tip">
 			<p>
-				The test question for idempotency: <strong>if this handler runs twice, is the resulting
-					database state identical to running it once?</strong> If no, you have a bug waiting to
-				ship.
+				The test question for idempotency: <strong
+					>if this handler runs twice, is the resulting database state identical to running it once?</strong
+				> If no, you have a bug waiting to ship.
 			</p>
 		</Aside>
 	</section>
@@ -44,9 +44,9 @@
 });`}
 		</CodeBlock>
 		<p>
-			<code>processedAt</code> is nullable by design: the row exists from the moment we receive the
-			event, but only gets a timestamp once the side effects succeed. This lets you query "events
-			received but never processed" — the cleanest incident signal Stripe gives you.
+			<code>processedAt</code> is nullable by design: the row exists from the moment we receive the event,
+			but only gets a timestamp once the side effects succeed. This lets you query "events received but
+			never processed" — the cleanest incident signal Stripe gives you.
 		</p>
 	</section>
 
@@ -114,9 +114,11 @@ export const POST: RequestHandler = async ({ request }) => {
 	<section>
 		<h2>What the two-step does</h2>
 		<p>
-			Step 1 is the idempotency guarantee: the unique primary key makes <code>insert … do nothing</code>
-			atomic. If two concurrent Stripe deliveries race, exactly one row lands; the other returns an
-			empty array. Step 2 runs side effects only on first sight.
+			Step 1 is the idempotency guarantee: the unique primary key makes <code
+				>insert … do nothing</code
+			>
+			atomic. If two concurrent Stripe deliveries race, exactly one row lands; the other returns an empty
+			array. Step 2 runs side effects only on first sight.
 		</p>
 		<p>
 			If step 2 throws, the row is kept (now with <code>last_error</code>) and we return 500. Stripe
@@ -157,20 +159,20 @@ stripe events resend evt_...
 		<h2>Recap</h2>
 		<ul>
 			<li>
-				<strong>Record first, act second.</strong> The unique PK on the event id is the entire
-				idempotency story.
+				<strong>Record first, act second.</strong> The unique PK on the event id is the entire idempotency
+				story.
 			</li>
 			<li>
-				<strong>One raw read.</strong> <code>request.text()</code>, not <code>json()</code> — the
-				HMAC is byte-exact.
+				<strong>One raw read.</strong> <code>request.text()</code>, not <code>json()</code> — the HMAC
+				is byte-exact.
 			</li>
 			<li>
-				<strong>Store the payload.</strong> When something goes wrong, you can't ask Stripe for the
-				event twice without a manual resend; the DB row is your tape.
+				<strong>Store the payload.</strong> When something goes wrong, you can't ask Stripe for the event
+				twice without a manual resend; the DB row is your tape.
 			</li>
 			<li>
-				<strong><code>processedAt</code> is the signal.</strong> Null means "received but not
-				processed" — the cleanest "we have a bug" query in the whole billing surface.
+				<strong><code>processedAt</code> is the signal.</strong> Null means "received but not processed"
+				— the cleanest "we have a bug" query in the whole billing surface.
 			</li>
 		</ul>
 	</section>

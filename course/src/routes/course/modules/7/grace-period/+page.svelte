@@ -14,10 +14,10 @@
 	<section>
 		<h2>The shape of the problem</h2>
 		<p>
-			When <code>invoice.payment_failed</code> arrives, Stripe has already queued a retry (default
-			1 / 3 / 5 / 7 days, up to 21). The subscription status is still <code>past_due</code>, not
-			<code>canceled</code>. Cutting access immediately means a user whose card just expired is locked
-			out while their next charge is scheduled for tomorrow.
+			When <code>invoice.payment_failed</code> arrives, Stripe has already queued a retry (default 1
+			/ 3 / 5 / 7 days, up to 21). The subscription status is still <code>past_due</code>, not
+			<code>canceled</code>. Cutting access immediately means a user whose card just expired is
+			locked out while their next charge is scheduled for tomorrow.
 		</p>
 		<Aside type="tip">
 			<p>
@@ -73,9 +73,9 @@ export async function onInvoicePaid(event) {
 		</CodeBlock>
 		<Aside type="caution">
 			<p>
-				Don't roll your own retry. Stripe retries <em>and</em> emails the user through Smart Retries
-				and recovery emails. Your job is only to keep access open while Stripe works. Duplicating
-				the retry logic is where this feature goes from "one column" to "a system."
+				Don't roll your own retry. Stripe retries <em>and</em> emails the user through Smart Retries and
+				recovery emails. Your job is only to keep access open while Stripe works. Duplicating the retry
+				logic is where this feature goes from "one column" to "a system."
 			</p>
 		</Aside>
 	</section>
@@ -106,18 +106,17 @@ export async function entitlementFor(userId: string): Promise<Entitlement> {
 }`}
 		</CodeBlock>
 		<p>
-			Notice what's <em>not</em> here: no UI copy, no logging, no email trigger. Entitlement answers
-			one question (does this user have access, and until when) so that every caller can decide what
-			to do about a denial in its own context.
+			Notice what's <em>not</em> here: no UI copy, no logging, no email trigger. Entitlement answers one
+			question (does this user have access, and until when) so that every caller can decide what to do
+			about a denial in its own context.
 		</p>
 	</section>
 
 	<section>
 		<h2>Surface it in the UI</h2>
 		<p>
-			When <code>graceUntil</code> is set, <code>/account</code> should show a calm banner —
-			not a red alarm. Users whose card expired don't want to be yelled at; they want a clear
-			next step.
+			When <code>graceUntil</code> is set, <code>/account</code> should show a calm banner — not a red
+			alarm. Users whose card expired don't want to be yelled at; they want a clear next step.
 		</p>
 		<CodeBlock title="src/routes/account/+page.svelte (excerpt)" lang="svelte">
 			{`{#if data.subscription.graceUntil}
@@ -175,20 +174,19 @@ stripe test_helpers test_clocks advance --frozen-time $(date -v+2d +%s) tclk_...
 		<h2>Recap</h2>
 		<ul>
 			<li>
-				<strong>One column, <code>grace_until</code>.</strong> Null when healthy, timestamp when
-				dunning.
+				<strong>One column, <code>grace_until</code>.</strong> Null when healthy, timestamp when dunning.
 			</li>
 			<li>
 				<strong>Two event handlers.</strong>
 				<code>invoice.payment_failed</code> sets it; <code>invoice.paid</code> clears it.
 			</li>
 			<li>
-				<strong>One entitlement function.</strong> Every gate — pages, endpoints, UI — asks it, no
-				one else.
+				<strong>One entitlement function.</strong> Every gate — pages, endpoints, UI — asks it, no one
+				else.
 			</li>
 			<li>
-				<strong>The UI is a status message, not an alert.</strong> Card failures are a normal event
-				for long-lived subscriptions.
+				<strong>The UI is a status message, not an alert.</strong> Card failures are a normal event for
+				long-lived subscriptions.
 			</li>
 			<li>
 				<strong>Test clocks replay the whole cycle in ten minutes.</strong> Run this before ship, not

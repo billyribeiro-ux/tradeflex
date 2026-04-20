@@ -15,8 +15,8 @@
 		<h2>Why a real seed beats a fixture</h2>
 		<p>
 			Fixtures (five rows, perfect data) hide three classes of bug: empty-state pagination, Unicode
-			in names, and time-zone skew in <code>createdAt</code>. A seed script that inserts 200 contacts
-			with varied shapes catches all of them before the first PR.
+			in names, and time-zone skew in <code>createdAt</code>. A seed script that inserts 200
+			contacts with varied shapes catches all of them before the first PR.
 		</p>
 		<Aside type="tip">
 			<p>
@@ -67,8 +67,8 @@ main().catch((err) => {
 		<Aside type="caution">
 			<p>
 				<code>@example.test</code> is reserved by IANA and guaranteed to never resolve — safe for
-				test data. Never use <code>@example.com</code> (a real domain owned by IANA). Never use a
-				real person's address, even yours.
+				test data. Never use <code>@example.com</code> (a real domain owned by IANA). Never use a real
+				person's address, even yours.
 			</p>
 		</Aside>
 	</section>
@@ -84,7 +84,8 @@ main().catch((err) => {
 }`}
 		</CodeBlock>
 		<p>
-			<code>tsx</code> executes the TypeScript directly — no compile step. Add <code>tsx</code> under
+			<code>tsx</code> executes the TypeScript directly — no compile step. Add <code>tsx</code>
+			under
 			<code>devDependencies</code> if it's not there yet: <code>pnpm add -D tsx</code>.
 		</p>
 	</section>
@@ -93,8 +94,8 @@ main().catch((err) => {
 		<h2>A reset guard</h2>
 		<p>
 			Sometimes you want to start fresh. <code>--reset</code> truncates first, but <em>only</em> if
-			the database URL hostname is <code>localhost</code> — a three-line insurance policy that
-			prevents a catastrophic mistake.
+			the database URL hostname is <code>localhost</code> — a three-line insurance policy that prevents
+			a catastrophic mistake.
 		</p>
 		<CodeBlock title="scripts/seed.ts (excerpt)" lang="ts">
 			{`if (process.argv.includes('--reset')) {
@@ -108,8 +109,8 @@ main().catch((err) => {
 		</CodeBlock>
 		<Aside type="caution">
 			<p>
-				The Neon-branch allowlist is deliberate: CI's Neon branch is a fresh hostname on every PR, so
-				truncating it is safe. Your production database's hostname is <em>not</em> on the list, and
+				The Neon-branch allowlist is deliberate: CI's Neon branch is a fresh hostname on every PR,
+				so truncating it is safe. Your production database's hostname is <em>not</em> on the list, and
 				the seed will refuse to run.
 			</p>
 		</Aside>
@@ -139,7 +140,9 @@ psql $DATABASE_URL -c "select count(*) from contact"
 			<li>Seed in development, never in production. Scripts, not migrations.</li>
 			<li><code>@example.test</code> for addresses, <code>Math.random</code> for age.</li>
 			<li>Volume (200+) exposes pagination bugs fixtures can't.</li>
-			<li>A hostname allowlist on <code>--reset</code> is the cheapest catastrophe-proofing there is.</li>
+			<li>
+				A hostname allowlist on <code>--reset</code> is the cheapest catastrophe-proofing there is.
+			</li>
 		</ul>
 	</section>
 </CoursePage>
