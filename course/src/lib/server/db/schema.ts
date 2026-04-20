@@ -164,6 +164,22 @@ export const refundRequest = pgTable('refund_request', {
 	idempotencyKey: text('idempotency_key').notNull().unique()
 });
 
+export const featureFlag = pgTable('feature_flag', {
+	key: text('key').primaryKey(),
+	description: text('description').notNull().default(''),
+	enabled: boolean('enabled').notNull().default(false),
+	// Additive overrides beyond the global `enabled` flag.
+	// If enabled=true, everyone gets it. If enabled=false, only users matching
+	// enabledForRoles or enabledForUserIds get it. This mirrors how every
+	// reasonable flag service (LaunchDarkly, GrowthBook, etc.) models staged
+	// rollouts without needing a full targeting DSL.
+	enabledForRoles: jsonb('enabled_for_roles').notNull().default([]),
+	enabledForUserIds: jsonb('enabled_for_user_ids').notNull().default([]),
+	updatedByUserId: text('updated_by_user_id'),
+	updatedAt: timestamp('updated_at').notNull().defaultNow(),
+	createdAt: timestamp('created_at').notNull().defaultNow()
+});
+
 export const subscription = pgTable('subscription', {
 	id: text('id').primaryKey(),
 	userId: text('user_id')
