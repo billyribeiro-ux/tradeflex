@@ -6,11 +6,29 @@
 	let { data, form }: { data: PageData; form: ActionData } = $props();
 
 	let submitting = $state(false);
+	let confirmingDeletion = $state(false);
 
 	$effect(() => {
-		if (form && 'success' in form && form.success) {
+		if (!form) return;
+		if ('deletionRequested' in form && form.deletionRequested) {
+			toast.success('Account deletion scheduled — you have 30 days to cancel.');
+			confirmingDeletion = false;
+		} else if ('deletionCancelled' in form && form.deletionCancelled) {
+			toast.success('Deletion cancelled.');
+		} else if ('success' in form && form.success) {
 			toast.success('Profile saved');
 		}
+	});
+
+	const deletionDeadline = $derived.by(() => {
+		const d = data.pendingDeletion?.scheduledFor;
+		if (!d) return null;
+		return new Date(d);
+	});
+	const daysLeft = $derived.by(() => {
+		if (!deletionDeadline) return null;
+		const ms = deletionDeadline.getTime() - Date.now();
+		return Math.max(0, Math.ceil(ms / (24 * 60 * 60 * 1000)));
 	});
 
 	const p = $derived(data.profile);
@@ -132,6 +150,57 @@
 			<a class="btn-primary" href="/pricing">View plans</a>
 		{/if}
 	</div>
+</section>
+
+<section class="card danger" style="margin-top: var(--space-5);">
+	<h2>Privacy &amp; data</h2>
+	<p class="muted">
+		Export your data at any time. Deletion has a 30-day grace period — you can cancel from here
+		before it runs.
+	</p>
+
+	{#if data.pendingDeletion && daysLeft !== null}
+		<div class="pending-deletion">
+			<p style="margin: 0 0 var(--space-2);">
+				<strong>Account deletion scheduled.</strong>
+				Your data will be removed in <strong>{daysLeft} day{daysLeft === 1 ? '' : 's'}</strong>
+				{#if deletionDeadline}
+					(on {deletionDeadline.toLocaleDateString()}){/if}.
+			</p>
+			<form method="post" action="?/cancelDeletion" use:enhance>
+				<button class="btn-primary" type="submit">Cancel deletion</button>
+			</form>
+		</div>
+	{/if}
+
+	<div class="privacy-row">
+		<a class="btn-ghost" href="/account/export" download>Export my data (JSON)</a>
+
+		{#if !data.pendingDeletion}
+			{#if confirmingDeletion}
+				<form method="post" action="?/requestDeletion" use:enhance class="privacy-row">
+					<textarea
+						class="reason"
+						name="reason"
+						rows="2"
+						placeholder="Optional: tell us why (audited, not required)"
+					></textarea>
+					<button class="btn-danger" type="submit">Confirm deletion</button>
+					<button class="btn-link" type="button" onclick={() => (confirmingDeletion = false)}>
+						Cancel
+					</button>
+				</form>
+			{:else}
+				<button class="btn-danger-ghost" type="button" onclick={() => (confirmingDeletion = true)}>
+					Request account deletion
+				</button>
+			{/if}
+		{/if}
+	</div>
+
+	{#if form && 'message' in form && form.message}
+		<p class="error" role="alert" style="margin-top: var(--space-3);">{form.message}</p>
+	{/if}
 </section>
 
 <style>
@@ -277,5 +346,63 @@
 	.billing-actions a.btn-primary {
 		text-decoration: none;
 		display: inline-block;
+	}
+	.danger {
+		border-color: color-mix(in oklab, var(--color-danger) 35%, var(--color-border));
+	}
+	.danger h2 {
+		color: var(--color-danger);
+	}
+	.privacy-row {
+		display: flex;
+		flex-wrap: wrap;
+		gap: var(--space-3);
+		align-items: center;
+	}
+	.btn-danger {
+		padding: var(--space-3) var(--space-5);
+		background: var(--color-danger);
+		color: #fff;
+		border: none;
+		border-radius: var(--radius-md);
+		font-weight: 600;
+		cursor: pointer;
+	}
+	.btn-danger-ghost {
+		padding: var(--space-3) var(--space-5);
+		background: transparent;
+		border: 1px solid var(--color-danger);
+		color: var(--color-danger);
+		border-radius: var(--radius-md);
+		font-weight: 600;
+		cursor: pointer;
+	}
+	.btn-link {
+		background: none;
+		border: none;
+		padding: 0;
+		color: var(--color-text-muted);
+		text-decoration: underline;
+		cursor: pointer;
+		font: inherit;
+	}
+	.pending-deletion {
+		background: color-mix(in oklab, var(--color-danger) 10%, transparent);
+		border: 1px solid color-mix(in oklab, var(--color-danger) 35%, var(--color-border));
+		border-radius: var(--radius-md);
+		padding: var(--space-4);
+		margin-bottom: var(--space-4);
+	}
+	.pending-deletion strong {
+		color: var(--color-danger);
+	}
+	textarea.reason {
+		padding: var(--space-3);
+		background: var(--color-bg);
+		border: 1px solid var(--color-border);
+		border-radius: var(--radius-md);
+		color: var(--color-text);
+		font: inherit;
+		min-width: 320px;
 	}
 </style>

@@ -4,6 +4,7 @@ import { profileService } from '$lib/server/services/profile';
 import { customersService } from '$lib/server/services/customers';
 import { subscriptionsService } from '$lib/server/services/subscriptions';
 import { billingService } from '$lib/server/services/billing';
+import { complianceService, ComplianceError } from '$lib/server/services/compliance';
 import { MissingConfigError } from '$lib/server/services/settings';
 import { setFlash } from '$lib/server/flash';
 import type { Actions, PageServerLoad } from './$types';
@@ -20,10 +21,11 @@ export const load: PageServerLoad = async ({ locals, url }) => {
 	if (!locals.caller.userId) {
 		throw redirect(303, `/login?next=${encodeURIComponent(url.pathname)}`);
 	}
-	const [profile, customer, subscription] = await Promise.all([
+	const [profile, customer, subscription, pendingDeletion] = await Promise.all([
 		profileService.getForCaller(locals.caller),
 		customersService.forCaller(locals.caller),
-		subscriptionsService.forCaller(locals.caller)
+		subscriptionsService.forCaller(locals.caller),
+		complianceService.pendingForCaller(locals.caller)
 	]);
 	const entitled = await subscriptionsService.hasActiveEntitlement(locals.caller);
 	return {
@@ -31,7 +33,8 @@ export const load: PageServerLoad = async ({ locals, url }) => {
 		user: locals.user,
 		customer,
 		subscription,
-		entitled
+		entitled,
+		pendingDeletion
 	};
 };
 
@@ -78,5 +81,24 @@ export const actions: Actions = {
 		}
 		setFlash(cookies, { kind: 'info', message: 'Opening Stripe billing portal…' });
 		throw redirect(303, portalUrl);
+	},
+
+	requestDeletion: async ({ request, locals }) => {
+		if (!locals.caller.userId) return fail(401, { message: 'Not signed in.' });
+		const fd = await request.formData();
+		const reason = fd.get('reason')?.toString() ?? '';
+		try {
+			await complianceService.requestDeletion(locals.caller, { reason });
+			return { success: true, deletionRequested: true };
+		} catch (err) {
+			if (err instanceof ComplianceError) return fail(err.httpStatus, { message: err.message });
+			throw err;
+		}
+	},
+
+	cancelDeletion: async ({ locals }) => {
+		if (!locals.caller.userId) return fail(401, { message: 'Not signed in.' });
+		await complianceService.cancelDeletion(locals.caller);
+		return { success: true, deletionCancelled: true };
 	}
 };

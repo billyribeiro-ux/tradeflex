@@ -118,6 +118,19 @@ export const customer = pgTable('customer', {
 	createdAt: timestamp('created_at').notNull().defaultNow()
 });
 
+export const accountDeletion = pgTable('account_deletion', {
+	id: text('id').primaryKey(),
+	userId: text('user_id')
+		.notNull()
+		.references(() => user.id, { onDelete: 'cascade' })
+		.unique(),
+	requestedAt: timestamp('requested_at').notNull().defaultNow(),
+	scheduledFor: timestamp('scheduled_for').notNull(),
+	cancelledAt: timestamp('cancelled_at'),
+	executedAt: timestamp('executed_at'),
+	reason: text('reason')
+});
+
 export const impersonation = pgTable('impersonation', {
 	id: text('id').primaryKey(),
 	impersonatorUserId: text('impersonator_user_id')
