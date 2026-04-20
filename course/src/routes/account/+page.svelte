@@ -186,20 +186,12 @@
 						placeholder="Optional: tell us why (audited, not required)"
 					></textarea>
 					<button class="btn-danger" type="submit">Confirm deletion</button>
-					<button
-						class="btn-link"
-						type="button"
-						onclick={() => (confirmingDeletion = false)}
-					>
+					<button class="btn-link" type="button" onclick={() => (confirmingDeletion = false)}>
 						Cancel
 					</button>
 				</form>
 			{:else}
-				<button
-					class="btn-danger-ghost"
-					type="button"
-					onclick={() => (confirmingDeletion = true)}
-				>
+				<button class="btn-danger-ghost" type="button" onclick={() => (confirmingDeletion = true)}>
 					Request account deletion
 				</button>
 			{/if}

@@ -15,6 +15,13 @@
       "when": 1776723401933,
       "tag": "0001_loving_random",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1776723983719,
+      "tag": "0002_nosy_odin",
+      "breakpoints": true
     }
   ]
 }

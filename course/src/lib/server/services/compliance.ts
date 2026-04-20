@@ -10,12 +10,7 @@ import {
 	subscription,
 	user
 } from '$lib/server/db/schema';
-import {
-	assertAuthenticated,
-	assertRole,
-	AuthzError,
-	type Caller
-} from '$lib/server/authz/caller';
+import { assertAuthenticated, assertRole, AuthzError, type Caller } from '$lib/server/authz/caller';
 import { writeAudit } from './audit';
 
 export type AccountDeletionRow = typeof accountDeletion.$inferSelect;
@@ -96,10 +91,7 @@ export const complianceService = {
 		};
 	},
 
-	async requestDeletion(
-		caller: Caller,
-		params: { reason?: string }
-	): Promise<AccountDeletionRow> {
+	async requestDeletion(caller: Caller, params: { reason?: string }): Promise<AccountDeletionRow> {
 		assertAuthenticated(caller);
 		const uid = caller.userId;
 		const existing = await this.getPendingForUser(uid);
