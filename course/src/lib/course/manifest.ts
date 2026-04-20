@@ -434,6 +434,16 @@ const pages: CoursePage[] = [
 			'Three failures, three fixes: vercel.json root-mapping, a pinned packageManager, and a clean workflow without the version-collision trap.'
 	},
 	{
+		slug: 'module-12-actions-spending-cap',
+		href: '/course/modules/12/actions-spending-cap',
+		title: '12.4 · Actions spending cap',
+		module: 'module-12',
+		moduleOrder: 12,
+		order: 3,
+		summary:
+			'The invisible CI blocker: a private repo on the free plan silently queues workflows once the 2,000-minute cap is hit. Two fixes (go public or raise the cap) and three habits that keep the meter low.'
+	},
+	{
 		slug: 'module-13-overview',
 		href: '/course/modules/13/overview',
 		title: '13.1 · UX extras',
