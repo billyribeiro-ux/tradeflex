@@ -3,5 +3,12 @@
 	"buildCommand": "cd course && npx -y pnpm@10.33.0 install --frozen-lockfile && npx -y pnpm@10.33.0 build",
 	"installCommand": "echo noop — install runs inside course/",
 	"outputDirectory": "course/.vercel/output",
-	"framework": null
+	"framework": null,
+	"build": {
+		"env": {
+			"BETTER_AUTH_SECRET": "build-placeholder-thirty-two-chars-min-xxx",
+			"ORIGIN": "https://tradeflex.vercel.app",
+			"DATABASE_URL": "postgres://build:build@localhost:5432/build"
+		}
+	}
 }
