@@ -172,6 +172,54 @@ export const complianceService = {
 			);
 	},
 
+	/**
+	 * Automated cron sweep: deletes every past-grace row transactionally and
+	 * writes a system-attributed audit row per deletion. Returns per-row
+	 * outcomes so the caller (cron endpoint) can report a summary. Does NOT
+	 * re-use `executeDeletion` because that one requires a human owner; the
+	 * sweep is system-attributed (`actorUserId: null`) and has no caller.
+	 */
+	async runSweep(
+		now = new Date()
+	): Promise<{ scanned: number; deleted: string[]; failed: { id: string; error: string }[] }> {
+		const due = await this.listDueForSweep(now);
+		const deleted: string[] = [];
+		const failed: { id: string; error: string }[] = [];
+		for (const row of due) {
+			try {
+				await db.transaction(async (tx) => {
+					const updated = await tx
+						.update(accountDeletion)
+						.set({ executedAt: new Date() })
+						.where(and(eq(accountDeletion.id, row.id), isNull(accountDeletion.executedAt)))
+						.returning();
+					if (updated.length === 0) {
+						throw new Error('row already executed');
+					}
+					await tx.delete(user).where(eq(user.id, row.userId));
+				});
+				await db.insert(auditEvent).values({
+					id: crypto.randomUUID(),
+					actorUserId: null,
+					impersonatorUserId: null,
+					action: 'compliance.deletion.sweep',
+					targetKind: 'user',
+					targetId: row.userId,
+					metadata: {
+						id: row.id,
+						scheduledFor: row.scheduledFor.toISOString(),
+						reason: row.reason ?? null,
+						via: 'cron'
+					}
+				});
+				deleted.push(row.userId);
+			} catch (err) {
+				failed.push({ id: row.id, error: err instanceof Error ? err.message : String(err) });
+			}
+		}
+		return { scanned: due.length, deleted, failed };
+	},
+
 	async adminCancel(caller: Caller, params: { id: string; note: string }): Promise<void> {
 		assertRole(caller, 'owner', 'admin');
 		if (params.note.trim().length < 3) {

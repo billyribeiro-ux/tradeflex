@@ -20,6 +20,9 @@
 			toast.success('Account hard-deleted.');
 			executingId = null;
 			confirmText = '';
+		} else if ('sweep' in form && form.sweep) {
+			const s = form.sweep;
+			toast.success(`Sweep: ${s.deleted} deleted, ${s.failed} failed (scanned ${s.scanned})`);
 		}
 	});
 
@@ -36,13 +39,22 @@
 <svelte:head><title>Compliance — Trade Flex admin</title></svelte:head>
 
 <header class="head">
-	<h1>Compliance</h1>
-	<p class="muted">
-		Pending account deletions. Users get a 30-day grace window — admins can override and cancel with
-		a note (audited). Once past grace, owners can hard-delete the row; this cascades to all data
-		FK'd to the user (profile, sessions, subscriptions, etc.) but preserves financial records and
-		audit trails as dangling references.
-	</p>
+	<div>
+		<h1>Compliance</h1>
+		<p class="muted">
+			Pending account deletions. Users get a 30-day grace window — admins can override and cancel
+			with a note (audited). Once past grace, owners can hard-delete the row; this cascades to all
+			data FK'd to the user (profile, sessions, subscriptions, etc.) but preserves financial records
+			and audit trails as dangling references.
+		</p>
+		<p class="muted sweep-hint">
+			A cron job runs <code>/api/jobs/compliance-sweep</code> daily at 03:00 UTC and hard-deletes every
+			past-grace row automatically. Owners can trigger it manually here.
+		</p>
+	</div>
+	<form method="post" action="?/runSweep" use:enhance class="sweep-form">
+		<button class="btn-ghost" type="submit">Run sweep now</button>
+	</form>
 </header>
 
 {#if form && 'message' in form && form.message}
@@ -160,13 +172,29 @@
 {/if}
 
 <style>
+	.head {
+		display: flex;
+		justify-content: space-between;
+		align-items: flex-start;
+		gap: var(--space-4);
+		margin-bottom: var(--space-6);
+	}
 	.head h1 {
 		margin: 0 0 var(--space-1);
 		font-size: var(--fs-2xl);
 	}
+	.sweep-hint {
+		font-size: var(--fs-sm);
+	}
+	.sweep-hint code {
+		font-size: inherit;
+	}
+	.sweep-form {
+		flex-shrink: 0;
+	}
 	.muted {
 		color: var(--color-text-muted);
-		margin: 0 0 var(--space-6);
+		margin: 0 0 var(--space-3);
 		max-width: 72ch;
 	}
 	.empty {
