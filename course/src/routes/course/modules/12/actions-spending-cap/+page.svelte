@@ -42,17 +42,16 @@ gh api /users/$(gh api /user --jq .login)/settings/billing/actions --jq '{
 }'`}
 		</CodeBlock>
 		<p>
-			If <code>used</code> ≥ <code>included</code> and <code>overage</code> is null, you're hitting
-			the cap with no spending allowance set. That's the blocker.
+			If <code>used</code> ≥ <code>included</code> and <code>overage</code> is null, you're hitting the
+			cap with no spending allowance set. That's the blocker.
 		</p>
 	</section>
 
 	<section>
 		<h2>Fix A — make the repo public</h2>
 		<p>
-			Public repos get <strong>unlimited</strong> Actions minutes on all plans. If your code is
-			open-source-friendly (no secrets checked in, no commercial restriction), flipping the
-			visibility is the cleanest fix.
+			Public repos get <strong>unlimited</strong> Actions minutes on all plans. If your code is open-source-friendly
+			(no secrets checked in, no commercial restriction), flipping the visibility is the cleanest fix.
 		</p>
 		<CodeBlock title="bash" lang="bash">
 			{`gh repo edit billyribeiro-ux/tradeflex --visibility public --accept-visibility-change-consequences
@@ -85,8 +84,8 @@ gh api /users/$(gh api /user --jq .login)/settings/billing/actions`}
 		</CodeBlock>
 		<Aside type="caution">
 			<p>
-				Set a specific limit, not "unlimited." A runaway matrix job can burn $100 in a few hours;
-				a $10 cap caps the blast radius.
+				Set a specific limit, not "unlimited." A runaway matrix job can burn $100 in a few hours; a
+				$10 cap caps the blast radius.
 			</p>
 		</Aside>
 	</section>
@@ -96,16 +95,16 @@ gh api /users/$(gh api /user --jq .login)/settings/billing/actions`}
 		<ul>
 			<li>
 				<strong>Cache aggressively.</strong> <code>actions/setup-node</code> with
-				<code>cache: pnpm</code> typically saves 20–40 seconds per run. The Playwright browser
-				cache we added in 11.3 saves another 15 seconds.
+				<code>cache: pnpm</code> typically saves 20–40 seconds per run. The Playwright browser cache we
+				added in 11.3 saves another 15 seconds.
 			</li>
 			<li>
-				<strong>Cancel in-progress on new pushes.</strong> Add a concurrency group so a second push
-				to the same branch cancels the first — no point running tests against stale code.
+				<strong>Cancel in-progress on new pushes.</strong> Add a concurrency group so a second push to
+				the same branch cancels the first — no point running tests against stale code.
 			</li>
 			<li>
-				<strong>Skip forks and doc-only PRs.</strong> A <code>paths-ignore</code> clause keeps
-				README edits off the paid clock.
+				<strong>Skip forks and doc-only PRs.</strong> A <code>paths-ignore</code> clause keeps README
+				edits off the paid clock.
 			</li>
 		</ul>
 		<CodeBlock title=".github/workflows/ci.yml (excerpt)" lang="yaml">
@@ -125,12 +124,8 @@ concurrency:
 	<section>
 		<h2>Recap</h2>
 		<ul>
-			<li>
-				Silent CI ≠ broken workflow. Check the Actions billing before the YAML.
-			</li>
-			<li>
-				Public repo = unlimited. Spending limit = private + pay. Pick one.
-			</li>
+			<li>Silent CI ≠ broken workflow. Check the Actions billing before the YAML.</li>
+			<li>Public repo = unlimited. Spending limit = private + pay. Pick one.</li>
 			<li>
 				Cache + cancel-in-progress + <code>paths-ignore</code> keep the meter low.
 			</li>

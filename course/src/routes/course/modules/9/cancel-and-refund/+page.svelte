@@ -15,7 +15,8 @@
 		<h2>The four knobs</h2>
 		<ul>
 			<li>
-				<strong>When</strong> — cancel <em>immediately</em> (no more invoices) or <em>at period end</em>
+				<strong>When</strong> — cancel <em>immediately</em> (no more invoices) or
+				<em>at period end</em>
 				(honour what they paid for).
 			</li>
 			<li>
@@ -31,16 +32,18 @@
 		</ul>
 		<Aside type="tip">
 			<p>
-				The most common pair for a self-serve portal is <strong>at period end + no refund +
-					keep access until the end</strong>. You keep every dollar they paid, and they keep what
-				they bought. No one is surprised.
+				The most common pair for a self-serve portal is <strong
+					>at period end + no refund + keep access until the end</strong
+				>. You keep every dollar they paid, and they keep what they bought. No one is surprised.
 			</p>
 		</Aside>
 	</section>
 
 	<section>
 		<h2>Pattern A — cancel at period end</h2>
-		<p>This is what the Stripe Customer Portal does by default. A one-line update flips the flag.</p>
+		<p>
+			This is what the Stripe Customer Portal does by default. A one-line update flips the flag.
+		</p>
 		<CodeBlock title="src/lib/server/billing/cancel.ts" lang="ts">
 			{`export async function cancelAtPeriodEnd(caller: Caller, subId: string) {
   assertRole(caller, 'member', 'admin');
@@ -58,8 +61,8 @@
 		<p>
 			Stripe will deliver <code>customer.subscription.updated</code> with
 			<code>cancel_at_period_end: true</code>; your webhook handler writes that to the subscription
-			row, and the <code>/account</code> page shows "ends on {'{'}date{'}'}" with an
-			"Undo cancellation" button that flips the flag back.
+			row, and the <code>/account</code> page shows "ends on {'{'}date{'}'}" with an "Undo
+			cancellation" button that flips the flag back.
 		</p>
 	</section>
 
@@ -102,10 +105,10 @@
 		</CodeBlock>
 		<Aside type="caution">
 			<p>
-				<strong>Two-person approval for refunds above $500.</strong> A single-admin refund loop is a
-				fraud vector — an attacker with one admin account can cash out customer charges. Either
-				require a second approver on a hard threshold, or route large refunds through a separate
-				"approved" queue that only a finance role can clear.
+				<strong>Two-person approval for refunds above $500.</strong> A single-admin refund loop is a fraud
+				vector — an attacker with one admin account can cash out customer charges. Either require a second
+				approver on a hard threshold, or route large refunds through a separate "approved" queue that
+				only a finance role can clear.
 			</p>
 		</Aside>
 	</section>
@@ -159,12 +162,12 @@
 				<code>refunds.create</code> against the last paid charge.
 			</li>
 			<li>
-				<code>cancelAtPeriodEnd + currentPeriodEnd &gt; now</code> keeps entitlement alive through
-				the paid window.
+				<code>cancelAtPeriodEnd + currentPeriodEnd &gt; now</code> keeps entitlement alive through the
+				paid window.
 			</li>
 			<li>
-				Big refunds need a confirm-the-amount UI and, above a threshold, a second approver. One is
-				a typo-catcher, the other is a fraud-catcher.
+				Big refunds need a confirm-the-amount UI and, above a threshold, a second approver. One is a
+				typo-catcher, the other is a fraud-catcher.
 			</li>
 		</ul>
 	</section>
