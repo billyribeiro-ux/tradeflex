@@ -38,6 +38,7 @@
 			label: 'Communications',
 			items: [
 				{ href: '/admin/inbox', label: 'Inbox' },
+				{ href: '/admin/support', label: 'Support' },
 				{ href: '/admin/marketing', label: 'Marketing' }
 			]
 		},

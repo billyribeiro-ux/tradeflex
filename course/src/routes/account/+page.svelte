@@ -205,6 +205,7 @@
 	{/if}
 
 	<div class="privacy-row">
+		<a class="btn-ghost" href="/account/support">Support tickets</a>
 		<a class="btn-ghost" href="/account/export" download>Export my data (JSON)</a>
 
 		{#if !data.pendingDeletion}

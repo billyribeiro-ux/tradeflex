@@ -213,4 +213,31 @@ export const emailMessage = pgTable('email_message', {
 	createdAt: timestamp('created_at').notNull().defaultNow()
 });
 
+export const supportTicket = pgTable('support_ticket', {
+	id: text('id').primaryKey(),
+	subjectUserId: text('subject_user_id').references(() => user.id, { onDelete: 'set null' }),
+	contactEmail: text('contact_email').notNull(),
+	subject: text('subject').notNull(),
+	category: text('category').notNull().default('other'),
+	priority: text('priority').notNull().default('normal'),
+	status: text('status').notNull().default('open'),
+	assignedToUserId: text('assigned_to_user_id').references(() => user.id, {
+		onDelete: 'set null'
+	}),
+	createdAt: timestamp('created_at').notNull().defaultNow(),
+	updatedAt: timestamp('updated_at').notNull().defaultNow(),
+	resolvedAt: timestamp('resolved_at'),
+	closedAt: timestamp('closed_at')
+});
+
+export const supportTicketMessage = pgTable('support_ticket_message', {
+	id: text('id').primaryKey(),
+	ticketId: text('ticket_id').notNull(),
+	authorUserId: text('author_user_id'),
+	authorKind: text('author_kind').notNull(),
+	visibility: text('visibility').notNull().default('public'),
+	body: text('body').notNull(),
+	createdAt: timestamp('created_at').notNull().defaultNow()
+});
+
 export * from './auth.schema';
