@@ -15,6 +15,8 @@ jobs:
     concurrency:
       group: deploy-production
       cancel-in-progress: false
+    env:
+      HAS_PROD_DB_URL: ${{ secrets.PROD_DATABASE_URL != '' }}
     steps:
       - uses: actions/checkout@v4
 
@@ -47,7 +49,7 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       - name: Apply migrations
-        if: ${{ secrets.PROD_DATABASE_URL != '' }}
+        if: ${{ env.HAS_PROD_DB_URL == 'true' }}
         env:
           DATABASE_URL: ${{ secrets.PROD_DATABASE_URL }}
         run: pnpm drizzle-kit migrate
