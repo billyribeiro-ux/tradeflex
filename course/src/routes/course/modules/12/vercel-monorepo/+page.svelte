@@ -133,6 +133,34 @@ ERROR  Headless installation requires a pnpm-lock.yaml file`}
 	</section>
 
 	<section>
+		<h2>Fix 4: build-time env for SSR bootstrap</h2>
+		<p>
+			Better Auth (and most auth libs) initialize at module load, which means they run during
+			<code>vite build</code>'s SSR pass — before any runtime env is injected. Give the build benign
+			placeholders under <code>build.env</code> so it compiles. Real values come from your Vercel project's
+			Environment Variables settings at runtime.
+		</p>
+		<CodeBlock title="vercel.json (excerpt)" lang="json">
+			{`{
+  "build": {
+    "env": {
+      "BETTER_AUTH_SECRET": "build-placeholder-thirty-two-chars-min-xxx",
+      "ORIGIN": "https://tradeflex.vercel.app",
+      "DATABASE_URL": "postgres://build:build@localhost:5432/build"
+    }
+  }
+}`}
+		</CodeBlock>
+		<Aside type="caution">
+			<p>
+				These placeholders are for the build phase only. Never set real secrets in
+				<code>vercel.json</code> — it's checked into git. Real values belong in the Vercel project
+				settings (or <code>vercel env add</code>), scoped to the right environment.
+			</p>
+		</Aside>
+	</section>
+
+	<section>
 		<h2>What you verify once it is green</h2>
 		<ul>
 			<li>Every PR opens a Vercel Preview URL with the latest <code>feat/</code> commit.</li>
