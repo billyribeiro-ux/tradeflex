@@ -6,6 +6,7 @@
 	let open = $state(false);
 	let query = $state('');
 	let inputEl: HTMLInputElement | undefined = $state();
+	let active = $state(0);
 
 	const results = $derived(
 		query.trim().length === 0
@@ -21,6 +22,11 @@
 					})
 					.slice(0, 12)
 	);
+
+	$effect(() => {
+		void query;
+		active = 0;
+	});
 
 	onMount(() => {
 		const onKey = (e: KeyboardEvent) => {
@@ -65,7 +71,21 @@
 			if (e.target === e.currentTarget) open = false;
 		}}
 		onkeydown={(e) => {
-			if (e.key === 'Escape') open = false;
+			if (e.key === 'Escape') {
+				open = false;
+			} else if (e.key === 'ArrowDown') {
+				e.preventDefault();
+				active = Math.min(active + 1, Math.max(results.length - 1, 0));
+			} else if (e.key === 'ArrowUp') {
+				e.preventDefault();
+				active = Math.max(active - 1, 0);
+			} else if (e.key === 'Enter') {
+				const hit = results[active];
+				if (hit) {
+					e.preventDefault();
+					pick(hit.href);
+				}
+			}
 		}}
 	>
 		<div class="panel">
@@ -76,10 +96,10 @@
 				placeholder="Search course pages…"
 				aria-label="Search query"
 			/>
-			<ul class="results">
-				{#each results as r (r.href)}
-					<li>
-						<button type="button" onclick={() => pick(r.href)}>
+			<ul class="results" role="listbox">
+				{#each results as r, i (r.href)}
+					<li class:active={i === active} role="option" aria-selected={i === active}>
+						<button type="button" onclick={() => pick(r.href)} onmouseenter={() => (active = i)}>
 							<span class="title">{r.title}</span>
 							{#if r.summary}<span class="summary">{r.summary}</span>{/if}
 						</button>
@@ -89,6 +109,7 @@
 				{/each}
 			</ul>
 			<footer>
+				<span><kbd>↑</kbd><kbd>↓</kbd> navigate</span>
 				<span><kbd>↵</kbd> open</span>
 				<span><kbd>Esc</kbd> close</span>
 			</footer>
@@ -187,6 +208,11 @@
 	.results li button:hover,
 	.results li button:focus-visible {
 		background: var(--color-surface-2);
+	}
+
+	.results li.active button {
+		background: var(--color-surface-2);
+		outline: 1px solid var(--color-accent);
 	}
 
 	.results .title {
