@@ -46,6 +46,13 @@ const KNOWN_KEYS: {
 		help: 'e.g. "Trade Flex <hello@send.tradeflex.app>"'
 	},
 	{
+		key: 'RESEND_WEBHOOK_SECRET',
+		label: 'Resend Webhook Signing Secret',
+		encrypted: true,
+		group: 'Email',
+		help: 'whsec_… from resend.com → Webhooks. Point the webhook at /api/webhooks/resend.'
+	},
+	{
 		key: 'BUNNY_STREAM_LIBRARY_ID',
 		label: 'Bunny Stream Library ID',
 		encrypted: false,
