@@ -2,6 +2,7 @@ import { eq, desc, and } from 'drizzle-orm';
 import { db } from '$lib/server/db';
 import { alert } from '$lib/server/db/schema';
 import { assertRole, type Caller } from '$lib/server/authz/caller';
+import { notificationBus } from '$lib/server/events/bus';
 import { writeAudit } from './audit';
 
 export type AlertKind = 'options' | 'equity' | 'macro';
@@ -50,6 +51,15 @@ export const alertsService = {
 			targetId: id,
 			metadata: { symbol: input.symbol, kind: input.kind }
 		});
+		notificationBus.publish({
+			type: 'alert.published',
+			at: new Date().toISOString(),
+			alertId: id,
+			symbol: input.symbol.toUpperCase(),
+			direction: input.direction,
+			kind: input.kind,
+			visibility: input.visibility ?? 'members'
+		});
 		return id;
 	},
 
@@ -75,12 +85,23 @@ export const alertsService = {
 			targetId: input.id,
 			metadata: { outcome: input.outcome }
 		});
+		notificationBus.publish({
+			type: 'alert.closed',
+			at: new Date().toISOString(),
+			alertId: input.id,
+			outcome: input.outcome
+		});
 	},
 
 	async unpublish(caller: Caller, id: string): Promise<void> {
 		assertRole(caller, 'owner', 'admin');
 		await db.update(alert).set({ status: 'unpublished' }).where(eq(alert.id, id));
 		await writeAudit(caller, { action: 'alert.unpublish', targetKind: 'alert', targetId: id });
+		notificationBus.publish({
+			type: 'alert.unpublished',
+			at: new Date().toISOString(),
+			alertId: id
+		});
 	},
 
 	async listForMember(caller: Caller, limit = 50) {
