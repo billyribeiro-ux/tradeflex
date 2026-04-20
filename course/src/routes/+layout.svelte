@@ -18,5 +18,28 @@
 	<meta name="color-scheme" content="light dark" />
 </svelte:head>
 
-{@render children()}
+<a href="#main-content" class="skip-link">Skip to main content</a>
+<div id="main-content">
+	{@render children()}
+</div>
 <ToastHost />
+
+<style>
+	.skip-link {
+		position: absolute;
+		top: -40px;
+		left: var(--space-3);
+		padding: var(--space-2) var(--space-4);
+		background: var(--color-accent);
+		color: var(--color-accent-contrast);
+		border-radius: var(--radius-md);
+		font-weight: 600;
+		z-index: 1000;
+	}
+	.skip-link:focus-visible {
+		top: var(--space-3);
+	}
+	#main-content {
+		display: contents;
+	}
+</style>
