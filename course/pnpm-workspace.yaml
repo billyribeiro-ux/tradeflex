@@ -1,2 +1,6 @@
 onlyBuiltDependencies:
   - esbuild
+
+# Optional peer deps from better-auth (supports many DB adapters; we use drizzle+pg
+# only) should not pull @prisma/client + better-sqlite3 into our tree.
+autoInstallPeers: false
