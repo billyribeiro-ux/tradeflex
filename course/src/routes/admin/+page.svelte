@@ -15,13 +15,25 @@
 		<h2>Integrations</h2>
 		<p>Stripe, Resend, Bunny, GitHub OAuth. Keys are encrypted at rest.</p>
 	</a>
+	<a class="tile" href="/admin/settings/branding">
+		<h2>Branding</h2>
+		<p>Logo, palette, email-header colors, marketing-site overrides.</p>
+	</a>
 	<a class="tile" href="/admin/members">
 		<h2>Members</h2>
 		<p>Search, impersonate, block, refund, delete — always audited.</p>
 	</a>
+	<a class="tile" href="/admin/roles">
+		<h2>Roles</h2>
+		<p>Grant/revoke owner, admin, content, support, analyst.</p>
+	</a>
 	<a class="tile" href="/admin/subscriptions">
 		<h2>Subscriptions</h2>
 		<p>Plans, trials, cancellations, dunning, test clocks.</p>
+	</a>
+	<a class="tile" href="/admin/payments">
+		<h2>Payments</h2>
+		<p>Successful charges, refunds, failed retries, invoice PDFs.</p>
 	</a>
 	<a class="tile" href="/admin/courses">
 		<h2>Courses</h2>
@@ -30,6 +42,14 @@
 	<a class="tile" href="/admin/alerts">
 		<h2>Alerts</h2>
 		<p>Publish, schedule, stop-out, unpublish. Member notifications.</p>
+	</a>
+	<a class="tile" href="/admin/inbox">
+		<h2>Email inbox</h2>
+		<p>Incoming Resend replies, outbound deliverability, suppression list.</p>
+	</a>
+	<a class="tile" href="/admin/marketing">
+		<h2>Marketing</h2>
+		<p>Leads, campaigns, ebook downloads, contact-form triage.</p>
 	</a>
 	<a class="tile" href="/admin/audit">
 		<h2>Audit log</h2>

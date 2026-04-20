@@ -39,6 +39,13 @@
 
 <svelte:head><title>Pricing — Trade Flex</title></svelte:head>
 
+{#if data.gate === 'alerts'}
+	<aside class="gate" role="status">
+		<strong>Alerts are members-only.</strong>
+		<span>Pick a plan below to unlock real-time alerts and the full courses.</span>
+	</aside>
+{/if}
+
 <section class="head">
 	<h1>One membership. Everything.</h1>
 	<p>Alerts + courses + macOS app. Cancel anytime.</p>
@@ -75,7 +82,14 @@
 				{#if plan.savingsNote && billing === 'year'}
 					<p class="savings">{plan.savingsNote}</p>
 				{/if}
-				<a class="btn-primary" href={plan.cta.href}>{plan.cta.label}</a>
+				{#if plan.cta.priceId && plan.cta.href === '/api/billing/checkout'}
+					<form method="POST" action="/api/billing/checkout" class="cta-form">
+						<input type="hidden" name="priceId" value={plan.cta.priceId} />
+						<button type="submit" class="btn-primary">{plan.cta.label}</button>
+					</form>
+				{:else}
+					<a class="btn-primary" href={plan.cta.href}>{plan.cta.label}</a>
+				{/if}
 				<ul>
 					{#each plan.features as f}
 						<li>{f}</li>
@@ -99,6 +113,18 @@
 </section>
 
 <style>
+	.gate {
+		max-width: var(--layout-max);
+		margin: var(--space-4) auto 0;
+		padding: var(--space-3) var(--space-4);
+		background: color-mix(in oklab, var(--color-accent) 10%, transparent);
+		border: 1px solid var(--color-accent);
+		border-radius: var(--radius-md);
+		display: flex;
+		gap: var(--space-2);
+		flex-wrap: wrap;
+		color: var(--color-text);
+	}
 	.head {
 		max-width: var(--layout-max);
 		margin: 0 auto;
@@ -221,6 +247,14 @@
 		border-radius: var(--radius-md);
 		text-decoration: none;
 		font-weight: 600;
+		border: none;
+		cursor: pointer;
+		font: inherit;
+		font-weight: 600;
+		width: 100%;
+	}
+	.cta-form {
+		margin: 0;
 	}
 	.plan ul {
 		list-style: none;

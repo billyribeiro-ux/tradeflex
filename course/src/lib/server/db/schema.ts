@@ -110,4 +110,28 @@ export const alert = pgTable('alert', {
 	visibility: text('visibility').notNull().default('members')
 });
 
+export const customer = pgTable('customer', {
+	userId: text('user_id')
+		.primaryKey()
+		.references(() => user.id, { onDelete: 'cascade' }),
+	stripeCustomerId: text('stripe_customer_id').notNull().unique(),
+	createdAt: timestamp('created_at').notNull().defaultNow()
+});
+
+export const subscription = pgTable('subscription', {
+	id: text('id').primaryKey(),
+	userId: text('user_id')
+		.notNull()
+		.references(() => user.id, { onDelete: 'cascade' }),
+	stripeSubscriptionId: text('stripe_subscription_id').notNull().unique(),
+	status: text('status').notNull(),
+	priceLookupKey: text('price_lookup_key'),
+	priceId: text('price_id'),
+	currentPeriodEnd: timestamp('current_period_end'),
+	cancelAtPeriodEnd: boolean('cancel_at_period_end').notNull().default(false),
+	graceUntil: timestamp('grace_until'),
+	createdAt: timestamp('created_at').notNull().defaultNow(),
+	updatedAt: timestamp('updated_at').notNull().defaultNow()
+});
+
 export * from './auth.schema';

@@ -21,7 +21,8 @@ Every build step becomes a course page (per `tradeflex_course_authoring_rules.md
 - A `courseManifest.ts` reads frontmatter at build via `import.meta.glob('/src/routes/course/**/+page.svx', { eager: true })` to produce the sidebar + prev/next mapping — single source of truth, no duplicated lists.
 
 Code blocks:
-- ```` ```ts title="src/lib/foo.ts" {2-4} add=3 del=5 ```` renders with filename header, line numbers, highlighted + added + removed lines, copy button. Implemented by the `CodeBlock.svelte` component driven by Shiki's decoration API.
+
+- ` ```ts title="src/lib/foo.ts" {2-4} add=3 del=5 ` renders with filename header, line numbers, highlighted + added + removed lines, copy button. Implemented by the `CodeBlock.svelte` component driven by Shiki's decoration API.
 
 ## Alternatives considered
 

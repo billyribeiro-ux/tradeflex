@@ -23,8 +23,13 @@
 <header class="hd">
 	<div>
 		<h1>Members</h1>
-		<p>{data.members.length} shown · page {data.page}</p>
+		<p>{data.members.length} shown · page {data.page}{data.q ? ` · matching "${data.q}"` : ''}</p>
 	</div>
+	<form class="search" method="get">
+		<input name="q" type="search" placeholder="Search by email…" value={data.q} />
+		<button type="submit" class="btn-primary">Search</button>
+		{#if data.q}<a class="clear" href="/admin/members">Clear</a>{/if}
+	</form>
 </header>
 
 <div class="table">
@@ -88,13 +93,48 @@
 </nav>
 
 <style>
+	.hd {
+		display: flex;
+		justify-content: space-between;
+		align-items: flex-end;
+		gap: var(--space-4);
+		margin-bottom: var(--space-5);
+		flex-wrap: wrap;
+	}
 	.hd h1 {
 		font-size: var(--fs-3xl);
 		margin: 0;
 	}
 	.hd p {
 		color: var(--color-text-muted);
-		margin: var(--space-1) 0 var(--space-5);
+		margin: var(--space-1) 0 0;
+	}
+	.search {
+		display: flex;
+		gap: var(--space-2);
+		align-items: center;
+	}
+	.search input {
+		padding: var(--space-2) var(--space-3);
+		background: var(--color-bg);
+		border: 1px solid var(--color-border);
+		border-radius: var(--radius-md);
+		color: var(--color-text);
+		min-width: 240px;
+		font: inherit;
+	}
+	.search .btn-primary {
+		padding: var(--space-2) var(--space-4);
+		background: var(--color-accent);
+		color: var(--color-accent-contrast);
+		border: none;
+		border-radius: var(--radius-md);
+		cursor: pointer;
+	}
+	.search .clear {
+		color: var(--color-text-muted);
+		text-decoration: none;
+		font-size: var(--fs-sm);
 	}
 	.table {
 		border: 1px solid var(--color-border);

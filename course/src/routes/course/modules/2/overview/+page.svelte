@@ -21,18 +21,18 @@
 		</p>
 		<ol>
 			<li>
-				A <strong>typed environment</strong>. Every variable is parsed with a Zod schema at boot.
-				If <code>DATABASE_URL</code> is missing, the app refuses to start — not 40 requests in.
+				A <strong>typed environment</strong>. Every variable is parsed with a Zod schema at boot. If
+				<code>DATABASE_URL</code> is missing, the app refuses to start — not 40 requests in.
 			</li>
 			<li>
 				A <strong>single Drizzle client</strong> imported only from <code>$lib/server</code>, and a
-				<strong>service layer</strong> that owns every read and write. Routes call services;
-				services call the DB. Never the reverse.
+				<strong>service layer</strong> that owns every read and write. Routes call services; services
+				call the DB. Never the reverse.
 			</li>
 			<li>
 				A <strong>request pipeline</strong> that stamps a request id, resolves a <code>Caller</code>
-				object (the actor + their roles), logs a structured line per request, and catches every
-				unhandled error with a correlation id the user can read off the screen.
+				object (the actor + their roles), logs a structured line per request, and catches every unhandled
+				error with a correlation id the user can read off the screen.
 			</li>
 		</ol>
 	</section>
@@ -40,9 +40,11 @@
 	<section>
 		<h2>Why this matters</h2>
 		<p>
-			The three hardest classes of production bug in an early-stage app are: <em>missing config that
-			only trips in prod</em>, <em>a query that assumed the wrong user</em>, and <em>an error the
-			user saw but you can't find in logs</em>. Module 2 kills all three by construction.
+			The three hardest classes of production bug in an early-stage app are: <em
+				>missing config that only trips in prod</em
+			>, <em>a query that assumed the wrong user</em>, and
+			<em>an error the user saw but you can't find in logs</em>. Module 2 kills all three by
+			construction.
 		</p>
 		<Aside type="tip" title="PE7 lens">
 			<p>
@@ -57,11 +59,12 @@
 	<section>
 		<h2>What's already in the repo</h2>
 		<p>
-			You do not write this module from zero — the scaffolding is already sitting under <code>src/lib/server</code>.
-			Module 2 is the guided tour that teaches you what each file does and why.
+			You do not write this module from zero — the scaffolding is already sitting under <code
+				>src/lib/server</code
+			>. Module 2 is the guided tour that teaches you what each file does and why.
 		</p>
 		<FileTree>
-{`src/
+			{`src/
 ├── lib/server/
 │   ├── env.ts                 ← Zod-parsed env (2.2)
 │   ├── log.ts                 ← structured JSON logger (2.4)
@@ -86,11 +89,19 @@
 	<section>
 		<h2>How to verify this module</h2>
 		<ul>
-			<li>Delete <code>DATABASE_URL</code> from <code>.env</code>. Run <code>pnpm dev</code>. The app refuses to boot with a readable error naming the variable.</li>
-			<li>Make a request against any route. Check the terminal: one JSON log line with <code>requestId</code>, <code>method</code>, <code>path</code>, <code>status</code>, <code>latencyMs</code>.</li>
+			<li>
+				Delete <code>DATABASE_URL</code> from <code>.env</code>. Run <code>pnpm dev</code>. The app
+				refuses to boot with a readable error naming the variable.
+			</li>
+			<li>
+				Make a request against any route. Check the terminal: one JSON log line with <code
+					>requestId</code
+				>, <code>method</code>, <code>path</code>, <code>status</code>, <code>latencyMs</code>.
+			</li>
 			<li>
 				In any <code>+page.server.ts</code>, read <code>locals.caller</code>. Type checker confirms
-				it is always defined. <code>locals.caller.userId</code> is <code>string | null</code> — nullable on purpose.
+				it is always defined. <code>locals.caller.userId</code> is <code>string | null</code> — nullable
+				on purpose.
 			</li>
 		</ul>
 	</section>
@@ -98,9 +109,15 @@
 	<section>
 		<h2>Recap</h2>
 		<ul>
-			<li>Module 2 lands three invariants: typed env, service-layer DB access, and a request pipeline with Caller + logging.</li>
+			<li>
+				Module 2 lands three invariants: typed env, service-layer DB access, and a request pipeline
+				with Caller + logging.
+			</li>
 			<li>Each invariant eliminates a whole class of production bug.</li>
-			<li>The code is already in the repo; these pages walk you through <em>why</em> each file is shaped the way it is.</li>
+			<li>
+				The code is already in the repo; these pages walk you through <em>why</em> each file is shaped
+				the way it is.
+			</li>
 		</ul>
 
 		<h3>Next up</h3>

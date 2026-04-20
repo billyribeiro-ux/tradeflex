@@ -17,12 +17,17 @@
 	<section>
 		<h2>What you&rsquo;ll learn</h2>
 		<ul>
-			<li>Why <code>user</code> (from Better Auth) and <code>profile</code> (our data) are two tables, not one.</li>
 			<li>
-				What <strong>Row Level Security (RLS)</strong> is — because the original course outline
-				uses it — and why our stack uses <em>service-layer authorization</em> instead.
+				Why <code>user</code> (from Better Auth) and <code>profile</code> (our data) are two tables, not
+				one.
 			</li>
-			<li>How a typed <code>Caller</code> object threads identity + roles + entitlements through every write.</li>
+			<li>
+				What <strong>Row Level Security (RLS)</strong> is — because the original course outline uses
+				it — and why our stack uses <em>service-layer authorization</em> instead.
+			</li>
+			<li>
+				How a typed <code>Caller</code> object threads identity + roles + entitlements through every write.
+			</li>
 			<li>How to emit an <code>audit_event</code> row on every state-changing call, for free.</li>
 		</ul>
 	</section>
@@ -31,8 +36,8 @@
 		<h2>Two tables, not one</h2>
 		<p>
 			<code>user</code> is owned by Better Auth. It stores email, name, image, verification state.
-			<strong>Never edit the generated <code>auth.schema.ts</code></strong> — it will be
-			regenerated whenever auth config changes, and your edits would be overwritten.
+			<strong>Never edit the generated <code>auth.schema.ts</code></strong> — it will be regenerated whenever
+			auth config changes, and your edits would be overwritten.
 		</p>
 		<p>
 			<code>profile</code> is our data about the user — bio, timezone, avatar blob key, notification
@@ -44,21 +49,24 @@
 	<section>
 		<h2>RLS vs service-layer: the pivot</h2>
 		<p>
-			A traditional Postgres-native approach is <strong>Row Level Security (RLS)</strong>: you
-			write SQL policies on each table that the database itself evaluates per query, using claims
-			from the current session. It works well when your auth system, your DB, and your app all
-			agree on how to thread identity (Supabase is built around this).
+			A traditional Postgres-native approach is <strong>Row Level Security (RLS)</strong>: you write
+			SQL policies on each table that the database itself evaluates per query, using claims from the
+			current session. It works well when your auth system, your DB, and your app all agree on how
+			to thread identity (Supabase is built around this).
 		</p>
 		<p>
 			Our stack is Better Auth + Neon + Drizzle. Better Auth identity lives in the SvelteKit
 			request, not in a Postgres session variable, so RLS policies would have to be invented from
 			scratch. Instead, we use <strong>service-layer authorization</strong>: every read and write
-			goes through a typed service function that takes a <code>Caller</code> argument and enforces
-			the check in application code.
+			goes through a typed service function that takes a <code>Caller</code> argument and enforces the
+			check in application code.
 		</p>
 		<p>This has three properties worth calling out:</p>
 		<ol>
-			<li>Policies live next to the code that uses them — no &ldquo;which policy is hiding this row?&rdquo; debugging.</li>
+			<li>
+				Policies live next to the code that uses them — no &ldquo;which policy is hiding this
+				row?&rdquo; debugging.
+			</li>
 			<li>Services are plain functions — unit tests are trivial.</li>
 			<li>If we ever swap DBs, the auth-z logic travels with us.</li>
 		</ol>
@@ -74,7 +82,8 @@
 					Open <code>src/lib/server/db/schema.ts</code> and add a <code>profile</code> table
 					alongside the demo <code>task</code> table:
 				</p>
-				<CodeBlock title="src/lib/server/db/schema.ts" lang="ts">{`import { pgTable, serial, integer, text, timestamp, jsonb } from 'drizzle-orm/pg-core';
+				<CodeBlock title="src/lib/server/db/schema.ts" lang="ts"
+					>{`import { pgTable, serial, integer, text, timestamp, jsonb } from 'drizzle-orm/pg-core';
 import { user } from './auth.schema';
 
 export const task = pgTable('task', {
@@ -108,23 +117,26 @@ export const auditEvent = pgTable('audit_event', {
   at: timestamp('at').notNull().defaultNow()
 });
 
-export * from './auth.schema';`}</CodeBlock>
+export * from './auth.schema';`}</CodeBlock
+				>
 			</li>
 
 			<li>
 				<h4>Generate and apply the migration</h4>
-				<CodeBlock lang="bash">$ pnpm db:generate
-$ DATABASE_URL=$DATABASE_URL_DIRECT pnpm db:migrate</CodeBlock>
+				<CodeBlock lang="bash"
+					>$ pnpm db:generate $ DATABASE_URL=$DATABASE_URL_DIRECT pnpm db:migrate</CodeBlock
+				>
 			</li>
 
 			<li>
 				<h4>Define the Caller type</h4>
 				<p>
-					A <code>Caller</code> is the authenticated identity making a service call: user id +
-					roles + entitlements. Every service method takes it as the first argument, so no service
-					ever reads auth state from a global.
+					A <code>Caller</code> is the authenticated identity making a service call: user id + roles +
+					entitlements. Every service method takes it as the first argument, so no service ever reads
+					auth state from a global.
 				</p>
-				<CodeBlock title="src/lib/server/authz/caller.ts" lang="ts">{`export type Role = 'owner' | 'admin' | 'support' | 'content' | 'finance' | 'analyst' | 'read_only';
+				<CodeBlock title="src/lib/server/authz/caller.ts" lang="ts"
+					>{`export type Role = 'owner' | 'admin' | 'support' | 'content' | 'finance' | 'analyst' | 'read_only';
 
 export interface Caller {
   userId: string | null;
@@ -158,12 +170,14 @@ export function assertRole(caller: Caller, ...allowed: Role[]) {
   if (!caller.roles.some((r) => allowed.includes(r))) {
     throw new AuthzError(\`role required: \${allowed.join(' | ')}\`);
   }
-}`}</CodeBlock>
+}`}</CodeBlock
+				>
 			</li>
 
 			<li>
 				<h4>Write the profile service</h4>
-				<CodeBlock title="src/lib/server/services/profile.ts" lang="ts">{`import { eq } from 'drizzle-orm';
+				<CodeBlock title="src/lib/server/services/profile.ts" lang="ts"
+					>{`import { eq } from 'drizzle-orm';
 import { db } from '$lib/server/db';
 import { profile } from '$lib/server/db/schema';
 import { assertAuthenticated, type Caller } from '$lib/server/authz/caller';
@@ -199,12 +213,14 @@ export const profileService = {
 
     return row;
   }
-};`}</CodeBlock>
+};`}</CodeBlock
+				>
 			</li>
 
 			<li>
 				<h4>Write the audit helper</h4>
-				<CodeBlock title="src/lib/server/services/audit.ts" lang="ts">{`import { db } from '$lib/server/db';
+				<CodeBlock title="src/lib/server/services/audit.ts" lang="ts"
+					>{`import { db } from '$lib/server/db';
 import { auditEvent } from '$lib/server/db/schema';
 import type { Caller } from '$lib/server/authz/caller';
 
@@ -220,7 +236,8 @@ export async function writeAudit(
     targetId: entry.targetId,
     metadata: { requestId: caller.requestId, ...(entry.metadata ?? {}) }
   });
-}`}</CodeBlock>
+}`}</CodeBlock
+				>
 			</li>
 
 			<li>
@@ -228,7 +245,8 @@ export async function writeAudit(
 				<p>
 					This is what keeps the pattern honest over time. Add to <code>eslint.config.js</code>:
 				</p>
-				<CodeBlock title="eslint.config.js (rule snippet)" lang="js">{`{
+				<CodeBlock title="eslint.config.js (rule snippet)" lang="js"
+					>{`{
   files: ['src/routes/**'],
   rules: {
     'no-restricted-imports': ['error', {
@@ -240,10 +258,11 @@ export async function writeAudit(
       ]
     }]
   }
-}`}</CodeBlock>
+}`}</CodeBlock
+				>
 				<p>
-					Now a reviewer does not have to catch accidental direct-Drizzle-use by hand — ESLint
-					does it for every PR.
+					Now a reviewer does not have to catch accidental direct-Drizzle-use by hand — ESLint does
+					it for every PR.
 				</p>
 			</li>
 		</Steps>
@@ -264,22 +283,31 @@ export async function writeAudit(
 		<ul>
 			<li><code>profile</code> is our data; <code>user</code> stays under Better Auth.</li>
 			<li>
-				Service layer, not RLS. Every write threads a <code>Caller</code> and emits an audit
-				event.
+				Service layer, not RLS. Every write threads a <code>Caller</code> and emits an audit event.
 			</li>
-			<li>ESLint forbids importing <code>$lib/server/db</code> from routes — the rule is mechanical, not cultural.</li>
+			<li>
+				ESLint forbids importing <code>$lib/server/db</code> from routes — the rule is mechanical, not
+				cultural.
+			</li>
 		</ul>
 
 		<h3>Verify you&rsquo;re done</h3>
 		<ul>
 			<li><code>pnpm check</code> green.</li>
-			<li><code>drizzle/</code> contains a second migration adding <code>profile</code> + <code>audit_event</code>.</li>
-			<li>Calling <code>profileService.upsertForCaller</code> (from a scratch script or a test) inserts a row and an audit event.</li>
+			<li>
+				<code>drizzle/</code> contains a second migration adding <code>profile</code> +
+				<code>audit_event</code>.
+			</li>
+			<li>
+				Calling <code>profileService.upsertForCaller</code> (from a scratch script or a test) inserts
+				a row and an audit event.
+			</li>
 		</ul>
 
 		<h3>Next up</h3>
 		<p>
-			Module 2 lands the typed env loader, the production Drizzle client, and the load/remote-function patterns that every later page relies on.
+			Module 2 lands the typed env loader, the production Drizzle client, and the
+			load/remote-function patterns that every later page relies on.
 		</p>
 	</section>
 </CoursePage>

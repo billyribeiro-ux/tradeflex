@@ -5,6 +5,10 @@ on:
   push:
     branches: [main]
 
+defaults:
+  run:
+    working-directory: course
+
 jobs:
   check:
     runs-on: ubuntu-latest
@@ -19,6 +23,7 @@ jobs:
         with:
           node-version: 24
           cache: pnpm
+          cache-dependency-path: course/pnpm-lock.yaml
 
       - name: Install
         run: pnpm install --frozen-lockfile

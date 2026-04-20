@@ -14,10 +14,18 @@
 	<section>
 		<h2>What you will ship</h2>
 		<ul>
-			<li>A styled <code>/login</code> with email-password + GitHub, under an <code>(auth)</code> group layout.</li>
+			<li>
+				A styled <code>/login</code> with email-password + GitHub, under an <code>(auth)</code> group
+				layout.
+			</li>
 			<li>A <code>/register</code> with the same look and a 10-character minimum password.</li>
-			<li>An <code>/account</code> page gated by a load-function redirect; uses <code>profileService</code>.</li>
-			<li>A profile editor with Zod validation, a real audit trail, and an optimistic save toast.</li>
+			<li>
+				An <code>/account</code> page gated by a load-function redirect; uses
+				<code>profileService</code>.
+			</li>
+			<li>
+				A profile editor with Zod validation, a real audit trail, and an optimistic save toast.
+			</li>
 			<li>A <code>/logout</code> POST action that clears the Better Auth session cookie.</li>
 		</ul>
 	</section>
@@ -29,7 +37,7 @@
 			We use it twice in this module:
 		</p>
 		<FileTree>
-{`src/routes/
+			{`src/routes/
 ├── (auth)/             ← split-screen brand + form, no main nav
 │   ├── +layout.svelte
 │   ├── login/
@@ -41,7 +49,9 @@
 `}
 		</FileTree>
 		<p>
-			Keeping unauthenticated surfaces in their own group makes it easy to audit: anything under <code>(auth)</code>
+			Keeping unauthenticated surfaces in their own group makes it easy to audit: anything under <code
+				>(auth)</code
+			>
 			is intentionally public.
 		</p>
 	</section>
@@ -50,9 +60,9 @@
 		<h2>What we are <em>not</em> doing yet</h2>
 		<Aside type="note">
 			<p>
-				Password reset, magic link, and 2FA land in a later module when we wire Resend for transactional
-				email. Account deletion + data export arrive in the Compliance module. We ship the common path
-				first.
+				Password reset, magic link, and 2FA land in a later module when we wire Resend for
+				transactional email. Account deletion + data export arrive in the Compliance module. We ship
+				the common path first.
 			</p>
 		</Aside>
 	</section>
@@ -60,9 +70,15 @@
 	<section>
 		<h2>Recap</h2>
 		<ul>
-			<li>Two route groups: <code>(auth)</code> for unauthenticated surfaces, <code>account</code> for member surfaces.</li>
+			<li>
+				Two route groups: <code>(auth)</code> for unauthenticated surfaces, <code>account</code> for member
+				surfaces.
+			</li>
 			<li>Every write hits the service layer; the route only wires form to service.</li>
-			<li>Password reset / magic link / 2FA / account deletion come later; build the common path first.</li>
+			<li>
+				Password reset / magic link / 2FA / account deletion come later; build the common path
+				first.
+			</li>
 		</ul>
 
 		<h3>Next up</h3>

@@ -19,7 +19,11 @@
 					<ul>
 						{#each m.pages as p (p.href)}
 							<li>
-								<a href={p.href} class:active={p.href === currentHref} aria-current={p.href === currentHref ? 'page' : undefined}>
+								<a
+									href={p.href}
+									class:active={p.href === currentHref}
+									aria-current={p.href === currentHref ? 'page' : undefined}
+								>
 									{p.title}
 								</a>
 							</li>
@@ -109,7 +113,9 @@
 		color: var(--color-text-muted);
 		text-decoration: none;
 		font-size: var(--fs-sm);
-		transition: background var(--dur-1) var(--ease-out-expo), color var(--dur-1) var(--ease-out-expo);
+		transition:
+			background var(--dur-1) var(--ease-out-expo),
+			color var(--dur-1) var(--ease-out-expo);
 	}
 
 	details ul li a:hover {

@@ -45,10 +45,22 @@
 			</header>
 			<p>{a.thesis}</p>
 			<dl>
-				<div><dt>Entry</dt><dd>{a.entry}</dd></div>
-				<div><dt>Stop</dt><dd>{a.stop}</dd></div>
-				<div><dt>Target</dt><dd>{a.target}</dd></div>
-				<div><dt>Sizing</dt><dd>{a.sizing}</dd></div>
+				<div>
+					<dt>Entry</dt>
+					<dd>{a.entry}</dd>
+				</div>
+				<div>
+					<dt>Stop</dt>
+					<dd>{a.stop}</dd>
+				</div>
+				<div>
+					<dt>Target</dt>
+					<dd>{a.target}</dd>
+				</div>
+				<div>
+					<dt>Sizing</dt>
+					<dd>{a.sizing}</dd>
+				</div>
 			</dl>
 		</article>
 	{/each}

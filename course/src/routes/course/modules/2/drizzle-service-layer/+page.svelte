@@ -108,18 +108,19 @@ export const load = async ({ locals }) => {
 		<h2>One client, one module</h2>
 		<p>
 			A Drizzle client wraps a <code>postgres-js</code> connection pool. Instantiating it twice
-			means two pools, double the connections, and subtle bugs when transactions span the wrong
-			one. We create it exactly once, in <code>src/lib/server/db/index.ts</code>, and import it
-			from there.
+			means two pools, double the connections, and subtle bugs when transactions span the wrong one.
+			We create it exactly once, in <code>src/lib/server/db/index.ts</code>, and import it from
+			there.
 		</p>
 		<CodeBlock lang="ts" title="src/lib/server/db/index.ts" code={dbClient} />
 		<Aside type="caution" title="Server-only imports">
 			<p>
 				The path <code>$lib/server</code> is special in SvelteKit: anything under it is rejected at
-				build time if a client bundle imports it. Keep all database code under <code>$lib/server</code>.
-				If you see <code>Cannot import "$lib/server/db" into client bundle</code>, that's the
-				safety net firing — a page component is trying to query the DB directly. Move the call
-				into <code>+page.server.ts</code> or a remote function.
+				build time if a client bundle imports it. Keep all database code under
+				<code>$lib/server</code>. If you see
+				<code>Cannot import "$lib/server/db" into client bundle</code>, that's the safety net firing
+				— a page component is trying to query the DB directly. Move the call into
+				<code>+page.server.ts</code> or a remote function.
 			</p>
 		</Aside>
 	</section>
@@ -133,15 +134,13 @@ export const load = async ({ locals }) => {
 			<code>impersonatorUserId</code> when an admin is acting on a member's behalf.
 		</p>
 		<CodeBlock lang="ts" title="src/lib/server/authz/caller.ts" code={caller} />
-		<p>
-			Compare with the alternatives:
-		</p>
+		<p>Compare with the alternatives:</p>
 		<ul>
 			<li>
-				<strong>Postgres Row-Level Security (RLS).</strong> Every query runs as the user, policies
-				enforce visibility in the database. Safer in a vacuum, but it leaks auth into SQL, makes
-				impersonation awkward, makes background jobs awkward, and locks you out of batch admin
-				work. We considered it and explicitly rejected it in ADR 0008.
+				<strong>Postgres Row-Level Security (RLS).</strong> Every query runs as the user, policies enforce
+				visibility in the database. Safer in a vacuum, but it leaks auth into SQL, makes impersonation
+				awkward, makes background jobs awkward, and locks you out of batch admin work. We considered it
+				and explicitly rejected it in ADR 0008.
 			</li>
 			<li>
 				<strong>Middleware that mutates request context.</strong> Classic Express pattern. It's
@@ -149,20 +148,22 @@ export const load = async ({ locals }) => {
 				Caller argument is visible: every service signature says <code>(caller: Caller, ...)</code>.
 			</li>
 			<li>
-				<strong>"Just check session in every route."</strong> Works for a weekend project. At
-				Trade Flex scale there are dozens of write paths; missing one is a vulnerability.
+				<strong>"Just check session in every route."</strong> Works for a weekend project. At Trade Flex
+				scale there are dozens of write paths; missing one is a vulnerability.
 			</li>
 		</ul>
 	</section>
 
 	<section>
 		<h2>Anatomy of a service</h2>
-		<p>
-			A service module is a plain object of async functions. Each function:
-		</p>
+		<p>A service module is a plain object of async functions. Each function:</p>
 		<ol>
 			<li>Takes a <code>Caller</code> first.</li>
-			<li>Asserts what it needs up front (<code>assertAuthenticated</code>, <code>assertRole</code>, <code>assertEntitlement</code>). These throw typed errors that the request pipeline converts to 401/403.</li>
+			<li>
+				Asserts what it needs up front (<code>assertAuthenticated</code>, <code>assertRole</code>,
+				<code>assertEntitlement</code>). These throw typed errors that the request pipeline converts
+				to 401/403.
+			</li>
 			<li>Does the Drizzle query.</li>
 			<li>On any state change, writes an audit row before returning.</li>
 		</ol>
@@ -172,8 +173,8 @@ export const load = async ({ locals }) => {
 	<section>
 		<h2>How routes use it</h2>
 		<p>
-			<code>locals.caller</code> is populated by the request pipeline (next page). A route hands it
-			straight to the service and trusts the service to enforce rules.
+			<code>locals.caller</code> is populated by the request pipeline (next page). A route hands it straight
+			to the service and trusts the service to enforce rules.
 		</p>
 		<CodeBlock lang="ts" code={callsite} />
 		<p>
@@ -196,10 +197,19 @@ export const load = async ({ locals }) => {
 	<section>
 		<h2>Recap</h2>
 		<ul>
-			<li>One Drizzle client, imported from <code>$lib/server/db</code>, never instantiated twice.</li>
-			<li>Every service function takes a <code>Caller</code> and asserts requirements before querying.</li>
-			<li>Routes hand <code>locals.caller</code> to services; services own authorization and audit.</li>
-			<li>RLS was considered and rejected: service-layer auth is visible, testable, and friendly to impersonation + background jobs.</li>
+			<li>
+				One Drizzle client, imported from <code>$lib/server/db</code>, never instantiated twice.
+			</li>
+			<li>
+				Every service function takes a <code>Caller</code> and asserts requirements before querying.
+			</li>
+			<li>
+				Routes hand <code>locals.caller</code> to services; services own authorization and audit.
+			</li>
+			<li>
+				RLS was considered and rejected: service-layer auth is visible, testable, and friendly to
+				impersonation + background jobs.
+			</li>
 		</ul>
 
 		<h3>Next up</h3>

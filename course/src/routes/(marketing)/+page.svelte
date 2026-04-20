@@ -35,7 +35,7 @@
 		},
 		{
 			quote:
-				'The courses are the clearest I\'ve seen. Options 101 untangled what three YouTube channels couldn\'t.',
+				"The courses are the clearest I've seen. Options 101 untangled what three YouTube channels couldn't.",
 			author: 'M. Okafor',
 			role: 'Swing trader'
 		}

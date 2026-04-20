@@ -1,17 +1,15 @@
 <script lang="ts">
 	import { enhance } from '$app/forms';
 	import type { ActionData, PageData } from './$types';
+	import { toast } from '$lib/toast/store.svelte';
 
 	let { data, form }: { data: PageData; form: ActionData } = $props();
 
 	let submitting = $state(false);
-	let toast = $state<string | null>(null);
 
 	$effect(() => {
 		if (form && 'success' in form && form.success) {
-			toast = 'Profile saved';
-			const t = setTimeout(() => (toast = null), 2500);
-			return () => clearTimeout(t);
+			toast.success('Profile saved');
 		}
 	});
 
@@ -58,18 +56,12 @@
 	>
 		<label class="field">
 			<span>Display name</span>
-			<input
-				name="displayName"
-				required
-				value={prevValues.displayName || (p?.displayName ?? '')}
-			/>
+			<input name="displayName" required value={prevValues.displayName || (p?.displayName ?? '')} />
 		</label>
 
 		<label class="field">
 			<span>Bio</span>
-			<textarea name="bio" rows="3" maxlength="500"
-				>{prevValues.bio || (p?.bio ?? '')}</textarea
-			>
+			<textarea name="bio" rows="3" maxlength="500">{prevValues.bio || (p?.bio ?? '')}</textarea>
 		</label>
 
 		<label class="field">
@@ -86,12 +78,7 @@
 			<div class="radio-row">
 				{#each ['system', 'light', 'dark'] as t}
 					<label class="radio">
-						<input
-							type="radio"
-							name="theme"
-							value={t}
-							checked={(p?.theme ?? 'system') === t}
-						/>
+						<input type="radio" name="theme" value={t} checked={(p?.theme ?? 'system') === t} />
 						<span>{t}</span>
 					</label>
 				{/each}
@@ -115,9 +102,37 @@
 	</form>
 </section>
 
-{#if toast}
-	<div class="toast" role="status">{toast}</div>
-{/if}
+<section class="card" style="margin-top: var(--space-5);">
+	<h2>Membership</h2>
+	{#if data.subscription}
+		<p class="muted">
+			Status <strong>{data.subscription.status}</strong>
+			{#if data.subscription.priceLookupKey}· plan <strong
+					>{data.subscription.priceLookupKey}</strong
+				>{/if}
+			{#if data.subscription.currentPeriodEnd}
+				· renews {new Date(data.subscription.currentPeriodEnd).toLocaleDateString()}
+			{/if}
+		</p>
+		{#if data.entitled}
+			<p class="ok">You have access to member-only features like /alerts.</p>
+		{:else}
+			<p class="warn">Your membership is paused. Update payment to restore access.</p>
+		{/if}
+	{:else}
+		<p class="muted">You don't have an active membership yet.</p>
+	{/if}
+
+	<div class="billing-actions">
+		{#if data.customer}
+			<form method="post" action="?/portal" use:enhance>
+				<button class="btn-primary" type="submit">Open billing portal</button>
+			</form>
+		{:else}
+			<a class="btn-primary" href="/pricing">View plans</a>
+		{/if}
+	</div>
+</section>
 
 <style>
 	.page-head {
@@ -246,15 +261,21 @@
 		color: var(--color-danger);
 		margin: 0;
 	}
-	.toast {
-		position: fixed;
-		bottom: var(--space-5);
-		right: var(--space-5);
-		padding: var(--space-3) var(--space-4);
-		background: var(--color-surface);
-		border: 1px solid var(--color-border);
-		border-radius: var(--radius-md);
-		box-shadow: var(--shadow-3);
-		z-index: var(--z-toast);
+	.ok {
+		color: var(--color-success, #16a34a);
+		margin: var(--space-1) 0 0;
+	}
+	.warn {
+		color: var(--color-warning, #d97706);
+		margin: var(--space-1) 0 0;
+	}
+	.billing-actions {
+		display: flex;
+		gap: var(--space-3);
+		margin-top: var(--space-4);
+	}
+	.billing-actions a.btn-primary {
+		text-decoration: none;
+		display: inline-block;
 	}
 </style>

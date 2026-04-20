@@ -73,17 +73,18 @@ export const actions = {
 	<section>
 		<h2>Register</h2>
 		<p>
-			A classic SvelteKit form action: parse the body, validate, call <code>auth.api.signUpEmail</code>,
-			redirect on success. Errors come back as structured <code>APIError</code>s from Better Auth — we
-			surface the message and repopulate the non-sensitive fields so the user doesn't lose their typed
-			email.
+			A classic SvelteKit form action: parse the body, validate, call <code
+				>auth.api.signUpEmail</code
+			>, redirect on success. Errors come back as structured <code>APIError</code>s from Better Auth
+			— we surface the message and repopulate the non-sensitive fields so the user doesn't lose
+			their typed email.
 		</p>
 		<CodeBlock lang="ts" code={registerAction} />
 		<Aside type="caution" title="Never echo passwords back">
 			<p>
-				Notice <code>password</code> is not in any <code>fail()</code> payload. If validation fails
-				the user re-types it. Echoing a password through the server response to the client is the
-				kind of detail review tools will catch — better to build the habit now.
+				Notice <code>password</code> is not in any <code>fail()</code> payload. If validation fails the
+				user re-types it. Echoing a password through the server response to the client is the kind of
+				detail review tools will catch — better to build the habit now.
 			</p>
 		</Aside>
 	</section>
@@ -101,7 +102,8 @@ export const actions = {
 		<h2>The <code>next</code> parameter</h2>
 		<p>
 			The login page reads <code>?next=/some/path</code> and round-trips it through a hidden form
-			field. When a member clicks a protected link while logged out, the route guard redirects them to
+			field. When a member clicks a protected link while logged out, the route guard redirects them
+			to
 			<code>/login?next=/where/they/were-going</code>. Better login UX, one extra form field.
 		</p>
 	</section>
@@ -109,17 +111,19 @@ export const actions = {
 	<section>
 		<h2>Progressive enhancement with <code>use:enhance</code></h2>
 		<p>
-			<code>use:enhance</code> intercepts the form submit and performs it over fetch, so the page
-			doesn't reload. Critically, if JS hasn't loaded yet (slow network, script error), the form still
-			submits the normal way — the server action handles both cases identically. That's why we don't
-			ship a separate JSON endpoint for auth.
+			<code>use:enhance</code> intercepts the form submit and performs it over fetch, so the page doesn't
+			reload. Critically, if JS hasn't loaded yet (slow network, script error), the form still submits
+			the normal way — the server action handles both cases identically. That's why we don't ship a separate
+			JSON endpoint for auth.
 		</p>
 	</section>
 
 	<section>
 		<h2>Recap</h2>
 		<ul>
-			<li>Both actions use <code>request.formData()</code> directly; Superforms lands in the contacts module.</li>
+			<li>
+				Both actions use <code>request.formData()</code> directly; Superforms lands in the contacts module.
+			</li>
 			<li>Better Auth handles password hashing, session creation, and OAuth.</li>
 			<li>Never echo a password back in a <code>fail()</code> payload.</li>
 			<li><code>?next=</code> round-trips through a hidden field for post-login redirects.</li>

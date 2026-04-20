@@ -104,7 +104,8 @@ const pages: CoursePage[] = [
 		module: 'module-2',
 		moduleOrder: 2,
 		order: 2,
-		summary: 'One Drizzle instance, server-only imports, and the Caller that travels with every call.'
+		summary:
+			'One Drizzle instance, server-only imports, and the Caller that travels with every call.'
 	},
 	{
 		slug: 'module-2-request-pipeline',
@@ -113,7 +114,8 @@ const pages: CoursePage[] = [
 		module: 'module-2',
 		moduleOrder: 2,
 		order: 3,
-		summary: 'hooks.server.ts: request id, logging, Caller resolution, and load functions that use them.'
+		summary:
+			'hooks.server.ts: request id, logging, Caller resolution, and load functions that use them.'
 	},
 	{
 		slug: 'module-2-remote-functions',
@@ -122,7 +124,8 @@ const pages: CoursePage[] = [
 		module: 'module-2',
 		moduleOrder: 2,
 		order: 4,
-		summary: 'When to reach for a form action, when to reach for a remote function, and why never a REST endpoint.'
+		summary:
+			'When to reach for a form action, when to reach for a remote function, and why never a REST endpoint.'
 	},
 	{
 		slug: 'module-3-overview',
@@ -140,7 +143,8 @@ const pages: CoursePage[] = [
 		module: 'module-3',
 		moduleOrder: 3,
 		order: 1,
-		summary: 'Two route groups, email/password, GitHub OAuth, real Better Auth API calls, real errors.'
+		summary:
+			'Two route groups, email/password, GitHub OAuth, real Better Auth API calls, real errors.'
 	},
 	{
 		slug: 'module-3-route-guards',
@@ -149,7 +153,8 @@ const pages: CoursePage[] = [
 		module: 'module-3',
 		moduleOrder: 3,
 		order: 2,
-		summary: 'Gating authenticated pages, the account layout, and the profile editor on service + audit.'
+		summary:
+			'Gating authenticated pages, the account layout, and the profile editor on service + audit.'
 	},
 	{
 		slug: 'module-3-sessions-and-signout',
@@ -167,7 +172,8 @@ const pages: CoursePage[] = [
 		module: 'module-4',
 		moduleOrder: 4,
 		order: 0,
-		summary: 'From auth to a first real feature: contacts / leads, end-to-end, service-layer all the way.'
+		summary:
+			'From auth to a first real feature: contacts / leads, end-to-end, service-layer all the way.'
 	},
 	{
 		slug: 'module-4-schema-and-service',
@@ -176,7 +182,8 @@ const pages: CoursePage[] = [
 		module: 'module-4',
 		moduleOrder: 4,
 		order: 1,
-		summary: 'A Drizzle table for leads, a service that dedupes by email, and the public POST endpoint.'
+		summary:
+			'A Drizzle table for leads, a service that dedupes by email, and the public POST endpoint.'
 	},
 	{
 		slug: 'module-4-admin-inbox',
@@ -186,6 +193,195 @@ const pages: CoursePage[] = [
 		moduleOrder: 4,
 		order: 2,
 		summary: 'Paginated staff view, role-gated unsubscribe action, and every change audited.'
+	},
+	{
+		slug: 'module-5-overview',
+		href: '/course/modules/5/overview',
+		title: '5.1 · Overview',
+		module: 'module-5',
+		moduleOrder: 5,
+		order: 0,
+		summary:
+			'Stripe mental model: products, prices, customers, subscriptions, events. Ten terms, then code.'
+	},
+	{
+		slug: 'module-5-dashboard-and-cli',
+		href: '/course/modules/5/dashboard-and-cli',
+		title: '5.2 · Dashboard + CLI',
+		module: 'module-5',
+		moduleOrder: 5,
+		order: 1,
+		summary:
+			'Create a test-mode account, install the Stripe CLI, authenticate, and watch events stream.'
+	},
+	{
+		slug: 'module-5-products-and-prices',
+		href: '/course/modules/5/products-and-prices',
+		title: '5.3 · Products + prices + lookup keys',
+		module: 'module-5',
+		moduleOrder: 5,
+		order: 2,
+		summary:
+			'Why prices are the thing you reference in code, not products — and why lookup keys save your life.'
+	},
+	{
+		slug: 'module-6-overview',
+		href: '/course/modules/6/overview',
+		title: '6.1 · Stripe + SvelteKit',
+		module: 'module-6',
+		moduleOrder: 6,
+		order: 0,
+		summary: 'A minimal REST client instead of the SDK, why, and how the webhook endpoint verifies.'
+	},
+	{
+		slug: 'module-6-checkout-and-webhook',
+		href: '/course/modules/6/checkout-and-webhook',
+		title: '6.2 · Checkout + webhook',
+		module: 'module-6',
+		moduleOrder: 6,
+		order: 1,
+		summary:
+			'POST /api/billing/checkout that redirects to Stripe, POST /api/stripe/webhook that signs + stores.'
+	},
+	{
+		slug: 'module-7-overview',
+		href: '/course/modules/7/overview',
+		title: '7.1 · Billing services',
+		module: 'module-7',
+		moduleOrder: 7,
+		order: 0,
+		summary:
+			'Turning webhook rows into subscription state — customers, subscriptions, grace periods, portal.'
+	},
+	{
+		slug: 'module-7-entitlements',
+		href: '/course/modules/7/entitlements',
+		title: '7.2 · Entitlements + gating',
+		module: 'module-7',
+		moduleOrder: 7,
+		order: 1,
+		summary:
+			'One entitlement function, a redirect gate on /alerts, and membership state surfaced on /account.'
+	},
+	{
+		slug: 'module-9-trials-and-test-clocks',
+		href: '/course/modules/9/trials-and-test-clocks',
+		title: '9.1 · Trials + test clocks',
+		module: 'module-9',
+		moduleOrder: 9,
+		order: 0,
+		summary:
+			'Two trial flavors (card upfront 14d, no-card 7d) + using Stripe test clocks to replay a 21-day dunning cycle in seconds.'
+	},
+	{
+		slug: 'module-9-portal-and-dunning',
+		href: '/course/modules/9/portal-and-dunning',
+		title: '9.2 · Customer portal + dunning',
+		module: 'module-9',
+		moduleOrder: 9,
+		order: 1,
+		summary:
+			'Stripe-hosted portal in one redirect, grace_until pattern for payment_failed retries, and a test-clock replay of the full 21-day cycle.'
+	},
+	{
+		slug: 'module-10-tier-gating',
+		href: '/course/modules/10/tier-gating',
+		title: '10.1 · Tier-based access control',
+		module: 'module-10',
+		moduleOrder: 10,
+		order: 0,
+		summary:
+			'Three rules: pages redirect, endpoints 402, services stay tier-blind. One entitlement function, used everywhere.'
+	},
+	{
+		slug: 'module-8-overview',
+		href: '/course/modules/8/overview',
+		title: '8.1 · Products + pricing page',
+		module: 'module-8',
+		moduleOrder: 8,
+		order: 0,
+		summary:
+			'Stripe is the source of truth for amounts; lookup keys (not price IDs) live in code; form POST + 303 into checkout.'
+	},
+	{
+		slug: 'module-11-overview',
+		href: '/course/modules/11/overview',
+		title: '11.1 · Testing',
+		module: 'module-11',
+		moduleOrder: 11,
+		order: 0,
+		summary:
+			'Three layers (unit, integration, E2E), each with one job — no layer fakes another layer.'
+	},
+	{
+		slug: 'module-11-e2e-smoke',
+		href: '/course/modules/11/e2e-smoke',
+		title: '11.2 · E2E smoke tests',
+		module: 'module-11',
+		moduleOrder: 11,
+		order: 1,
+		summary:
+			'Two-assertion Playwright tests that run on every preview deploy — the canary for each Vercel URL.'
+	},
+	{
+		slug: 'module-12-overview',
+		href: '/course/modules/12/overview',
+		title: '12.1 · CI/CD + production',
+		module: 'module-12',
+		moduleOrder: 12,
+		order: 0,
+		summary:
+			'Two lanes (PR + main), Neon branch per PR, forward-compatible migrations, one-liner rollback.'
+	},
+	{
+		slug: 'module-12-neon-branches-and-rollback',
+		href: '/course/modules/12/neon-branches-and-rollback',
+		title: '12.2 · Neon branches + rollback',
+		module: 'module-12',
+		moduleOrder: 12,
+		order: 1,
+		summary:
+			'Branch per PR, forward-compatible migrations, rollback = revert (never down-migrations), audit-driven replay for data bugs.'
+	},
+	{
+		slug: 'module-13-overview',
+		href: '/course/modules/13/overview',
+		title: '13.1 · UX extras',
+		module: 'module-13',
+		moduleOrder: 13,
+		order: 0,
+		summary:
+			'Toasts that survive redirects, preserved next= intent, Stripe branding, reduced-motion-first animation.'
+	},
+	{
+		slug: 'module-13-toasts-and-flash',
+		href: '/course/modules/13/toasts-and-flash',
+		title: '13.2 · Toasts + flash cookie',
+		module: 'module-13',
+		moduleOrder: 13,
+		order: 1,
+		summary:
+			'App-wide toast store, the flash-cookie pattern for toasts that survive redirects, and the open-redirect guard on next=.'
+	},
+	{
+		slug: 'module-13-command-palette',
+		href: '/course/modules/13/command-palette',
+		title: '13.3 · Command palette (⌘K)',
+		module: 'module-13',
+		moduleOrder: 13,
+		order: 2,
+		summary:
+			'Listbox semantics, ArrowUp/Down/Enter nav, reduced-motion-safe entrance — from zero to a keyboard-first palette.'
+	},
+	{
+		slug: 'module-bonus-custom-checkout',
+		href: '/course/modules/bonus/custom-checkout',
+		title: 'B.1 · Custom multi-step checkout',
+		module: 'module-bonus',
+		moduleOrder: 99,
+		order: 0,
+		summary:
+			'Tabbed Sign in → Billing → Payment, persistent cart sidebar w/ recurring-totals split, Stripe Payment Element.'
 	}
 ];
 
@@ -223,7 +419,7 @@ const moduleMeta: Record<string, { order: number; title: string; summary: string
 	'module-6': {
 		order: 6,
 		title: 'Stripe + SvelteKit',
-		summary: 'Node client, webhooks, stripe listen, what to mirror locally.'
+		summary: 'Fetch client, webhook HMAC, checkout redirect, idempotent event storage.'
 	},
 	'module-7': {
 		order: 7,

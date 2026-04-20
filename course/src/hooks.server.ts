@@ -65,8 +65,10 @@ const handleLogging: Handle = async ({ event, resolve }) => {
 };
 
 function sequence(...handlers: Handle[]): Handle {
-	return handlers.reduce((acc, h) => async ({ event, resolve }) =>
-		acc({ event, resolve: (ev) => h({ event: ev, resolve }) })
+	return handlers.reduce(
+		(acc, h) =>
+			async ({ event, resolve }) =>
+				acc({ event, resolve: (ev) => h({ event: ev, resolve }) })
 	);
 }
 

@@ -1,4 +1,4 @@
-import { desc, eq, sql } from 'drizzle-orm';
+import { desc, eq, ilike, sql } from 'drizzle-orm';
 import { db } from '$lib/server/db';
 import { user } from '$lib/server/db/auth.schema';
 import { profile, roleAssignment } from '$lib/server/db/schema';
@@ -17,12 +17,16 @@ export interface MemberRow {
 const STAFF_READ: Role[] = ['owner', 'admin', 'support', 'analyst'];
 
 export const membersService = {
-	async list(caller: Caller, opts: { limit?: number; offset?: number } = {}): Promise<MemberRow[]> {
+	async list(
+		caller: Caller,
+		opts: { limit?: number; offset?: number; q?: string } = {}
+	): Promise<MemberRow[]> {
 		assertRole(caller, ...STAFF_READ);
 		const limit = Math.min(opts.limit ?? 50, 200);
 		const offset = Math.max(opts.offset ?? 0, 0);
+		const q = opts.q?.trim() ?? '';
 
-		const rows = await db
+		const baseQuery = db
 			.select({
 				userId: user.id,
 				email: user.email,
@@ -31,7 +35,9 @@ export const membersService = {
 				createdAt: user.createdAt
 			})
 			.from(user)
-			.leftJoin(profile, eq(profile.userId, user.id))
+			.leftJoin(profile, eq(profile.userId, user.id));
+
+		const rows = await (q ? baseQuery.where(ilike(user.email, `%${q}%`)) : baseQuery)
 			.orderBy(desc(user.createdAt))
 			.limit(limit)
 			.offset(offset);

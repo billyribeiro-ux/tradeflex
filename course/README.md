@@ -23,16 +23,16 @@ pnpm dev
 
 ## Scripts
 
-| Command | Does |
-| --- | --- |
-| `pnpm dev` | start Vite dev server |
-| `pnpm build` | production build (Vercel adapter) |
-| `pnpm check` | svelte-check typecheck |
-| `pnpm lint` | prettier + eslint |
-| `pnpm test:unit` | vitest |
-| `pnpm test:e2e` | playwright |
-| `pnpm db:push` | push Drizzle schema to DB |
-| `pnpm db:generate` | generate SQL migration |
+| Command            | Does                              |
+| ------------------ | --------------------------------- |
+| `pnpm dev`         | start Vite dev server             |
+| `pnpm build`       | production build (Vercel adapter) |
+| `pnpm check`       | svelte-check typecheck            |
+| `pnpm lint`        | prettier + eslint                 |
+| `pnpm test:unit`   | vitest                            |
+| `pnpm test:e2e`    | playwright                        |
+| `pnpm db:push`     | push Drizzle schema to DB         |
+| `pnpm db:generate` | generate SQL migration            |
 
 ## Layout
 

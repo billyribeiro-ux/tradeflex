@@ -12,11 +12,13 @@ const mutationSchema = z.object({
 export const load: PageServerLoad = async ({ locals, url }) => {
 	const page = Math.max(parseInt(url.searchParams.get('page') ?? '1', 10) || 1, 1);
 	const pageSize = 50;
+	const q = url.searchParams.get('q')?.trim() ?? '';
 	const members = await membersService.list(locals.caller, {
 		limit: pageSize,
-		offset: (page - 1) * pageSize
+		offset: (page - 1) * pageSize,
+		q: q || undefined
 	});
-	return { members, page, pageSize };
+	return { members, page, pageSize, q };
 };
 
 export const actions: Actions = {

@@ -35,21 +35,20 @@
 		</p>
 		<ol>
 			<li>
-				<strong>Repo + tooling</strong> — you cannot commit progress without Git in place, and you
-				cannot reproduce a build without pinned tools.
+				<strong>Repo + tooling</strong> — you cannot commit progress without Git in place, and you cannot
+				reproduce a build without pinned tools.
 			</li>
 			<li>
-				<strong>Database</strong> — every later feature reads or writes somewhere. A dev branch on
-				Neon gives you an isolated, cheap copy of Postgres you can safely break.
+				<strong>Database</strong> — every later feature reads or writes somewhere. A dev branch on Neon
+				gives you an isolated, cheap copy of Postgres you can safely break.
 			</li>
 			<li>
-				<strong>Auth</strong> — every authenticated surface needs a <code>user</code> row. Better
-				Auth writes them; we generate its schema and migrate it first.
+				<strong>Auth</strong> — every authenticated surface needs a <code>user</code> row. Better Auth
+				writes them; we generate its schema and migrate it first.
 			</li>
 			<li>
-				<strong>Profile + authorization primitives</strong> — everything user-facing will key off
-				the profile row, and everything data-facing will go through the service layer. Land the
-				pattern now.
+				<strong>Profile + authorization primitives</strong> — everything user-facing will key off the
+				profile row, and everything data-facing will go through the service layer. Land the pattern now.
 			</li>
 		</ol>
 	</section>
@@ -57,7 +56,7 @@
 	<section>
 		<h2>The shape of the repo by the end of this module</h2>
 		<FileTree>
-{`tradeflex/
+			{`tradeflex/
 ├── docs/
 │   ├── prd.md
 │   ├── roadmap.md
@@ -113,8 +112,8 @@
 
 	<Aside type="note" title="No frontend yet">
 		<p>
-			Module 1 does not build any user-facing pages beyond what the scaffold already has. That is
-			on purpose. We are landing the plumbing. Module 3 is when the member-facing auth UI lands.
+			Module 1 does not build any user-facing pages beyond what the scaffold already has. That is on
+			purpose. We are landing the plumbing. Module 3 is when the member-facing auth UI lands.
 		</p>
 	</Aside>
 

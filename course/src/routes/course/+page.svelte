@@ -24,7 +24,9 @@
 			Auth, Stripe, and Resend. Every build step is a page. Every command shows its output.
 		</p>
 		<div class="actions">
-			<LinkButton href="/course/cli-reference" variant="primary">Start with the CLI reference →</LinkButton>
+			<LinkButton href="/course/cli-reference" variant="primary"
+				>Start with the CLI reference →</LinkButton
+			>
 			<LinkButton href="#modules" variant="secondary">Jump to modules</LinkButton>
 		</div>
 
@@ -48,9 +50,9 @@
 <Aside type="tip" title="How to read this course">
 	<p>
 		Every page opens with <em>what you&rsquo;ll learn</em> and <em>why it matters</em>, walks you
-		through commands <strong>and</strong> their expected output, and closes with a recap, a
-		&ldquo;verify you&rsquo;re done&rdquo; checklist, and a link to the next page. If you&rsquo;re
-		new to the terminal, start with the CLI reference.
+		through commands <strong>and</strong> their expected output, and closes with a recap, a &ldquo;verify
+		you&rsquo;re done&rdquo; checklist, and a link to the next page. If you&rsquo;re new to the terminal,
+		start with the CLI reference.
 	</p>
 </Aside>
 

@@ -25,7 +25,9 @@
 	</div>
 	{#each data.contacts as c (c.id)}
 		<div class="row">
-			<div class="email">{c.email}{#if c.name}<span class="name"> · {c.name}</span>{/if}</div>
+			<div class="email">
+				{c.email}{#if c.name}<span class="name"> · {c.name}</span>{/if}
+			</div>
 			<div><span class="pill">{c.source}</span></div>
 			<div class="when">{new Date(c.createdAt).toLocaleDateString()}</div>
 			<div>

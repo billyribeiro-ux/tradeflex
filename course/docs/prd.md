@@ -20,15 +20,16 @@ Retail options + stock traders pay for weekly alert services and education, but 
 
 Pricing is pulled from Stripe at runtime. **No hardcoded prices in code.** Source of truth is always the Stripe Price object; the app mirrors what it needs for auth-z and display.
 
-| Product                          | Price                            | Mechanism                                  |
-| -------------------------------- | -------------------------------- | ------------------------------------------ |
-| Weekly Alerts — Monthly          | $49 / month                      | Stripe recurring subscription              |
-| Weekly Alerts — Yearly           | $399 / year                      | Stripe recurring, month↔year toggle        |
-| Course: Price Action Simplified  | $799                             | Stripe one-time                            |
-| Course: Options 101              | $999                             | Stripe one-time                            |
-| Free ebook                       | Free (email required)            | Resend send + marketing contact row        |
+| Product                         | Price                 | Mechanism                           |
+| ------------------------------- | --------------------- | ----------------------------------- |
+| Weekly Alerts — Monthly         | $49 / month           | Stripe recurring subscription       |
+| Weekly Alerts — Yearly          | $399 / year           | Stripe recurring, month↔year toggle |
+| Course: Price Action Simplified | $799                  | Stripe one-time                     |
+| Course: Options 101             | $999                  | Stripe one-time                     |
+| Free ebook                      | Free (email required) | Resend send + marketing contact row |
 
 Trials: both flavors supported.
+
 - With credit card: `trial_period_days` on the Price.
 - Without credit card: `subscription_data.trial_period_days` + `payment_method_collection: 'if_required'`, card capture prompted before expiry.
 

@@ -1,8 +1,16 @@
 <script lang="ts">
 	import '$lib/styles/index.css';
 	import favicon from '$lib/assets/favicon.svg';
+	import ToastHost from '$lib/components/toast/ToastHost.svelte';
+	import { toast } from '$lib/toast/store.svelte';
+	import type { Snippet } from 'svelte';
+	import type { LayoutData } from './$types';
 
-	let { children } = $props();
+	let { data, children }: { data: LayoutData; children: Snippet } = $props();
+
+	$effect(() => {
+		if (data.flash) toast.push(data.flash.kind, data.flash.message);
+	});
 </script>
 
 <svelte:head>
@@ -10,4 +18,28 @@
 	<meta name="color-scheme" content="light dark" />
 </svelte:head>
 
-{@render children()}
+<a href="#main-content" class="skip-link">Skip to main content</a>
+<div id="main-content">
+	{@render children()}
+</div>
+<ToastHost />
+
+<style>
+	.skip-link {
+		position: absolute;
+		top: -40px;
+		left: var(--space-3);
+		padding: var(--space-2) var(--space-4);
+		background: var(--color-accent);
+		color: var(--color-accent-contrast);
+		border-radius: var(--radius-md);
+		font-weight: 600;
+		z-index: 1000;
+	}
+	.skip-link:focus-visible {
+		top: var(--space-3);
+	}
+	#main-content {
+		display: contents;
+	}
+</style>
