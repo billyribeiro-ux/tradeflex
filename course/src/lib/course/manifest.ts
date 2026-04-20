@@ -269,6 +269,15 @@ const pages: CoursePage[] = [
 		summary: 'Three rules: pages redirect, endpoints 402, services stay tier-blind. One entitlement function, used everywhere.'
 	},
 	{
+		slug: 'module-8-overview',
+		href: '/course/modules/8/overview',
+		title: '8.1 · Products + pricing page',
+		module: 'module-8',
+		moduleOrder: 8,
+		order: 0,
+		summary: 'Stripe is the source of truth for amounts; lookup keys (not price IDs) live in code; form POST + 303 into checkout.'
+	},
+	{
 		slug: 'module-11-overview',
 		href: '/course/modules/11/overview',
 		title: '11.1 · Testing',
