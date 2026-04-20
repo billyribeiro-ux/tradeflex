@@ -186,6 +186,87 @@ const pages: CoursePage[] = [
 		moduleOrder: 4,
 		order: 2,
 		summary: 'Paginated staff view, role-gated unsubscribe action, and every change audited.'
+	},
+	{
+		slug: 'module-5-overview',
+		href: '/course/modules/5/overview',
+		title: '5.1 · Overview',
+		module: 'module-5',
+		moduleOrder: 5,
+		order: 0,
+		summary: 'Stripe mental model: products, prices, customers, subscriptions, events. Ten terms, then code.'
+	},
+	{
+		slug: 'module-5-dashboard-and-cli',
+		href: '/course/modules/5/dashboard-and-cli',
+		title: '5.2 · Dashboard + CLI',
+		module: 'module-5',
+		moduleOrder: 5,
+		order: 1,
+		summary: 'Create a test-mode account, install the Stripe CLI, authenticate, and watch events stream.'
+	},
+	{
+		slug: 'module-5-products-and-prices',
+		href: '/course/modules/5/products-and-prices',
+		title: '5.3 · Products + prices + lookup keys',
+		module: 'module-5',
+		moduleOrder: 5,
+		order: 2,
+		summary: 'Why prices are the thing you reference in code, not products — and why lookup keys save your life.'
+	},
+	{
+		slug: 'module-6-overview',
+		href: '/course/modules/6/overview',
+		title: '6.1 · Stripe + SvelteKit',
+		module: 'module-6',
+		moduleOrder: 6,
+		order: 0,
+		summary: 'A minimal REST client instead of the SDK, why, and how the webhook endpoint verifies.'
+	},
+	{
+		slug: 'module-6-checkout-and-webhook',
+		href: '/course/modules/6/checkout-and-webhook',
+		title: '6.2 · Checkout + webhook',
+		module: 'module-6',
+		moduleOrder: 6,
+		order: 1,
+		summary: 'POST /api/billing/checkout that redirects to Stripe, POST /api/stripe/webhook that signs + stores.'
+	},
+	{
+		slug: 'module-7-overview',
+		href: '/course/modules/7/overview',
+		title: '7.1 · Billing services',
+		module: 'module-7',
+		moduleOrder: 7,
+		order: 0,
+		summary: 'Turning webhook rows into subscription state — customers, subscriptions, grace periods, portal.'
+	},
+	{
+		slug: 'module-7-entitlements',
+		href: '/course/modules/7/entitlements',
+		title: '7.2 · Entitlements + gating',
+		module: 'module-7',
+		moduleOrder: 7,
+		order: 1,
+		summary: 'One entitlement function, a redirect gate on /alerts, and membership state surfaced on /account.'
+	},
+	{
+		slug: 'module-9-trials-and-test-clocks',
+		href: '/course/modules/9/trials-and-test-clocks',
+		title: '9.1 · Trials + test clocks',
+		module: 'module-9',
+		moduleOrder: 9,
+		order: 0,
+		summary: 'Two trial flavors (card upfront 14d, no-card 7d) + using Stripe test clocks to replay a 21-day dunning cycle in seconds.'
+	},
+	{
+		slug: 'module-10-tier-gating',
+		href: '/course/modules/10/tier-gating',
+		title: '10.1 · Tier-based access control',
+		module: 'module-10',
+		moduleOrder: 10,
+		order: 0,
+		summary: 'Three rules: pages redirect, endpoints 402, services stay tier-blind. One entitlement function, used everywhere.'
 	}
 ];
 
@@ -223,7 +304,7 @@ const moduleMeta: Record<string, { order: number; title: string; summary: string
 	'module-6': {
 		order: 6,
 		title: 'Stripe + SvelteKit',
-		summary: 'Node client, webhooks, stripe listen, what to mirror locally.'
+		summary: 'Fetch client, webhook HMAC, checkout redirect, idempotent event storage.'
 	},
 	'module-7': {
 		order: 7,

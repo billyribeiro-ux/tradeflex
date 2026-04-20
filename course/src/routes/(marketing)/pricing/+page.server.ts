@@ -1,4 +1,5 @@
 import type { PageServerLoad } from './$types';
+import { billingService } from '$lib/server/services/billing';
 
 export interface PlanCard {
 	id: 'free' | 'monthly' | 'yearly';
@@ -7,17 +8,24 @@ export interface PlanCard {
 	priceMonthly: number | null;
 	priceYearly: number | null;
 	savingsNote?: string;
-	cta: { label: string; href: string };
+	cta: { label: string; href: string; priceId?: string };
 	features: string[];
 	badge?: string;
 }
 
 /**
- * Stripe is the source of truth for prices in production. Until Stripe is
- * wired in Modules 5–9, we read from a hard-coded snapshot here so the page
- * renders. Swapping this to read from the billingService is a 20-line change.
+ * If Stripe is configured and has prices with lookup_keys
+ * `tradeflex_monthly` and `tradeflex_yearly`, we read amounts + price IDs
+ * from Stripe. Otherwise we fall back to a hard-coded snapshot so the page
+ * still renders on a fresh install.
  */
-export const load: PageServerLoad = () => {
+export const load: PageServerLoad = async ({ url }) => {
+	const gate = url.searchParams.get('gate');
+	const livePlans = await billingService.listPlans();
+	const monthly = livePlans.find((p) => p.lookupKey === 'tradeflex_monthly');
+	const yearly = livePlans.find((p) => p.lookupKey === 'tradeflex_yearly');
+	const source: 'stripe' | 'static-snapshot' = monthly && yearly ? 'stripe' : 'static-snapshot';
+
 	const plans: PlanCard[] = [
 		{
 			id: 'free',
@@ -37,9 +45,13 @@ export const load: PageServerLoad = () => {
 			id: 'monthly',
 			name: 'Membership',
 			tagline: 'Everything. Pay monthly.',
-			priceMonthly: 49,
+			priceMonthly: monthly ? Math.round(monthly.amountCents / 100) : 49,
 			priceYearly: null,
-			cta: { label: 'Start monthly', href: '/register?plan=monthly' },
+			cta: {
+				label: 'Start monthly',
+				href: monthly ? '/api/billing/checkout' : '/register?plan=monthly',
+				priceId: monthly?.priceId
+			},
 			features: [
 				'Real-time alerts (options + equities)',
 				'Full access to both courses',
@@ -53,9 +65,13 @@ export const load: PageServerLoad = () => {
 			name: 'Membership — yearly',
 			tagline: 'Everything. Save $189/year.',
 			priceMonthly: null,
-			priceYearly: 399,
+			priceYearly: yearly ? Math.round(yearly.amountCents / 100) : 399,
 			savingsNote: 'Save $189 vs monthly',
-			cta: { label: 'Start yearly', href: '/register?plan=yearly' },
+			cta: {
+				label: 'Start yearly',
+				href: yearly ? '/api/billing/checkout' : '/register?plan=yearly',
+				priceId: yearly?.priceId
+			},
 			badge: 'Best value',
 			features: [
 				'Everything in Membership',
@@ -66,5 +82,5 @@ export const load: PageServerLoad = () => {
 		}
 	];
 
-	return { plans, source: 'static-snapshot' as const };
+	return { plans, source, gate };
 };

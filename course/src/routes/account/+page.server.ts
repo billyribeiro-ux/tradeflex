@@ -1,6 +1,10 @@
-import { fail, redirect } from '@sveltejs/kit';
+import { fail, redirect, error } from '@sveltejs/kit';
 import { z } from 'zod';
 import { profileService } from '$lib/server/services/profile';
+import { customersService } from '$lib/server/services/customers';
+import { subscriptionsService } from '$lib/server/services/subscriptions';
+import { billingService } from '$lib/server/services/billing';
+import { MissingConfigError } from '$lib/server/services/settings';
 import type { Actions, PageServerLoad } from './$types';
 
 const profileSchema = z.object({
@@ -15,10 +19,18 @@ export const load: PageServerLoad = async ({ locals, url }) => {
 	if (!locals.caller.userId) {
 		throw redirect(303, `/login?next=${encodeURIComponent(url.pathname)}`);
 	}
-	const profile = await profileService.getForCaller(locals.caller);
+	const [profile, customer, subscription] = await Promise.all([
+		profileService.getForCaller(locals.caller),
+		customersService.forCaller(locals.caller),
+		subscriptionsService.forCaller(locals.caller)
+	]);
+	const entitled = await subscriptionsService.hasActiveEntitlement(locals.caller);
 	return {
 		profile,
-		user: locals.user
+		user: locals.user,
+		customer,
+		subscription,
+		entitled
 	};
 };
 
@@ -45,5 +57,23 @@ export const actions: Actions = {
 
 		await profileService.upsertForCaller(locals.caller, parsed.data);
 		return { success: true, savedAt: new Date().toISOString() };
+	},
+
+	portal: async ({ locals, url }) => {
+		if (!locals.caller.userId) return fail(401, { message: 'Not signed in.' });
+		const customer = await customersService.forCaller(locals.caller);
+		if (!customer) return fail(400, { message: 'No Stripe customer yet — start a checkout first.' });
+		let portalUrl: string;
+		try {
+			portalUrl = await billingService.openPortal(locals.caller, {
+				customerId: customer.stripeCustomerId,
+				returnUrl: `${url.origin}/account`
+			});
+		} catch (err) {
+			if (err instanceof MissingConfigError) throw error(503, err.message);
+			const msg = err instanceof Error ? err.message : 'Portal unavailable.';
+			return fail(400, { message: msg });
+		}
+		throw redirect(303, portalUrl);
 	}
 };

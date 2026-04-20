@@ -115,6 +115,36 @@
 	</form>
 </section>
 
+<section class="card" style="margin-top: var(--space-5);">
+	<h2>Membership</h2>
+	{#if data.subscription}
+		<p class="muted">
+			Status <strong>{data.subscription.status}</strong>
+			{#if data.subscription.priceLookupKey}· plan <strong>{data.subscription.priceLookupKey}</strong>{/if}
+			{#if data.subscription.currentPeriodEnd}
+				· renews {new Date(data.subscription.currentPeriodEnd).toLocaleDateString()}
+			{/if}
+		</p>
+		{#if data.entitled}
+			<p class="ok">You have access to member-only features like /alerts.</p>
+		{:else}
+			<p class="warn">Your membership is paused. Update payment to restore access.</p>
+		{/if}
+	{:else}
+		<p class="muted">You don't have an active membership yet.</p>
+	{/if}
+
+	<div class="billing-actions">
+		{#if data.customer}
+			<form method="post" action="?/portal" use:enhance>
+				<button class="btn-primary" type="submit">Open billing portal</button>
+			</form>
+		{:else}
+			<a class="btn-primary" href="/pricing">View plans</a>
+		{/if}
+	</div>
+</section>
+
 {#if toast}
 	<div class="toast" role="status">{toast}</div>
 {/if}
@@ -245,6 +275,23 @@
 	.error {
 		color: var(--color-danger);
 		margin: 0;
+	}
+	.ok {
+		color: var(--color-success, #16a34a);
+		margin: var(--space-1) 0 0;
+	}
+	.warn {
+		color: var(--color-warning, #d97706);
+		margin: var(--space-1) 0 0;
+	}
+	.billing-actions {
+		display: flex;
+		gap: var(--space-3);
+		margin-top: var(--space-4);
+	}
+	.billing-actions a.btn-primary {
+		text-decoration: none;
+		display: inline-block;
 	}
 	.toast {
 		position: fixed;
