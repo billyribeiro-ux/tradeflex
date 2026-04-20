@@ -15,6 +15,10 @@
 			confirmingDeletion = false;
 		} else if ('deletionCancelled' in form && form.deletionCancelled) {
 			toast.success('Deletion cancelled.');
+		} else if ('avatarUrl' in form && form.avatarUrl) {
+			toast.success('Avatar updated');
+		} else if ('avatarRemoved' in form && form.avatarRemoved) {
+			toast.success('Avatar removed');
 		} else if ('success' in form && form.success) {
 			toast.success('Profile saved');
 		}
@@ -58,6 +62,33 @@
 </header>
 
 <section class="card">
+	<h2>Avatar</h2>
+	<p class="muted">PNG, JPEG, or WebP. Max 2 MB. Stored on Vercel Blob.</p>
+	<div class="avatar-row">
+		<div class="avatar-preview" class:circle={(p?.avatarShape ?? 'circle') === 'circle'}>
+			{#if p?.avatarBlobKey}
+				<img src={p.avatarBlobKey} alt="" />
+			{:else}
+				<span class="avatar-placeholder">
+					{(p?.displayName ?? data.user?.email ?? '?').slice(0, 1).toUpperCase()}
+				</span>
+			{/if}
+		</div>
+		<div class="avatar-forms">
+			<form method="post" action="?/uploadAvatar" use:enhance enctype="multipart/form-data">
+				<input type="file" name="avatar" accept="image/png,image/jpeg,image/webp" required />
+				<button class="btn-primary" type="submit">Upload</button>
+			</form>
+			{#if p?.avatarBlobKey}
+				<form method="post" action="?/removeAvatar" use:enhance>
+					<button class="btn-ghost" type="submit">Remove avatar</button>
+				</form>
+			{/if}
+		</div>
+	</div>
+</section>
+
+<section class="card" style="margin-top: var(--space-5);">
 	<h2>Profile</h2>
 	<p class="muted">Your display name and preferences. Changes are audited.</p>
 
@@ -404,5 +435,45 @@
 		color: var(--color-text);
 		font: inherit;
 		min-width: 320px;
+	}
+	.avatar-row {
+		display: flex;
+		align-items: center;
+		gap: var(--space-5);
+	}
+	.avatar-preview {
+		width: 88px;
+		height: 88px;
+		background: var(--color-surface-2);
+		border: 1px solid var(--color-border);
+		overflow: hidden;
+		flex-shrink: 0;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		border-radius: var(--radius-md);
+	}
+	.avatar-preview.circle {
+		border-radius: 50%;
+	}
+	.avatar-preview img {
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+	}
+	.avatar-placeholder {
+		font-size: var(--fs-xl);
+		color: var(--color-text-muted);
+		font-weight: 600;
+	}
+	.avatar-forms {
+		display: flex;
+		flex-direction: column;
+		gap: var(--space-3);
+	}
+	.avatar-forms form {
+		display: flex;
+		gap: var(--space-2);
+		align-items: center;
 	}
 </style>

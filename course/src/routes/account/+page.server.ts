@@ -5,6 +5,7 @@ import { customersService } from '$lib/server/services/customers';
 import { subscriptionsService } from '$lib/server/services/subscriptions';
 import { billingService } from '$lib/server/services/billing';
 import { complianceService, ComplianceError } from '$lib/server/services/compliance';
+import { avatarsService, AvatarError } from '$lib/server/services/avatars';
 import { MissingConfigError } from '$lib/server/services/settings';
 import { setFlash } from '$lib/server/flash';
 import type { Actions, PageServerLoad } from './$types';
@@ -100,5 +101,33 @@ export const actions: Actions = {
 		if (!locals.caller.userId) return fail(401, { message: 'Not signed in.' });
 		await complianceService.cancelDeletion(locals.caller);
 		return { success: true, deletionCancelled: true };
+	},
+
+	uploadAvatar: async ({ request, locals }) => {
+		if (!locals.caller.userId) return fail(401, { message: 'Not signed in.' });
+		const fd = await request.formData();
+		const file = fd.get('avatar');
+		if (!(file instanceof File) || file.size === 0) {
+			return fail(400, { message: 'Choose an image to upload.' });
+		}
+		try {
+			const url = await avatarsService.upload(locals.caller, file);
+			return { success: true, avatarUrl: url };
+		} catch (err) {
+			if (err instanceof AvatarError) return fail(err.httpStatus, { message: err.message });
+			if (err instanceof MissingConfigError) throw error(503, err.message);
+			throw err;
+		}
+	},
+
+	removeAvatar: async ({ locals }) => {
+		if (!locals.caller.userId) return fail(401, { message: 'Not signed in.' });
+		try {
+			await avatarsService.remove(locals.caller);
+			return { success: true, avatarRemoved: true };
+		} catch (err) {
+			if (err instanceof MissingConfigError) throw error(503, err.message);
+			throw err;
+		}
 	}
 };
