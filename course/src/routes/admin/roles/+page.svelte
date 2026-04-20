@@ -65,6 +65,15 @@
 			<li>Read audit log</li>
 		</ul>
 	</article>
+	<article class="card">
+		<h2>read_only</h2>
+		<p class="sub">Board/investor view. No PII, no individual member data.</p>
+		<ul>
+			<li>Read aggregated metrics (MRR, active subs)</li>
+			<li>Read published alerts + courses</li>
+			<li>No audit log access</li>
+		</ul>
+	</article>
 </div>
 
 <style>
