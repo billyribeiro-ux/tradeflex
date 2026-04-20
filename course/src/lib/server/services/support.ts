@@ -1,6 +1,6 @@
-import { and, desc, eq } from 'drizzle-orm';
+import { and, desc, eq, like } from 'drizzle-orm';
 import { db } from '$lib/server/db';
-import { supportTicket, supportTicketMessage, user } from '$lib/server/db/schema';
+import { auditEvent, supportTicket, supportTicketMessage, user } from '$lib/server/db/schema';
 import { assertAuthenticated, assertRole, AuthzError, type Caller } from '$lib/server/authz/caller';
 import { writeAudit } from './audit';
 import { resendService } from './resend';
@@ -35,21 +35,39 @@ function isStaff(caller: Caller): boolean {
 	return caller.roles.some((r) => (STAFF_ROLES as readonly string[]).includes(r));
 }
 
+export function ticketTokenFor(ticketId: string): string {
+	// First 8 chars of the UUID, uppercased. 32 bits of collision space is plenty
+	// at the scale of a support inbox and keeps the subject line readable.
+	return `TF-${ticketId.slice(0, 8).toUpperCase()}`;
+}
+
+const TICKET_TOKEN_RE = /\[#(TF-[A-F0-9]{8})\]/i;
+
+export function extractTicketToken(subject: string): string | null {
+	const m = subject.match(TICKET_TOKEN_RE);
+	return m ? m[1].toUpperCase() : null;
+}
+
 async function sendMemberReplyEmail(
 	ticket: SupportTicketRow,
 	body: string,
 	staffCaller: Caller
 ): Promise<void> {
+	const token = ticketTokenFor(ticket.id);
 	const text =
 		`We replied to your Trade Flex support ticket.\n\n` +
 		`Ticket: ${ticket.subject}\n\n` +
 		`${body}\n\n` +
 		`— Trade Flex support\n` +
-		`Reply to this email or visit /account/support to continue the conversation.`;
+		`Reply to this email or visit /account/support to continue the conversation.\n\n` +
+		`(ref: ${token})`;
 	try {
 		const r = await resendService.send({
 			to: ticket.contactEmail,
-			subject: `Re: ${ticket.subject}`,
+			// Token stays in the subject so the inbound webhook can route
+			// replies back to the right ticket without needing plus-addressed
+			// reply-to infrastructure.
+			subject: `Re: ${ticket.subject} [#${token}]`,
 			text,
 			tags: [
 				{ name: 'kind', value: 'support_reply' },
@@ -274,6 +292,90 @@ export const supportService = {
 			targetId: params.ticketId,
 			metadata: { status: params.status }
 		});
+	},
+
+	/**
+	 * Finds the ticket matching `[#TF-xxxxxxxx]` by id-prefix. Returns null when
+	 * the token is malformed or no ticket matches. Used by the Resend inbound
+	 * webhook to route member replies back to the right ticket.
+	 */
+	async findByToken(token: string): Promise<SupportTicketRow | null> {
+		const m = token.match(/^TF-([A-F0-9]{8})$/i);
+		if (!m) return null;
+		const prefix = m[1].toLowerCase();
+		const [row] = await db
+			.select()
+			.from(supportTicket)
+			.where(like(supportTicket.id, `${prefix}%`))
+			.limit(1);
+		return row ?? null;
+	},
+
+	/**
+	 * System-attributed append of an inbound email reply from a member.
+	 * `authorUserId` is set when the from-address matches the ticket contact;
+	 * otherwise we still accept the message but leave it unattributed so the
+	 * admin can see the drift. Reopens resolved/closed tickets.
+	 */
+	async ingestInboundReply(params: {
+		ticketId: string;
+		fromEmail: string;
+		body: string;
+	}): Promise<SupportTicketMessageRow | null> {
+		const body = params.body.trim();
+		if (body.length < 1) return null;
+
+		const [ticket] = await db
+			.select()
+			.from(supportTicket)
+			.where(eq(supportTicket.id, params.ticketId))
+			.limit(1);
+		if (!ticket) return null;
+
+		const fromMatches = params.fromEmail.toLowerCase() === ticket.contactEmail.toLowerCase();
+		const authorUserId = fromMatches ? ticket.subjectUserId : null;
+
+		const id = crypto.randomUUID();
+		const [row] = await db
+			.insert(supportTicketMessage)
+			.values({
+				id,
+				ticketId: ticket.id,
+				authorUserId,
+				authorKind: 'member',
+				visibility: 'public',
+				body: fromMatches ? body : `[from ${params.fromEmail} — address mismatch]\n\n${body}`
+			})
+			.returning();
+
+		// Member reply wakes a resolved/closed ticket back up so staff notice it.
+		const shouldReopen = ticket.status === 'resolved' || ticket.status === 'closed';
+		await db
+			.update(supportTicket)
+			.set({
+				updatedAt: new Date(),
+				status: shouldReopen ? 'open' : ticket.status,
+				resolvedAt: shouldReopen ? null : ticket.resolvedAt,
+				closedAt: shouldReopen ? null : ticket.closedAt
+			})
+			.where(eq(supportTicket.id, ticket.id));
+
+		await db.insert(auditEvent).values({
+			id: crypto.randomUUID(),
+			actorUserId: null,
+			impersonatorUserId: null,
+			action: 'support.ticket.inbound_reply',
+			targetKind: 'support_ticket',
+			targetId: ticket.id,
+			metadata: {
+				fromEmail: params.fromEmail,
+				fromMatches,
+				reopened: shouldReopen,
+				via: 'resend_inbound'
+			}
+		});
+
+		return row;
 	},
 
 	async setPriority(
