@@ -15,8 +15,8 @@
 
 <div class="note">
 	Values below are read from the settings service. Wire the form actions from
-	<a href="/admin/settings/integrations">Integrations</a> as a reference — same pattern, just
-	plain-text writes. Editing UI lands alongside the feature-flag admin in Module 13.
+	<a href="/admin/settings/integrations">Integrations</a> as a reference — same pattern, just plain-text
+	writes. Editing UI lands alongside the feature-flag admin in Module 13.
 </div>
 
 <dl class="vals">

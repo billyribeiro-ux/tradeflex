@@ -36,7 +36,10 @@ export const load: PageServerLoad = async ({ locals }) => {
 		acc[r.status] = (acc[r.status] ?? 0) + 1;
 		return acc;
 	}, {});
-	const summary = STATUS_ORDER.filter((s) => counts[s]).map((s) => ({ status: s, count: counts[s] }));
+	const summary = STATUS_ORDER.filter((s) => counts[s]).map((s) => ({
+		status: s,
+		count: counts[s]
+	}));
 
 	return { stripeConfigured: Boolean(stripeKey), rows, summary };
 };

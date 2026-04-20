@@ -13,8 +13,8 @@
 {#if !data.resendConfigured}
 	<div class="callout warn">
 		<strong>Resend not configured.</strong> Add <code>RESEND_API_KEY</code> and
-		<code>RESEND_FROM</code> in <a href="/admin/settings/integrations">Integrations</a> to start
-		sending and receiving through the inbox.
+		<code>RESEND_FROM</code> in <a href="/admin/settings/integrations">Integrations</a> to start sending
+		and receiving through the inbox.
 	</div>
 {:else}
 	<div class="callout ok">
@@ -26,7 +26,11 @@
 	<aside class="threads">
 		<input type="search" placeholder="Search threads…" disabled />
 		<div class="thread-list empty">
-			<p>Threads will appear as members reply to transactional mail and as you reach out via <code>/admin/members</code>.</p>
+			<p>
+				Threads will appear as members reply to transactional mail and as you reach out via <code
+					>/admin/members</code
+				>.
+			</p>
 		</div>
 	</aside>
 	<section class="thread-view empty">

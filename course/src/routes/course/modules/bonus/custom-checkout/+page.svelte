@@ -26,8 +26,8 @@
 		</ul>
 		<Aside type="tip">
 			<p>
-				Don't ship both. If you ship hosted <em>and</em> custom, you end up with two sets of
-				edge-case bugs, two webhook pathways, and two sources of "why did the user not convert".
+				Don't ship both. If you ship hosted <em>and</em> custom, you end up with two sets of edge-case
+				bugs, two webhook pathways, and two sources of "why did the user not convert".
 			</p>
 		</Aside>
 	</section>
@@ -36,8 +36,8 @@
 		<h2>Three tabs</h2>
 		<ol>
 			<li>
-				<strong>Sign in.</strong> Existing member? Log in. New? Create an account right here; no
-				redirect. Better Auth's API supports both in a single form.
+				<strong>Sign in.</strong> Existing member? Log in. New? Create an account right here; no redirect.
+				Better Auth's API supports both in a single form.
 			</li>
 			<li>
 				<strong>Billing address.</strong> Country, ZIP, name. Stripe uses this for tax and AVS.
@@ -51,14 +51,17 @@
 	<section>
 		<h2>Skeleton</h2>
 		<CodeBlock title="src/routes/checkout/+page.svelte" lang="svelte">
-{'<' + `script lang="ts">
+			{'<' +
+				`script lang="ts">
   import CartSidebar from '$lib/components/checkout/CartSidebar.svelte';
   import SignInTab from '$lib/components/checkout/SignInTab.svelte';
   import BillingTab from '$lib/components/checkout/BillingTab.svelte';
   import PaymentTab from '$lib/components/checkout/PaymentTab.svelte';
 
   let step = $state<'signin' | 'billing' | 'payment'>('signin');
-` + '<' + `/script>
+` +
+				'<' +
+				`/script>
 
 <div class="layout">
   <main>
@@ -81,7 +84,7 @@
 	<section>
 		<h2>Payment Element, server-side</h2>
 		<CodeBlock title="src/routes/api/checkout/setup/+server.ts" lang="ts">
-{`import { json } from '@sveltejs/kit';
+			{`import { json } from '@sveltejs/kit';
 import { stripe } from '$lib/server/stripe';
 
 export const POST = async ({ request, locals }) => {
@@ -102,7 +105,8 @@ export const POST = async ({ request, locals }) => {
 	<section>
 		<h2>Payment Element, client-side</h2>
 		<CodeBlock title="PaymentTab.svelte" lang="svelte">
-{'<' + `script lang="ts">
+			{'<' +
+				`script lang="ts">
   import { onMount } from 'svelte';
   import { loadStripe } from '@stripe/stripe-js';
   import { PUBLIC_STRIPE_PUBLISHABLE_KEY } from '$env/static/public';
@@ -134,7 +138,9 @@ export const POST = async ({ request, locals }) => {
     });
     if (error) alert(error.message);
   }
-` + '<' + `/script>
+` +
+				'<' +
+				`/script>
 
 <div bind:this={mount}></div>
 <button onclick={submit}>Pay</button>`}
@@ -144,11 +150,12 @@ export const POST = async ({ request, locals }) => {
 	<section>
 		<h2>Persistent cart with recurring totals</h2>
 		<p>
-			The sidebar subtotal shows two lines: <strong>due today</strong> and <strong>recurring</strong>.
-			That distinction is what separates a SaaS-grade checkout from an e-commerce one.
+			The sidebar subtotal shows two lines: <strong>due today</strong> and
+			<strong>recurring</strong>. That distinction is what separates a SaaS-grade checkout from an
+			e-commerce one.
 		</p>
 		<CodeBlock title="CartSidebar.svelte — totals" lang="svelte">
-{`{@const dueToday = cart.reduce((n, l) => n + (l.type === 'one_time' ? l.amount : 0), 0)}
+			{`{@const dueToday = cart.reduce((n, l) => n + (l.type === 'one_time' ? l.amount : 0), 0)}
 {@const recurringMonthly = cart.reduce((n, l) => n + (l.interval === 'month' ? l.amount : 0), 0)}
 {@const recurringYearly = cart.reduce((n, l) => n + (l.interval === 'year' ? l.amount : 0), 0)}
 

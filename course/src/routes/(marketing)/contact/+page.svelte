@@ -74,13 +74,7 @@
 
 					<label class="field">
 						<span>Your email</span>
-						<input
-							name="email"
-							type="email"
-							required
-							autocomplete="email"
-							value={prev.email}
-						/>
+						<input name="email" type="email" required autocomplete="email" value={prev.email} />
 					</label>
 
 					<label class="field">

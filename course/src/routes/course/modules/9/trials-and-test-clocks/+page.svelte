@@ -15,14 +15,13 @@
 		<h2>The two trial flavors</h2>
 		<ul>
 			<li>
-				<strong>Card upfront, 14 days.</strong> User enters a card now; no charge until day 14.
-				Fewer free-riders, a trained credit-card instinct, and Stripe's fraud signals kick in
-				immediately.
+				<strong>Card upfront, 14 days.</strong> User enters a card now; no charge until day 14. Fewer
+				free-riders, a trained credit-card instinct, and Stripe's fraud signals kick in immediately.
 			</li>
 			<li>
-				<strong>No card, 7 days.</strong> User creates an account, gets 7 days of access with no
-				card on file. Day 7 we prompt for payment — if they don't enter one, access expires.
-				Highest top-of-funnel conversion; lowest end-of-trial conversion. Use for cold traffic.
+				<strong>No card, 7 days.</strong> User creates an account, gets 7 days of access with no card
+				on file. Day 7 we prompt for payment — if they don't enter one, access expires. Highest top-of-funnel
+				conversion; lowest end-of-trial conversion. Use for cold traffic.
 			</li>
 		</ul>
 		<Aside type="tip">
@@ -40,7 +39,7 @@
 			<code>billingService.startCheckout</code> wraps it.
 		</p>
 		<CodeBlock title="src/routes/api/billing/checkout/+server.ts" lang="ts">
-{`const schema = z.object({
+			{`const schema = z.object({
   priceId: z.string().min(1),
   trial: z.enum(['none', 'card_upfront', 'no_card']).optional().default('none')
 });
@@ -62,11 +61,13 @@ checkoutUrl = await billingService.startCheckout(locals.caller, {
 	<section>
 		<h2>No-card trial — deferred card</h2>
 		<p>
-			For the no-card flavor, create the subscription with <code>payment_behavior='default_incomplete'</code>
+			For the no-card flavor, create the subscription with <code
+				>payment_behavior='default_incomplete'</code
+			>
 			and <code>trial_period_days=7</code>, mark it as needing a card, and watch for
-			<code>customer.subscription.updated</code> on day 7 with status <code>incomplete</code>. Prompt
-			the user to add a card from <code>/account</code>; a <code>SetupIntent</code> collects the card
-			and the subscription activates on the next <code>invoice.paid</code>.
+			<code>customer.subscription.updated</code> on day 7 with status <code>incomplete</code>.
+			Prompt the user to add a card from <code>/account</code>; a <code>SetupIntent</code> collects
+			the card and the subscription activates on the next <code>invoice.paid</code>.
 		</p>
 		<Aside type="tip">
 			<p>
@@ -81,12 +82,11 @@ checkoutUrl = await billingService.startCheckout(locals.caller, {
 		<h2>Test clocks</h2>
 		<p>
 			A test clock is a Stripe-hosted simulated clock attached to a test-mode customer. You create
-			one, attach a customer to it, start their subscription, then advance the clock to simulate
-			"14 days later" — Stripe fires real webhook events against your endpoint as if time had
-			passed.
+			one, attach a customer to it, start their subscription, then advance the clock to simulate "14
+			days later" — Stripe fires real webhook events against your endpoint as if time had passed.
 		</p>
 		<CodeBlock title="stripe CLI — cycle a trial end" lang="bash">
-{`# 1. Create a clock
+			{`# 1. Create a clock
 stripe test_helpers/test_clocks create \\
   --name "trial_e2e" --frozen_time $(date +%s)
 
@@ -110,11 +110,17 @@ stripe listen --forward-to localhost:5173/api/stripe/webhook`}
 	<section>
 		<h2>What to test with a clock</h2>
 		<ul>
-			<li>Trial-to-paid conversion: card charges on day 14, status flips <code>trialing → active</code>.</li>
+			<li>
+				Trial-to-paid conversion: card charges on day 14, status flips <code>trialing → active</code
+				>.
+			</li>
 			<li>Trial-with-no-card expiration: status flips <code>trialing → incomplete</code>.</li>
 			<li>Proration on plan switch mid-period.</li>
 			<li>Retry schedule on <code>invoice.payment_failed</code>: 3 attempts over ~21 days.</li>
-			<li>Cancel at period end: status stays <code>active</code> until <code>current_period_end</code>, then flips <code>canceled</code>.</li>
+			<li>
+				Cancel at period end: status stays <code>active</code> until
+				<code>current_period_end</code>, then flips <code>canceled</code>.
+			</li>
 		</ul>
 	</section>
 

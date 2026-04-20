@@ -1,11 +1,4 @@
-export type Role =
-	| 'owner'
-	| 'admin'
-	| 'support'
-	| 'content'
-	| 'finance'
-	| 'analyst'
-	| 'read_only';
+export type Role = 'owner' | 'admin' | 'support' | 'content' | 'finance' | 'analyst' | 'read_only';
 
 export interface Caller {
 	userId: string | null;
@@ -39,9 +32,7 @@ export class AuthnError extends Error {
 	}
 }
 
-export function assertAuthenticated(
-	caller: Caller
-): asserts caller is Caller & { userId: string } {
+export function assertAuthenticated(caller: Caller): asserts caller is Caller & { userId: string } {
 	if (!caller.userId) throw new AuthnError();
 }
 

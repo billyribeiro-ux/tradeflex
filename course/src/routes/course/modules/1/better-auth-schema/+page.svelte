@@ -18,25 +18,28 @@
 		<h2>What you&rsquo;ll learn</h2>
 		<ul>
 			<li>What <strong>Better Auth</strong> is and how it differs from hand-rolled auth.</li>
-			<li>How the <code>better-auth generate</code> CLI reads your config and writes a Drizzle schema.</li>
+			<li>
+				How the <code>better-auth generate</code> CLI reads your config and writes a Drizzle schema.
+			</li>
 			<li>What <strong>migrations</strong> are and why we version them.</li>
-			<li>How the <code>hooks.server.ts</code> handle hydrates <code>locals.session</code> for every request.</li>
+			<li>
+				How the <code>hooks.server.ts</code> handle hydrates <code>locals.session</code> for every request.
+			</li>
 		</ul>
 	</section>
 
 	<section>
 		<h2>What Better Auth is</h2>
 		<p>
-			<strong>Better Auth</strong> is a TypeScript-native auth library. You declare what providers
-			you support (email/password, OAuth, magic link, 2FA) in a single config file, and it gives
-			you back: a server-side handler that plugs into SvelteKit hooks, a client-side helper for
-			sign-up/sign-in, a CLI that writes the SQL schema, and sensible defaults (secure cookies,
-			CSRF, rate limiting).
+			<strong>Better Auth</strong> is a TypeScript-native auth library. You declare what providers you
+			support (email/password, OAuth, magic link, 2FA) in a single config file, and it gives you back:
+			a server-side handler that plugs into SvelteKit hooks, a client-side helper for sign-up/sign-in,
+			a CLI that writes the SQL schema, and sensible defaults (secure cookies, CSRF, rate limiting).
 		</p>
 		<p>
-			We chose it over rolling our own because every line of auth code you write is a line that
-			will be audited, exploited, or regretted. Libraries for the boring parts, custom for the
-			parts that differ.
+			We chose it over rolling our own because every line of auth code you write is a line that will
+			be audited, exploited, or regretted. Libraries for the boring parts, custom for the parts that
+			differ.
 		</p>
 	</section>
 
@@ -45,8 +48,8 @@
 		<p>
 			Open <code>src/lib/server/auth.ts</code>. It wires Drizzle as the adapter, declares
 			<code>emailAndPassword</code> and <code>socialProviders.github</code>, and adds the
-			<code>sveltekitCookies</code> plugin. You do not need to edit it now — we extend it in Module
-			3 with magic link + 2FA.
+			<code>sveltekitCookies</code> plugin. You do not need to edit it now — we extend it in Module 3
+			with magic link + 2FA.
 		</p>
 	</section>
 
@@ -64,12 +67,10 @@
 						src/lib/server/db/auth.schema.ts --yes</code
 					>. Expected (abridged):
 				</p>
-				<CodeBlock lang="text">✓ Read config src/lib/server/auth.ts
-✓ Writing schema with 4 tables to src/lib/server/db/auth.schema.ts
-  ├─ user
-  ├─ session
-  ├─ account
-  └─ verification</CodeBlock>
+				<CodeBlock lang="text"
+					>✓ Read config src/lib/server/auth.ts ✓ Writing schema with 4 tables to
+					src/lib/server/db/auth.schema.ts ├─ user ├─ session ├─ account └─ verification</CodeBlock
+				>
 
 				<Aside type="caution" title="If this command fails">
 					<p>
@@ -85,14 +86,14 @@
 				<h4>Generate a SQL migration from the schema</h4>
 				<CodeBlock lang="bash">$ pnpm db:generate</CodeBlock>
 				<p>Expected:</p>
-				<CodeBlock lang="text">drizzle-kit: v0.31.x
-✓ Reading schema src/lib/server/db/schema.ts
-✓ Creating migration drizzle/0000_init.sql</CodeBlock>
+				<CodeBlock lang="text"
+					>drizzle-kit: v0.31.x ✓ Reading schema src/lib/server/db/schema.ts ✓ Creating migration
+					drizzle/0000_init.sql</CodeBlock
+				>
 				<p>
 					Open <code>drizzle/0000_init.sql</code>. You should see <code>CREATE TABLE</code>
 					statements for <code>user</code>, <code>session</code>, <code>account</code>,
-					<code>verification</code>, plus the demo <code>task</code> table that was already in the
-					scaffold.
+					<code>verification</code>, plus the demo <code>task</code> table that was already in the scaffold.
 				</p>
 			</li>
 
@@ -100,21 +101,22 @@
 				<h4>Apply the migration to your dev branch</h4>
 				<CodeBlock lang="bash">$ DATABASE_URL=$DATABASE_URL_DIRECT pnpm db:migrate</CodeBlock>
 				<p>
-					We deliberately use the <em>direct</em> connection string for migrations — the pooled
-					endpoint disallows long transactions.
+					We deliberately use the <em>direct</em> connection string for migrations — the pooled endpoint
+					disallows long transactions.
 				</p>
 				<p>Expected:</p>
-				<CodeBlock lang="text">Reading migrations from drizzle/
-Applying 0000_init.sql…
-✓ Done</CodeBlock>
+				<CodeBlock lang="text"
+					>Reading migrations from drizzle/ Applying 0000_init.sql… ✓ Done</CodeBlock
+				>
 			</li>
 
 			<li>
 				<h4>Verify the tables exist</h4>
 				<CodeBlock lang="bash">$ pnpm db:studio</CodeBlock>
 				<p>
-					This opens Drizzle Studio in your browser — an inspector for your schema and data.
-					Confirm <code>user</code>, <code>session</code>, <code>account</code>,
+					This opens Drizzle Studio in your browser — an inspector for your schema and data. Confirm <code
+						>user</code
+					>, <code>session</code>, <code>account</code>,
 					<code>verification</code>, and <code>task</code> are listed.
 				</p>
 			</li>
@@ -122,8 +124,8 @@ Applying 0000_init.sql…
 			<li>
 				<h4>Boot the server + sign up (via the Better Auth API)</h4>
 				<p>
-					We have not built a sign-up UI yet — that lands in Module 3. For now, hit the Better
-					Auth API directly to prove it works:
+					We have not built a sign-up UI yet — that lands in Module 3. For now, hit the Better Auth
+					API directly to prove it works:
 				</p>
 				<CodeBlock lang="bash">$ pnpm dev</CodeBlock>
 				<p>In another terminal:</p>
@@ -148,9 +150,9 @@ Applying 0000_init.sql…
 
 	<Aside type="note" title="Why this is safe to commit">
 		<p>
-			<code>drizzle/0000_init.sql</code> goes into Git. It is the canonical history of how the
-			schema evolved. Never edit an already-applied migration — always add a new one. Module 12
-			makes this a CI-enforced rule.
+			<code>drizzle/0000_init.sql</code> goes into Git. It is the canonical history of how the schema
+			evolved. Never edit an already-applied migration — always add a new one. Module 12 makes this a
+			CI-enforced rule.
 		</p>
 	</Aside>
 

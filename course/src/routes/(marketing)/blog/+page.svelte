@@ -15,7 +15,11 @@
 			<li>
 				<a href="/blog/{p.slug}">
 					<time datetime={p.publishedAt}>
-						{new Date(p.publishedAt).toLocaleDateString(undefined, { year: 'numeric', month: 'long', day: 'numeric' })}
+						{new Date(p.publishedAt).toLocaleDateString(undefined, {
+							year: 'numeric',
+							month: 'long',
+							day: 'numeric'
+						})}
 					</time>
 					<h2>{p.title}</h2>
 					<p>{p.excerpt}</p>
@@ -62,7 +66,8 @@
 		border-radius: var(--radius-lg);
 		text-decoration: none;
 		color: inherit;
-		transition: border-color var(--dur-2) var(--ease-out-quart),
+		transition:
+			border-color var(--dur-2) var(--ease-out-quart),
 			transform var(--dur-2) var(--ease-out-quart);
 	}
 	.list a:hover {

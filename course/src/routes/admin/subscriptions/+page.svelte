@@ -30,7 +30,8 @@
 {#if !data.stripeConfigured}
 	<div class="callout">
 		<strong>Stripe not configured.</strong> Add <code>STRIPE_SECRET_KEY</code> under
-		<a href="/admin/settings">Settings</a>. Webhooks will still ingest events, but the Portal + Checkout links need the key.
+		<a href="/admin/settings">Settings</a>. Webhooks will still ingest events, but the Portal +
+		Checkout links need the key.
 	</div>
 {/if}
 
@@ -85,7 +86,14 @@
 						<td>
 							<form method="post" action="?/grantGrace" use:enhance class="inline">
 								<input type="hidden" name="stripeSubscriptionId" value={row.stripeSubscriptionId} />
-								<input type="number" name="days" value="7" min="1" max="90" aria-label="Days of grace" />
+								<input
+									type="number"
+									name="days"
+									value="7"
+									min="1"
+									max="90"
+									aria-label="Days of grace"
+								/>
 								<button type="submit" class="btn-ghost">Grant grace</button>
 							</form>
 						</td>
@@ -117,7 +125,9 @@
 		background: var(--color-surface);
 		margin-bottom: var(--space-5);
 	}
-	.callout a { color: var(--color-accent); }
+	.callout a {
+		color: var(--color-accent);
+	}
 	code {
 		font-family: var(--ff-mono);
 		background: var(--color-surface-2);
@@ -145,7 +155,9 @@
 		font-size: var(--fs-xs);
 		text-transform: capitalize;
 	}
-	.stat strong { font-size: var(--fs-xl); }
+	.stat strong {
+		font-size: var(--fs-xl);
+	}
 	.empty {
 		padding: var(--space-6);
 		background: var(--color-surface);
@@ -164,7 +176,8 @@
 		border-collapse: collapse;
 		font-size: var(--fs-sm);
 	}
-	th, td {
+	th,
+	td {
 		padding: var(--space-3);
 		text-align: left;
 		border-bottom: 1px solid var(--color-border);
@@ -174,9 +187,19 @@
 		color: var(--color-text-muted);
 		font-weight: 600;
 	}
-	tr:last-child td { border-bottom: none; }
-	.email { display: block; font-weight: 600; }
-	.subid { display: block; color: var(--color-text-muted); font-size: var(--fs-xs); font-family: var(--ff-mono); }
+	tr:last-child td {
+		border-bottom: none;
+	}
+	.email {
+		display: block;
+		font-weight: 600;
+	}
+	.subid {
+		display: block;
+		color: var(--color-text-muted);
+		font-size: var(--fs-xs);
+		font-family: var(--ff-mono);
+	}
 	.chip {
 		display: inline-block;
 		padding: 2px var(--space-2);
@@ -185,15 +208,19 @@
 		background: var(--color-surface-2);
 		color: var(--color-text);
 	}
-	.chip-active, .chip-trialing {
+	.chip-active,
+	.chip-trialing {
 		background: color-mix(in oklab, var(--color-success) 15%, transparent);
 		color: var(--color-success);
 	}
-	.chip-past_due, .chip-unpaid {
+	.chip-past_due,
+	.chip-unpaid {
 		background: color-mix(in oklab, var(--color-warning) 15%, transparent);
 		color: var(--color-warning);
 	}
-	.chip-canceled, .chip-incomplete, .chip-warning {
+	.chip-canceled,
+	.chip-incomplete,
+	.chip-warning {
 		background: color-mix(in oklab, var(--color-danger) 15%, transparent);
 		color: var(--color-danger);
 	}
@@ -220,7 +247,9 @@
 		cursor: pointer;
 		font: inherit;
 	}
-	.btn-ghost:hover { border-color: var(--color-border-strong); }
+	.btn-ghost:hover {
+		border-color: var(--color-border-strong);
+	}
 	.error {
 		color: var(--color-danger);
 		margin-bottom: var(--space-4);

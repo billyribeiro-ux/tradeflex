@@ -25,8 +25,8 @@
 	<header>
 		<h1>Alerts</h1>
 		<p class="lede">
-			Real-time setups. Every alert carries entry, stop, and sizing context. Outcomes are
-			reconciled and published monthly.
+			Real-time setups. Every alert carries entry, stop, and sizing context. Outcomes are reconciled
+			and published monthly.
 		</p>
 	</header>
 
@@ -52,16 +52,28 @@
 					<p class="thesis">{a.thesis}</p>
 					<dl class="levels">
 						{#if a.entry}
-							<div><dt>Entry</dt><dd>{a.entry}</dd></div>
+							<div>
+								<dt>Entry</dt>
+								<dd>{a.entry}</dd>
+							</div>
 						{/if}
 						{#if a.stop}
-							<div><dt>Stop</dt><dd>{a.stop}</dd></div>
+							<div>
+								<dt>Stop</dt>
+								<dd>{a.stop}</dd>
+							</div>
 						{/if}
 						{#if a.target}
-							<div><dt>Target</dt><dd>{a.target}</dd></div>
+							<div>
+								<dt>Target</dt>
+								<dd>{a.target}</dd>
+							</div>
 						{/if}
 						{#if a.sizingHint}
-							<div><dt>Sizing</dt><dd>{a.sizingHint}</dd></div>
+							<div>
+								<dt>Sizing</dt>
+								<dd>{a.sizingHint}</dd>
+							</div>
 						{/if}
 					</dl>
 					{#if a.outcomeNote}

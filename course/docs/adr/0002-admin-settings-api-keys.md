@@ -18,6 +18,7 @@ Trade Flex depends on third-party credentials (Stripe secret, Stripe webhook sig
 Build a `setting` table with two columns for sensitive values: `valueEncrypted` (AES-256-GCM) and `valueMask` (e.g. `sk_live_…••••1234`).
 
 **Resolution order** at runtime:
+
 1. If a `setting` row exists for the key and is not marked disabled → decrypt and use it.
 2. Else fall back to `process.env[KEY]`.
 3. Else throw a typed `MissingConfigError` that surfaces in `/admin/settings/integrations` with a prominent CTA.
@@ -25,6 +26,7 @@ Build a `setting` table with two columns for sensitive values: `valueEncrypted` 
 **Encryption primitive:** AES-256-GCM with 96-bit IV, 128-bit tag. `APP_ENCRYPTION_KEY` is 32 bytes, hex-encoded in Vercel env. AAD binds `(setting.id, version)` to prevent row-swap.
 
 **Access control:**
+
 - Only users with `owner` role may read decrypted values, and only via a server-side service (never returned to client).
 - `admin | finance` roles may rotate keys (write new value, old value invalidated).
 - Every read/write emits an `audit_event` with action `setting.read` / `setting.write`.

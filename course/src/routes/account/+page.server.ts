@@ -62,7 +62,8 @@ export const actions: Actions = {
 	portal: async ({ locals, url }) => {
 		if (!locals.caller.userId) return fail(401, { message: 'Not signed in.' });
 		const customer = await customersService.forCaller(locals.caller);
-		if (!customer) return fail(400, { message: 'No Stripe customer yet — start a checkout first.' });
+		if (!customer)
+			return fail(400, { message: 'No Stripe customer yet — start a checkout first.' });
 		let portalUrl: string;
 		try {
 			portalUrl = await billingService.openPortal(locals.caller, {

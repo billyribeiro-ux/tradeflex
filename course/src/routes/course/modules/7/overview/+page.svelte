@@ -14,7 +14,7 @@
 	<section>
 		<h2>New tables</h2>
 		<CodeBlock title="src/lib/server/db/schema.ts" lang="ts">
-{`export const customer = pgTable('customer', {
+			{`export const customer = pgTable('customer', {
   userId: text('user_id').primaryKey().references(() => user.id, { onDelete: 'cascade' }),
   stripeCustomerId: text('stripe_customer_id').notNull().unique(),
   createdAt: timestamp('created_at').notNull().defaultNow()
@@ -42,7 +42,7 @@ export const subscription = pgTable('subscription', {
 			success or <code>error</code> on failure.
 		</p>
 		<CodeBlock title="src/lib/server/services/webhooks.ts" lang="ts">
-{`const handlers: Record<string, (event: StripeEvent) => Promise<void>> = {
+			{`const handlers: Record<string, (event: StripeEvent) => Promise<void>> = {
   'checkout.session.completed': handleCheckoutCompleted,
   'customer.subscription.created': handleSubscriptionUpsert,
   'customer.subscription.updated': handleSubscriptionUpsert,
@@ -80,17 +80,17 @@ export async function drainWebhookDeliveries() {
 	<section>
 		<h2>Grace periods, the human touch</h2>
 		<p>
-			When <code>invoice.payment_failed</code> fires, Stripe retries for ~21 days. During that window
-			we don't revoke access immediately — we write <code>graceUntil = now + 7 days</code> and surface
-			a gentle banner on <code>/account</code>. If the retry eventually succeeds, the banner clears.
-			If not, the grace window expires and entitlement flips off.
+			When <code>invoice.payment_failed</code> fires, Stripe retries for ~21 days. During that
+			window we don't revoke access immediately — we write <code>graceUntil = now + 7 days</code>
+			and surface a gentle banner on <code>/account</code>. If the retry eventually succeeds, the
+			banner clears. If not, the grace window expires and entitlement flips off.
 		</p>
 	</section>
 
 	<section>
 		<h2>Customer Portal</h2>
 		<CodeBlock title="entry point" lang="ts">
-{`// /account/+page.server.ts action
+			{`// /account/+page.server.ts action
 export const actions = {
   portal: async ({ locals, url }) => {
     const customer = await customersService.forCaller(locals.caller);

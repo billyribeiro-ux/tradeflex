@@ -19,6 +19,8 @@ export const db = new Proxy({} as Db, {
 	get(_t, prop) {
 		const target = init() as unknown as Record<string | symbol, unknown>;
 		const value = target[prop];
-		return typeof value === 'function' ? (value as (...a: unknown[]) => unknown).bind(target) : value;
+		return typeof value === 'function'
+			? (value as (...a: unknown[]) => unknown).bind(target)
+			: value;
 	}
 });

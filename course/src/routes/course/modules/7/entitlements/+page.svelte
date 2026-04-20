@@ -19,10 +19,13 @@
 		<ul>
 			<li>Their subscription status is <code>active</code> or <code>trialing</code>.</li>
 			<li>Their <code>grace_until</code> timestamp is still in the future.</li>
-			<li>They hold a staff role (<code>owner</code>, <code>admin</code>, <code>content</code>, <code>support</code>).</li>
+			<li>
+				They hold a staff role (<code>owner</code>, <code>admin</code>, <code>content</code>,
+				<code>support</code>).
+			</li>
 		</ul>
 		<CodeBlock title="src/lib/server/services/subscriptions.ts" lang="ts">
-{`const ACTIVE_STATUSES = new Set(['active', 'trialing']);
+			{`const ACTIVE_STATUSES = new Set(['active', 'trialing']);
 
 async hasActiveEntitlement(caller: Caller): Promise<boolean> {
   if (!caller.userId) return false;
@@ -35,8 +38,8 @@ async hasActiveEntitlement(caller: Caller): Promise<boolean> {
 		</CodeBlock>
 		<Aside type="tip">
 			<p>
-				Keep this check in <em>one</em> function. Every gate in the app should call the same method
-				so a future refactor (say, adding a bundle entitlement) is a one-line change.
+				Keep this check in <em>one</em> function. Every gate in the app should call the same method so
+				a future refactor (say, adding a bundle entitlement) is a one-line change.
 			</p>
 		</Aside>
 	</section>
@@ -44,11 +47,11 @@ async hasActiveEntitlement(caller: Caller): Promise<boolean> {
 	<section>
 		<h2>Gating /alerts</h2>
 		<p>
-			The alerts feed is the product. Free users see the pricing page with a clear reason;
-			staff bypass the gate so we can QA in production.
+			The alerts feed is the product. Free users see the pricing page with a clear reason; staff
+			bypass the gate so we can QA in production.
 		</p>
 		<CodeBlock title="src/routes/alerts/+page.server.ts" lang="ts">
-{`const STAFF_ROLES = new Set(['owner', 'admin', 'content', 'support']);
+			{`const STAFF_ROLES = new Set(['owner', 'admin', 'content', 'support']);
 
 export const load: PageServerLoad = async ({ locals, url }) => {
   if (!locals.caller.userId) {
@@ -68,12 +71,12 @@ export const load: PageServerLoad = async ({ locals, url }) => {
 	<section>
 		<h2>Surfacing state on /account</h2>
 		<p>
-			The account page loads the subscription and customer row alongside the profile. A member
-			sees their plan, renewal date, and a single button to open the Stripe Customer Portal.
-			Anyone without a customer yet sees a link to /pricing.
+			The account page loads the subscription and customer row alongside the profile. A member sees
+			their plan, renewal date, and a single button to open the Stripe Customer Portal. Anyone
+			without a customer yet sees a link to /pricing.
 		</p>
 		<CodeBlock title="src/routes/account/+page.server.ts" lang="ts">
-{`const [profile, customer, subscription] = await Promise.all([
+			{`const [profile, customer, subscription] = await Promise.all([
   profileService.getForCaller(locals.caller),
   customersService.forCaller(locals.caller),
   subscriptionsService.forCaller(locals.caller)
@@ -86,15 +89,15 @@ return { profile, user: locals.user, customer, subscription, entitled };`}
 	<section>
 		<h2>Why redirect, not 403</h2>
 		<p>
-			A 403 on <code>/alerts</code> would be correct — the caller has no right to the resource —
-			but it's a dead end. Redirecting to <code>/pricing?gate=alerts</code> is a conversion funnel:
-			the user lands on a page explaining why, with the plans one click away.
+			A 403 on <code>/alerts</code> would be correct — the caller has no right to the resource — but
+			it's a dead end. Redirecting to <code>/pricing?gate=alerts</code> is a conversion funnel: the user
+			lands on a page explaining why, with the plans one click away.
 		</p>
 		<Aside type="tip">
 			<p>
-				Do <em>not</em> redirect API endpoints this way. A JSON endpoint returning 302 confuses
-				clients. Endpoint handlers should return 402 Payment Required or 403 Forbidden with a body
-				that names the missing entitlement.
+				Do <em>not</em> redirect API endpoints this way. A JSON endpoint returning 302 confuses clients.
+				Endpoint handlers should return 402 Payment Required or 403 Forbidden with a body that names the
+				missing entitlement.
 			</p>
 		</Aside>
 	</section>
@@ -105,7 +108,9 @@ return { profile, user: locals.user, customer, subscription, entitled };`}
 			<li>One function decides entitlement; every gate calls it.</li>
 			<li>Page gates redirect; endpoint gates return a structured error.</li>
 			<li>Staff roles always bypass the gate — you need to test in prod.</li>
-			<li>Grace windows extend access past a failed payment; the rule handles them automatically.</li>
+			<li>
+				Grace windows extend access past a failed payment; the rule handles them automatically.
+			</li>
 		</ul>
 	</section>
 </CoursePage>

@@ -88,7 +88,9 @@
 		text-decoration: none;
 		border-left: 2px solid transparent;
 		margin-left: -1px;
-		transition: color var(--dur-1) var(--ease-out-expo), border-color var(--dur-1) var(--ease-out-expo);
+		transition:
+			color var(--dur-1) var(--ease-out-expo),
+			border-color var(--dur-1) var(--ease-out-expo);
 	}
 
 	li[data-level='3'] a {

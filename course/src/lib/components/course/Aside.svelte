@@ -26,7 +26,11 @@
 	};
 </script>
 
-<aside class="aside" data-type={type} role={type === 'danger' || type === 'caution' ? 'alert' : 'note'}>
+<aside
+	class="aside"
+	data-type={type}
+	role={type === 'danger' || type === 'caution' ? 'alert' : 'note'}
+>
 	<div class="header">
 		<span class="icon" aria-hidden="true">{icons[type]}</span>
 		<span class="label">{title ?? labels[type]}</span>

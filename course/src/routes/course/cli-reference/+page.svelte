@@ -16,8 +16,8 @@
 			<Badge tone="muted">Module 0 · Before you start</Badge>
 			<h1>CLI Reference</h1>
 			<p class="lede">
-				A living index of every command you will type in this course — what it does, what to
-				expect back, and the gotcha that costs people an hour the first time.
+				A living index of every command you will type in this course — what it does, what to expect
+				back, and the gotcha that costs people an hour the first time.
 			</p>
 		</header>
 
@@ -29,8 +29,15 @@
 				definition. You will learn:
 			</p>
 			<ul>
-				<li>What a <strong>command-line interface (CLI)</strong> is and why we prefer it over dashboards.</li>
-				<li>The 12 CLIs you will install and use: <code>git</code>, <code>gh</code>, <code>pnpm</code>, <code>vercel</code>, <code>stripe</code>, <code>neonctl</code>, <code>drizzle-kit</code>, <code>playwright</code>, <code>vitest</code>, <code>resend</code>, <code>bunnycdn</code>, <code>tauri</code>.</li>
+				<li>
+					What a <strong>command-line interface (CLI)</strong> is and why we prefer it over dashboards.
+				</li>
+				<li>
+					The 12 CLIs you will install and use: <code>git</code>, <code>gh</code>,
+					<code>pnpm</code>, <code>vercel</code>, <code>stripe</code>, <code>neonctl</code>,
+					<code>drizzle-kit</code>, <code>playwright</code>, <code>vitest</code>,
+					<code>resend</code>, <code>bunnycdn</code>, <code>tauri</code>.
+				</li>
 				<li>The expected output of each of the commands you will run most often.</li>
 			</ul>
 		</section>
@@ -38,21 +45,18 @@
 		<section>
 			<h2>Why the CLI</h2>
 			<p>
-				A <strong>CLI</strong> (command-line interface) is a program you drive by typing text. It
-				does one thing: reads your input, does the work, prints the result. Nothing hidden,
-				nothing clicked.
+				A <strong>CLI</strong> (command-line interface) is a program you drive by typing text. It does
+				one thing: reads your input, does the work, prints the result. Nothing hidden, nothing clicked.
 			</p>
-			<p>
-				We prefer CLIs over web dashboards for three reasons:
-			</p>
+			<p>We prefer CLIs over web dashboards for three reasons:</p>
 			<ol>
 				<li>
 					<strong>Reproducible</strong>: a command you can paste into a README or a CI script runs
 					the same way next time. A click sequence through a dashboard doesn&rsquo;t.
 				</li>
 				<li>
-					<strong>Inspectable</strong>: when something fails, a CLI prints a message you can read.
-					A dashboard shows a spinner.
+					<strong>Inspectable</strong>: when something fails, a CLI prints a message you can read. A
+					dashboard shows a spinner.
 				</li>
 				<li>
 					<strong>Scriptable</strong>: every build, every deploy, every rotation of a secret is one
@@ -72,29 +76,30 @@
 		<section>
 			<h2>git — version control</h2>
 			<p>
-				<strong>Git</strong> is a version-control system: it tracks every change you make to a file
-				so you can go back, branch off, and collaborate. You&rsquo;ll use it on every module.
+				<strong>Git</strong> is a version-control system: it tracks every change you make to a file so
+				you can go back, branch off, and collaborate. You&rsquo;ll use it on every module.
 			</p>
 
 			<h3>Common commands</h3>
 
-			<CodeBlock title="Initialize + first commit" lang="bash">$ git init
-$ git add .
-$ git commit -m "chore: initial scaffold"</CodeBlock>
+			<CodeBlock title="Initialize + first commit" lang="bash"
+				>$ git init $ git add . $ git commit -m "chore: initial scaffold"</CodeBlock
+			>
 
 			<p>Expected output (abridged):</p>
 
-			<CodeBlock lang="text">Initialized empty Git repository in /Users/you/path/.git/
-[main (root-commit) 7f2d1a0] chore: initial scaffold
- 127 files changed, 4219 insertions(+)</CodeBlock>
+			<CodeBlock lang="text"
+				>Initialized empty Git repository in /Users/you/path/.git/ [main (root-commit) 7f2d1a0]
+				chore: initial scaffold 127 files changed, 4219 insertions(+)</CodeBlock
+			>
 
-			<CodeBlock title="Status + diff" lang="bash">$ git status
-$ git diff
-$ git log --oneline --graph --decorate -10</CodeBlock>
+			<CodeBlock title="Status + diff" lang="bash"
+				>$ git status $ git diff $ git log --oneline --graph --decorate -10</CodeBlock
+			>
 
-			<CodeBlock title="Branch + merge" lang="bash">$ git switch -c feature/auth
-$ git switch main
-$ git merge --no-ff feature/auth</CodeBlock>
+			<CodeBlock title="Branch + merge" lang="bash"
+				>$ git switch -c feature/auth $ git switch main $ git merge --no-ff feature/auth</CodeBlock
+			>
 
 			<Aside type="caution" title="No --force-with-lease on main">
 				<p>
@@ -107,22 +112,27 @@ $ git merge --no-ff feature/auth</CodeBlock>
 		<section>
 			<h2>gh — GitHub CLI</h2>
 			<p>
-				<code>gh</code> is the official GitHub CLI. It authenticates once, then lets you create
-				repos, open pull requests, read issues, and manage releases without leaving the terminal.
+				<code>gh</code> is the official GitHub CLI. It authenticates once, then lets you create repos,
+				open pull requests, read issues, and manage releases without leaving the terminal.
 			</p>
 
-			<CodeBlock title="Install + authenticate (macOS)" lang="bash">$ brew install gh
-$ gh auth login</CodeBlock>
+			<CodeBlock title="Install + authenticate (macOS)" lang="bash"
+				>$ brew install gh $ gh auth login</CodeBlock
+			>
 
 			<p>Follow the interactive prompts; pick HTTPS and a web-browser login.</p>
 
-			<CodeBlock title="Create the Trade Flex repo + push" lang="bash">$ gh repo create tradeflex --private --source=. --remote=origin --push</CodeBlock>
+			<CodeBlock title="Create the Trade Flex repo + push" lang="bash"
+				>$ gh repo create tradeflex --private --source=. --remote=origin --push</CodeBlock
+			>
 
 			<p>Expected output:</p>
 
-			<CodeBlock lang="text">✓ Created repository YOUR-USER/tradeflex on GitHub
-✓ Added remote https://github.com/YOUR-USER/tradeflex.git
-✓ Pushed commits to https://github.com/YOUR-USER/tradeflex.git</CodeBlock>
+			<CodeBlock lang="text"
+				>✓ Created repository YOUR-USER/tradeflex on GitHub ✓ Added remote
+				https://github.com/YOUR-USER/tradeflex.git ✓ Pushed commits to
+				https://github.com/YOUR-USER/tradeflex.git</CodeBlock
+			>
 
 			<CodeBlock title="Open a PR" lang="bash">$ gh pr create --fill --web</CodeBlock>
 		</section>
@@ -135,18 +145,16 @@ $ gh auth login</CodeBlock>
 				project&rsquo;s <code>node_modules</code>.
 			</p>
 
-			<CodeBlock title="Install + daily use" lang="bash">$ corepack enable
-$ pnpm install
-$ pnpm dev
-$ pnpm check
-$ pnpm lint
-$ pnpm test:unit -- --run</CodeBlock>
+			<CodeBlock title="Install + daily use" lang="bash"
+				>$ corepack enable $ pnpm install $ pnpm dev $ pnpm check $ pnpm lint $ pnpm test:unit --
+				--run</CodeBlock
+			>
 
 			<Aside type="note">
 				<p>
 					<code>corepack enable</code> (built into Node 16+) pins <code>pnpm</code> to the version
-					recorded in <code>package.json</code>&rsquo;s <code>packageManager</code> field — so every
-					contributor gets the same tool without manually installing it.
+					recorded in <code>package.json</code>&rsquo;s <code>packageManager</code> field — so every contributor
+					gets the same tool without manually installing it.
 				</p>
 			</Aside>
 		</section>
@@ -154,23 +162,30 @@ $ pnpm test:unit -- --run</CodeBlock>
 		<section>
 			<h2>vercel — deploy + env</h2>
 			<p>
-				<code>vercel</code> is Vercel&rsquo;s deployment CLI. It links a local project to a Vercel
-				project, pulls environment variables, and ships preview or production builds.
+				<code>vercel</code> is Vercel&rsquo;s deployment CLI. It links a local project to a Vercel project,
+				pulls environment variables, and ships preview or production builds.
 			</p>
 
-			<CodeBlock title="Install + authenticate" lang="bash">$ pnpm add -g vercel
-$ vercel login</CodeBlock>
+			<CodeBlock title="Install + authenticate" lang="bash"
+				>$ pnpm add -g vercel $ vercel login</CodeBlock
+			>
 
-			<CodeBlock title="Link local → Vercel project" lang="bash">$ vercel link
-$ vercel git connect</CodeBlock>
+			<CodeBlock title="Link local → Vercel project" lang="bash"
+				>$ vercel link $ vercel git connect</CodeBlock
+			>
 
-			<CodeBlock title="Pull env to local .env" lang="bash">$ vercel env pull .env.local
-$ vercel env add STRIPE_SECRET_KEY production</CodeBlock>
+			<CodeBlock title="Pull env to local .env" lang="bash"
+				>$ vercel env pull .env.local $ vercel env add STRIPE_SECRET_KEY production</CodeBlock
+			>
 
-			<CodeBlock title="Preview deploy + prod deploy" lang="bash">$ vercel
-$ vercel deploy --prod</CodeBlock>
+			<CodeBlock title="Preview deploy + prod deploy" lang="bash"
+				>$ vercel $ vercel deploy --prod</CodeBlock
+			>
 
-			<p>After <code>--prod</code> you get back a URL ending in <code>.vercel.app</code>. That&rsquo;s the temporary domain we ship v1 on.</p>
+			<p>
+				After <code>--prod</code> you get back a URL ending in <code>.vercel.app</code>.
+				That&rsquo;s the temporary domain we ship v1 on.
+			</p>
 		</section>
 
 		<section>
@@ -180,17 +195,24 @@ $ vercel deploy --prod</CodeBlock>
 				and simulates events (charges, trial-end, disputes) for testing.
 			</p>
 
-			<CodeBlock title="Install + login (macOS)" lang="bash">$ brew install stripe/stripe-cli/stripe
-$ stripe login</CodeBlock>
+			<CodeBlock title="Install + login (macOS)" lang="bash"
+				>$ brew install stripe/stripe-cli/stripe $ stripe login</CodeBlock
+			>
 
-			<CodeBlock title="Forward webhooks to local dev" lang="bash">$ stripe listen --forward-to localhost:5173/api/stripe/webhook</CodeBlock>
+			<CodeBlock title="Forward webhooks to local dev" lang="bash"
+				>$ stripe listen --forward-to localhost:5173/api/stripe/webhook</CodeBlock
+			>
 
 			<p>Expected output:</p>
 
-			<CodeBlock lang="text">> Ready! Your webhook signing secret is whsec_abc… (^C to quit)
-> 2026-04-20 10:02:11   --&gt; customer.subscription.created [evt_1OabcD…]</CodeBlock>
+			<CodeBlock lang="text"
+				>> Ready! Your webhook signing secret is whsec_abc… (^C to quit) > 2026-04-20 10:02:11
+				--&gt; customer.subscription.created [evt_1OabcD…]</CodeBlock
+			>
 
-			<CodeBlock title="Trigger a test event" lang="bash">$ stripe trigger checkout.session.completed</CodeBlock>
+			<CodeBlock title="Trigger a test event" lang="bash"
+				>$ stripe trigger checkout.session.completed</CodeBlock
+			>
 
 			<Aside type="caution" title="Test mode vs live mode">
 				<p>
@@ -203,16 +225,18 @@ $ stripe login</CodeBlock>
 		<section>
 			<h2>neonctl — Neon Postgres branches</h2>
 			<p>
-				<code>neonctl</code> manages Neon projects + branches. A <strong>branch</strong> in Neon is
-				a zero-copy clone of a database; we use one per PR to run migration dry-runs without
-				touching prod.
+				<code>neonctl</code> manages Neon projects + branches. A <strong>branch</strong> in Neon is a
+				zero-copy clone of a database; we use one per PR to run migration dry-runs without touching prod.
 			</p>
 
-			<CodeBlock title="Install + authenticate" lang="bash">$ pnpm add -g neonctl
-$ neonctl auth</CodeBlock>
+			<CodeBlock title="Install + authenticate" lang="bash"
+				>$ pnpm add -g neonctl $ neonctl auth</CodeBlock
+			>
 
-			<CodeBlock title="Create a branch for a PR" lang="bash">$ neonctl branches create --name pr-42 --parent main
-$ neonctl connection-string pr-42 --pooled</CodeBlock>
+			<CodeBlock title="Create a branch for a PR" lang="bash"
+				>$ neonctl branches create --name pr-42 --parent main $ neonctl connection-string pr-42
+				--pooled</CodeBlock
+			>
 
 			<p>The second command prints a connection string you pass to migration dry-run in CI.</p>
 		</section>
@@ -228,11 +252,14 @@ $ neonctl connection-string pr-42 --pooled</CodeBlock>
 
 			<p>Expected output:</p>
 
-			<CodeBlock lang="text">drizzle-kit: v0.31.x
-✓ Reading schema src/lib/server/db/schema.ts
-✓ Creating migration drizzle/0001_add_profile.sql</CodeBlock>
+			<CodeBlock lang="text"
+				>drizzle-kit: v0.31.x ✓ Reading schema src/lib/server/db/schema.ts ✓ Creating migration
+				drizzle/0001_add_profile.sql</CodeBlock
+			>
 
-			<CodeBlock title="Apply against the current DATABASE_URL" lang="bash">$ pnpm db:migrate</CodeBlock>
+			<CodeBlock title="Apply against the current DATABASE_URL" lang="bash"
+				>$ pnpm db:migrate</CodeBlock
+			>
 
 			<CodeBlock title="Inspect tables interactively" lang="bash">$ pnpm db:studio</CodeBlock>
 		</section>
@@ -240,70 +267,71 @@ $ neonctl connection-string pr-42 --pooled</CodeBlock>
 		<section>
 			<h2>playwright — end-to-end tests</h2>
 			<p>
-				<strong>Playwright</strong> drives a real browser (Chromium, Firefox, WebKit) against your
-				app. We use it to test sign-up, checkout, and admin flows end-to-end.
+				<strong>Playwright</strong> drives a real browser (Chromium, Firefox, WebKit) against your app.
+				We use it to test sign-up, checkout, and admin flows end-to-end.
 			</p>
 
-			<CodeBlock title="Install browsers (one-time)" lang="bash">$ pnpm exec playwright install</CodeBlock>
+			<CodeBlock title="Install browsers (one-time)" lang="bash"
+				>$ pnpm exec playwright install</CodeBlock
+			>
 
-			<CodeBlock title="Run the suite" lang="bash">$ pnpm test:e2e
-$ pnpm test:e2e --ui</CodeBlock>
+			<CodeBlock title="Run the suite" lang="bash">$ pnpm test:e2e $ pnpm test:e2e --ui</CodeBlock>
 
 			<p>
-				<code>--ui</code> opens an interactive test runner with a live DOM snapshot for each step —
-				invaluable when a test fails in CI.
+				<code>--ui</code> opens an interactive test runner with a live DOM snapshot for each step — invaluable
+				when a test fails in CI.
 			</p>
 		</section>
 
 		<section>
 			<h2>vitest — unit + integration</h2>
 			<p>
-				<strong>Vitest</strong> runs Vite-native tests. We use it for service-layer logic, schema
-				round-trips, and anything that doesn&rsquo;t need a browser.
+				<strong>Vitest</strong> runs Vite-native tests. We use it for service-layer logic, schema round-trips,
+				and anything that doesn&rsquo;t need a browser.
 			</p>
 
-			<CodeBlock title="Run once / watch" lang="bash">$ pnpm test:unit -- --run
-$ pnpm test:unit</CodeBlock>
+			<CodeBlock title="Run once / watch" lang="bash"
+				>$ pnpm test:unit -- --run $ pnpm test:unit</CodeBlock
+			>
 
 			<p>Expected output on a green run:</p>
 
-			<CodeBlock lang="text"> ✓ src/lib/server/services/contacts.test.ts (8)
- ✓ src/lib/server/services/subscriptions.test.ts (12)
-
- Test Files  2 passed (2)
-      Tests  20 passed (20)</CodeBlock>
+			<CodeBlock lang="text">
+				✓ src/lib/server/services/contacts.test.ts (8) ✓
+				src/lib/server/services/subscriptions.test.ts (12) Test Files 2 passed (2) Tests 20 passed
+				(20)</CodeBlock
+			>
 		</section>
 
 		<section>
 			<h2>resend — email</h2>
 			<p>
-				<code>resend</code> has a small CLI and a richer REST API. We mostly use the API, but the
-				CLI is handy for local smoke tests.
+				<code>resend</code> has a small CLI and a richer REST API. We mostly use the API, but the CLI
+				is handy for local smoke tests.
 			</p>
 
-			<CodeBlock title="Send a test email" lang="bash">$ pnpm dlx resend send --from 'hello@send.tradeflex.app' \
-  --to 'you@example.com' \
-  --subject 'Hello from Trade Flex' \
-  --text 'It works.'</CodeBlock>
+			<CodeBlock title="Send a test email" lang="bash"
+				>$ pnpm dlx resend send --from 'hello@send.tradeflex.app' \ --to 'you@example.com' \
+				--subject 'Hello from Trade Flex' \ --text 'It works.'</CodeBlock
+			>
 		</section>
 
 		<section>
 			<h2>bunnycdn — video uploads</h2>
 			<p>
-				Bunny Stream hosts gated video. We upload lesson masters via the API (wrapped in a small
-				npm helper) and rotate signed embed URLs per viewer session.
+				Bunny Stream hosts gated video. We upload lesson masters via the API (wrapped in a small npm
+				helper) and rotate signed embed URLs per viewer session.
 			</p>
 
-			<CodeBlock title="Upload a lesson" lang="bash">$ pnpm dlx @bunnycdn/stream upload \
-  --library $BUNNY_STREAM_LIBRARY_ID \
-  --title 'Price Action — Lesson 1' \
-  ./lesson-01.mp4</CodeBlock>
+			<CodeBlock title="Upload a lesson" lang="bash"
+				>$ pnpm dlx @bunnycdn/stream upload \ --library $BUNNY_STREAM_LIBRARY_ID \ --title 'Price
+				Action — Lesson 1' \ ./lesson-01.mp4</CodeBlock
+			>
 
 			<Aside type="danger" title="Never use YouTube for gated content">
 				<p>
-					YouTube unlisted is <em>not</em> access control. Any URL that leaks stays watchable. Only
-					use YouTube for the public landing hero and free previews. Bunny Stream for every paid
-					lesson.
+					YouTube unlisted is <em>not</em> access control. Any URL that leaks stays watchable. Only use
+					YouTube for the public landing hero and free previews. Bunny Stream for every paid lesson.
 				</p>
 			</Aside>
 		</section>
@@ -311,21 +339,31 @@ $ pnpm test:unit</CodeBlock>
 		<section>
 			<h2>tauri — macOS app</h2>
 			<p>
-				Tauri wraps our web build into a native macOS binary. It lands in Phase 11; the commands
-				are here so the reference is complete.
+				Tauri wraps our web build into a native macOS binary. It lands in Phase 11; the commands are
+				here so the reference is complete.
 			</p>
 
 			<CodeBlock title="Dev" lang="bash">$ pnpm tauri dev</CodeBlock>
 
-			<CodeBlock title="Build signed + notarized release" lang="bash">$ pnpm tauri build --target universal-apple-darwin</CodeBlock>
+			<CodeBlock title="Build signed + notarized release" lang="bash"
+				>$ pnpm tauri build --target universal-apple-darwin</CodeBlock
+			>
 		</section>
 
 		<section>
 			<h2>Recap</h2>
 			<ul>
 				<li>The CLI is your primary control surface — reproducible, inspectable, scriptable.</li>
-				<li>You installed (or will install): <code>git</code>, <code>gh</code>, <code>pnpm</code>, <code>vercel</code>, <code>stripe</code>, <code>neonctl</code>, <code>drizzle-kit</code>, <code>playwright</code>, <code>vitest</code>, <code>resend</code>, <code>bunnycdn</code>, <code>tauri</code>.</li>
-				<li>Every later page assumes you can come back to this reference when a command looks unfamiliar.</li>
+				<li>
+					You installed (or will install): <code>git</code>, <code>gh</code>, <code>pnpm</code>,
+					<code>vercel</code>, <code>stripe</code>, <code>neonctl</code>, <code>drizzle-kit</code>,
+					<code>playwright</code>, <code>vitest</code>, <code>resend</code>, <code>bunnycdn</code>,
+					<code>tauri</code>.
+				</li>
+				<li>
+					Every later page assumes you can come back to this reference when a command looks
+					unfamiliar.
+				</li>
 			</ul>
 
 			<h3>Verify you&rsquo;re done</h3>
@@ -339,8 +377,8 @@ $ pnpm test:unit</CodeBlock>
 
 			<h3>Next up</h3>
 			<p>
-				<a href="/course">Back to the module overview →</a> — Module 1 begins with the project
-				setup page: we turn the existing scaffold into the Trade Flex repo and wire it to Neon.
+				<a href="/course">Back to the module overview →</a> — Module 1 begins with the project setup page:
+				we turn the existing scaffold into the Trade Flex repo and wire it to Neon.
 			</p>
 		</section>
 

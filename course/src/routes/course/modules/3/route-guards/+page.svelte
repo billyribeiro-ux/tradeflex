@@ -49,7 +49,9 @@ export const load = async ({ locals, url }) => {
 	<section>
 		<h2>The one-liner guard</h2>
 		<p>
-			A protected page is just a load function that throws a redirect when <code>locals.caller.userId</code>
+			A protected page is just a load function that throws a redirect when <code
+				>locals.caller.userId</code
+			>
 			is null. No middleware, no decorator — plain throw.
 		</p>
 		<CodeBlock lang="ts" code={guard} />
@@ -65,34 +67,42 @@ export const load = async ({ locals, url }) => {
 	<section>
 		<h2>Don't trust the page load in the action</h2>
 		<p>
-			A load function proves you were signed in <em>when the page rendered</em>. It says nothing about
-			whether you're still signed in when the form submits. The action re-checks — otherwise a
+			A load function proves you were signed in <em>when the page rendered</em>. It says nothing
+			about whether you're still signed in when the form submits. The action re-checks — otherwise a
 			long-idle tab can submit a write with a stale session.
 		</p>
 		<CodeBlock lang="ts" code={save} />
 		<p>
 			The pattern: <strong>guards are defence in depth</strong>. Load guards protect the read;
-			action guards protect the write; the service layer guards the query. Any one of them missing is
-			a bug, but together they're redundant — which is what safety looks like.
+			action guards protect the write; the service layer guards the query. Any one of them missing
+			is a bug, but together they're redundant — which is what safety looks like.
 		</p>
 	</section>
 
 	<section>
 		<h2>Why <code>locals.caller</code> and not <code>locals.user</code>?</h2>
 		<p>
-			<code>locals.user</code> is the Better Auth user row. It's great for UI ("signed in as <code>user.email</code>"),
-			but it carries no role information, no entitlements, no request id. <code>locals.caller</code>
-			is the value we built in Module 2 — it is the thing services want. Mixing the two is how
-			role-check bugs sneak in.
+			<code>locals.user</code> is the Better Auth user row. It's great for UI ("signed in as
+			<code>user.email</code>"), but it carries no role information, no entitlements, no request id.
+			<code>locals.caller</code>
+			is the value we built in Module 2 — it is the thing services want. Mixing the two is how role-check
+			bugs sneak in.
 		</p>
 	</section>
 
 	<section>
 		<h2>Recap</h2>
 		<ul>
-			<li>Gate member pages with a redirect in the load function; preserve the destination via <code>next</code>.</li>
+			<li>
+				Gate member pages with a redirect in the load function; preserve the destination via <code
+					>next</code
+				>.
+			</li>
 			<li>Re-check auth in the action; load guards do not cover writes.</li>
-			<li>Prefer <code>locals.caller</code> for anything that enforces rules; <code>locals.user</code> is for UI only.</li>
+			<li>
+				Prefer <code>locals.caller</code> for anything that enforces rules; <code>locals.user</code> is
+				for UI only.
+			</li>
 		</ul>
 
 		<h3>Next up</h3>

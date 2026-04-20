@@ -51,7 +51,7 @@
 			{#if form && 'success' in form && form.success}
 				<div class="success" role="status">
 					<p>
-						<strong>{form.created ? 'Thanks — you\'re on the list.' : 'Welcome back.'}</strong>
+						<strong>{form.created ? "Thanks — you're on the list." : 'Welcome back.'}</strong>
 					</p>
 					<p>Your download is ready.</p>
 					<a class="btn-primary" href={form.downloadUrl}>Download PDF →</a>

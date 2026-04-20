@@ -15,13 +15,18 @@
 		<h2>Three rules</h2>
 		<ol>
 			<li><strong>Pages</strong> gate via <code>+page.server.ts load</code>. Redirect on miss.</li>
-			<li><strong>Endpoints</strong> gate at the top of the handler. Return structured error on miss.</li>
-			<li><strong>Services</strong> never gate on their own. The caller decides; services enforce by <em>scope</em> (eg. "your own rows"), not by tier.</li>
+			<li>
+				<strong>Endpoints</strong> gate at the top of the handler. Return structured error on miss.
+			</li>
+			<li>
+				<strong>Services</strong> never gate on their own. The caller decides; services enforce by
+				<em>scope</em> (eg. "your own rows"), not by tier.
+			</li>
 		</ol>
 		<Aside type="tip">
 			<p>
-				Services stay tier-blind on purpose. When you add a new tier later, you won't hunt
-				through services rewriting conditionals — the gate sits at the edge.
+				Services stay tier-blind on purpose. When you add a new tier later, you won't hunt through
+				services rewriting conditionals — the gate sits at the edge.
 			</p>
 		</Aside>
 	</section>
@@ -29,12 +34,12 @@
 	<section>
 		<h2>The entitlement function</h2>
 		<p>
-			Every gate calls the same method. No copy-paste of <code>status === 'active'</code> checks
-			scattered across the codebase. When the rule changes (eg. adding legacy grandfathered
-			members), you change it in one place.
+			Every gate calls the same method. No copy-paste of <code>status === 'active'</code> checks scattered
+			across the codebase. When the rule changes (eg. adding legacy grandfathered members), you change
+			it in one place.
 		</p>
 		<CodeBlock title="src/lib/server/services/subscriptions.ts" lang="ts">
-{`const ACTIVE_STATUSES = new Set(['active', 'trialing']);
+			{`const ACTIVE_STATUSES = new Set(['active', 'trialing']);
 
 async hasActiveEntitlement(caller: Caller): Promise<boolean> {
   if (!caller.userId) return false;
@@ -50,7 +55,7 @@ async hasActiveEntitlement(caller: Caller): Promise<boolean> {
 	<section>
 		<h2>Page gate</h2>
 		<CodeBlock title="src/routes/alerts/+page.server.ts" lang="ts">
-{`const STAFF_ROLES = new Set(['owner', 'admin', 'content', 'support']);
+			{`const STAFF_ROLES = new Set(['owner', 'admin', 'content', 'support']);
 
 export const load: PageServerLoad = async ({ locals, url }) => {
   if (!locals.caller.userId) throw redirect(303, \`/login?next=\${encodeURIComponent(url.pathname)}\`);
@@ -68,12 +73,11 @@ export const load: PageServerLoad = async ({ locals, url }) => {
 	<section>
 		<h2>Endpoint gate</h2>
 		<p>
-			For JSON endpoints, never redirect — return <code>402 Payment Required</code> with a body
-			that names the missing entitlement. Clients can map 402 to "show upsell modal" without
-			needing to parse a redirect.
+			For JSON endpoints, never redirect — return <code>402 Payment Required</code> with a body that names
+			the missing entitlement. Clients can map 402 to "show upsell modal" without needing to parse a redirect.
 		</p>
 		<CodeBlock title="pattern" lang="ts">
-{`export const GET: RequestHandler = async ({ locals }) => {
+			{`export const GET: RequestHandler = async ({ locals }) => {
   if (!locals.caller.userId) throw error(401, 'sign in required');
   const entitled = await subscriptionsService.hasActiveEntitlement(locals.caller);
   if (!entitled) {
@@ -87,12 +91,12 @@ export const load: PageServerLoad = async ({ locals, url }) => {
 	<section>
 		<h2>Preventing multiple plans</h2>
 		<p>
-			A single customer should never have two overlapping active subscriptions. Our checkout
-			handler reads <code>customer.forCaller</code> and, if a live subscription exists, redirects
-			to the portal instead of starting a new session.
+			A single customer should never have two overlapping active subscriptions. Our checkout handler
+			reads <code>customer.forCaller</code> and, if a live subscription exists, redirects to the portal
+			instead of starting a new session.
 		</p>
 		<CodeBlock title="guard in startCheckout" lang="ts">
-{`async startCheckout(caller, params) {
+			{`async startCheckout(caller, params) {
   const existing = await subscriptionsService.forCaller(caller);
   if (existing && ACTIVE_STATUSES.has(existing.status)) {
     // user already pays — send them to portal to switch plans
@@ -106,10 +110,10 @@ export const load: PageServerLoad = async ({ locals, url }) => {
 	<section>
 		<h2>UI limits</h2>
 		<p>
-			Gating isn't only backend. The pricing banner, the locked-content card on <code>/courses</code>,
-			and the greyed-out "Create alert" button on the marketing site all read the same entitlement.
-			A single <code>data.entitled</code> boolean in the root <code>+layout.server.ts</code> is
-			often the cleanest spread point.
+			Gating isn't only backend. The pricing banner, the locked-content card on <code>/courses</code
+			>, and the greyed-out "Create alert" button on the marketing site all read the same
+			entitlement. A single <code>data.entitled</code> boolean in the root
+			<code>+layout.server.ts</code> is often the cleanest spread point.
 		</p>
 	</section>
 

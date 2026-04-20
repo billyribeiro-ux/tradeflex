@@ -15,7 +15,7 @@
 	<section>
 		<h2>Checkout: the outgoing path</h2>
 		<CodeBlock title="src/routes/api/billing/checkout/+server.ts" lang="ts">
-{`export const POST: RequestHandler = async ({ request, locals, url }) => {
+			{`export const POST: RequestHandler = async ({ request, locals, url }) => {
   const body = await readBody(request);            // json or form-data
   const { priceId } = schema.parse(body);
   const checkoutUrl = await billingService.startCheckout(locals.caller, {
@@ -27,7 +27,9 @@
   throw redirect(303, checkoutUrl);   // form POST → redirect to Stripe
 };`}
 		</CodeBlock>
-		<p>The pricing page uses this as a form action — progressive enhancement: JS off still works.</p>
+		<p>
+			The pricing page uses this as a form action — progressive enhancement: JS off still works.
+		</p>
 	</section>
 
 	<section>
@@ -35,12 +37,17 @@
 		<Steps>
 			<li>Read the raw body — signature verification needs the exact bytes Stripe sent.</li>
 			<li>Look up <code>STRIPE_WEBHOOK_SECRET</code> from settings.</li>
-			<li>HMAC-SHA256 the <code>{`\${timestamp}.\${rawBody}`}</code> string with the secret; compare to the <code>v1=</code> part of the signature header.</li>
-			<li>Store the event in <code>webhook_delivery</code> (idempotent on <code>eventId</code>).</li>
+			<li>
+				HMAC-SHA256 the <code>{`\${timestamp}.\${rawBody}`}</code> string with the secret; compare
+				to the <code>v1=</code> part of the signature header.
+			</li>
+			<li>
+				Store the event in <code>webhook_delivery</code> (idempotent on <code>eventId</code>).
+			</li>
 			<li>Return 200. Dispatch to handlers happens async in Module 7.</li>
 		</Steps>
 		<CodeBlock title="verify + store" lang="ts">
-{`const rawBody = await request.text();
+			{`const rawBody = await request.text();
 const verified = await verifySignature(rawBody, request.headers.get('stripe-signature'));
 const event = JSON.parse(rawBody) as StripeEvent;
 
@@ -61,7 +68,7 @@ return json({ received: true });`}
 	<section>
 		<h2>HMAC, using the Web Crypto API</h2>
 		<CodeBlock title="verifySignature" lang="ts">
-{`const key = await crypto.subtle.importKey(
+			{`const key = await crypto.subtle.importKey(
   'raw', new TextEncoder().encode(secret),
   { name: 'HMAC', hash: 'SHA-256' }, false, ['sign']
 );
@@ -75,9 +82,9 @@ return hex === signature;`}
 		</CodeBlock>
 		<Aside type="caution">
 			<p>
-				<strong>Never trust the parsed body until you've verified.</strong> We read raw text first,
-				then parse. If verification fails we still record the attempt — so a bad actor DOS-spamming
-				your endpoint shows up in the admin, flagged, instead of being silently dropped.
+				<strong>Never trust the parsed body until you've verified.</strong> We read raw text first, then
+				parse. If verification fails we still record the attempt — so a bad actor DOS-spamming your endpoint
+				shows up in the admin, flagged, instead of being silently dropped.
 			</p>
 		</Aside>
 	</section>
@@ -85,7 +92,7 @@ return hex === signature;`}
 	<section>
 		<h2>Try it</h2>
 		<CodeBlock lang="sh">
-{`# Tab 1
+			{`# Tab 1
 stripe listen --forward-to http://localhost:5173/api/stripe/webhook
 
 # Tab 2
@@ -102,11 +109,18 @@ stripe trigger customer.subscription.deleted`}
 	<section>
 		<h2>Recap</h2>
 		<ul>
-			<li>Checkout is a redirect. The success URL carries a query string; the <code>checkout.session.completed</code> event is the source of truth.</li>
+			<li>
+				Checkout is a redirect. The success URL carries a query string; the <code
+					>checkout.session.completed</code
+				> event is the source of truth.
+			</li>
 			<li>Webhook verification is HMAC-SHA256 over <code>{`\${timestamp}.\${rawBody}`}</code>.</li>
 			<li>Store first, handle later — never lose an event, even if your handler crashes.</li>
 		</ul>
 		<h3>Up next</h3>
-		<p>Module 7 turns stored webhook rows into subscription state: customer sync, subscription table, grace periods, cancel at period end.</p>
+		<p>
+			Module 7 turns stored webhook rows into subscription state: customer sync, subscription table,
+			grace periods, cancel at period end.
+		</p>
 	</section>
 </CoursePage>

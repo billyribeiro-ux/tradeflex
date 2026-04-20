@@ -45,7 +45,9 @@
 			{copied ? 'Copied' : 'Copy'}
 		</button>
 	</header>
-	<pre><code class={`lang-${lang}`}>{#if code}{code}{:else if children}{@render children()}{/if}</code></pre>
+	<pre><code class={`lang-${lang}`}
+			>{#if code}{code}{:else if children}{@render children()}{/if}</code
+		></pre>
 </figure>
 
 <style>

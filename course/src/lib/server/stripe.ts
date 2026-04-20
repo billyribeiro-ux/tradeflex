@@ -37,7 +37,11 @@ function formEncode(obj: Record<string, unknown>, prefix = ''): string {
 	return parts.filter(Boolean).join('&');
 }
 
-async function stripeCall<T>(method: string, path: string, body?: Record<string, unknown>): Promise<T> {
+async function stripeCall<T>(
+	method: string,
+	path: string,
+	body?: Record<string, unknown>
+): Promise<T> {
 	const key = await settingsService.get('STRIPE_SECRET_KEY');
 	if (!key) {
 		throw new MissingConfigError(

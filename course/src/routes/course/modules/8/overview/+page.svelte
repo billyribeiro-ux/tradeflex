@@ -20,10 +20,10 @@
 		</p>
 		<Aside type="tip">
 			<p>
-				<strong>Lookup keys, not price IDs, in your code.</strong> Price IDs change when you
-				archive and re-create a price. Lookup keys are stable strings you assign
-				(<code>tradeflex_monthly</code>, <code>tradeflex_yearly</code>) — rotate prices behind them
-				without touching the frontend.
+				<strong>Lookup keys, not price IDs, in your code.</strong> Price IDs change when you archive
+				and re-create a price. Lookup keys are stable strings you assign (<code
+					>tradeflex_monthly</code
+				>, <code>tradeflex_yearly</code>) — rotate prices behind them without touching the frontend.
 			</p>
 		</Aside>
 	</section>
@@ -31,7 +31,7 @@
 	<section>
 		<h2>Server load</h2>
 		<CodeBlock title="src/routes/(marketing)/pricing/+page.server.ts" lang="ts">
-{`export const load: PageServerLoad = async ({ url }) => {
+			{`export const load: PageServerLoad = async ({ url }) => {
   const gate = url.searchParams.get('gate');
   const livePlans = await billingService.listPlans();
   const monthly = livePlans.find((p) => p.lookupKey === 'tradeflex_monthly');
@@ -48,9 +48,10 @@
 };`}
 		</CodeBlock>
 		<p>
-			If <code>STRIPE_SECRET_KEY</code> isn't set yet (fresh install), <code>listPlans</code> returns
-			<code>[]</code> without throwing, and the static snapshot wins. The page still renders; only
-			the data source changes.
+			If <code>STRIPE_SECRET_KEY</code> isn't set yet (fresh install), <code>listPlans</code>
+			returns
+			<code>[]</code> without throwing, and the static snapshot wins. The page still renders; only the
+			data source changes.
 		</p>
 	</section>
 
@@ -58,11 +59,11 @@
 		<h2>Month ↔ year toggle</h2>
 		<p>
 			The toggle should switch which card is "featured" and the visible price; it must not
-			<em>lie</em> about savings. Compute the actual savings from the two real amounts, not a
-			marketing round number.
+			<em>lie</em> about savings. Compute the actual savings from the two real amounts, not a marketing
+			round number.
 		</p>
 		<CodeBlock title="+page.svelte" lang="svelte">
-{`let billing = $state<'month' | 'year'>('year');
+			{`let billing = $state<'month' | 'year'>('year');
 
 const monthlyAmt = $derived(data.plans.find(p => p.id === 'monthly')?.priceMonthly ?? 0);
 const yearlyAmt  = $derived(data.plans.find(p => p.id === 'yearly')?.priceYearly ?? 0);
@@ -74,12 +75,11 @@ const savings    = $derived(Math.max(0, monthlyAmt * 12 - yearlyAmt));`}
 		<h2>Form POST into checkout</h2>
 		<p>
 			The "Start monthly" / "Start yearly" button is a <code>&lt;form method="post"&gt;</code> that
-			targets <code>/api/billing/checkout</code> with <code>priceId</code> in the body. The endpoint
-			creates a Checkout Session and redirects (303) to Stripe. No client JS needed to start the
-			purchase.
+			targets <code>/api/billing/checkout</code> with <code>priceId</code> in the body. The endpoint creates
+			a Checkout Session and redirects (303) to Stripe. No client JS needed to start the purchase.
 		</p>
 		<CodeBlock title="+page.svelte" lang="svelte">
-{`{#if plan.cta.priceId && plan.cta.href === '/api/billing/checkout'}
+			{`{#if plan.cta.priceId && plan.cta.href === '/api/billing/checkout'}
   <form method="post" action="/api/billing/checkout">
     <input type="hidden" name="priceId" value={plan.cta.priceId} />
     <button class="btn-primary" type="submit">{plan.cta.label}</button>
@@ -91,8 +91,8 @@ const savings    = $derived(Math.max(0, monthlyAmt * 12 - yearlyAmt));`}
 		<Aside type="tip">
 			<p>
 				Progressive enhancement: the form works with JS disabled. With JS on, wrap it in
-				<code>use:enhance</code> and intercept the JSON variant to show a loading state. Either way,
-				the Stripe redirect is authoritative.
+				<code>use:enhance</code> and intercept the JSON variant to show a loading state. Either way, the
+				Stripe redirect is authoritative.
 			</p>
 		</Aside>
 	</section>
@@ -102,8 +102,8 @@ const savings    = $derived(Math.max(0, monthlyAmt * 12 - yearlyAmt));`}
 		<p>
 			When a non-member bounces off <code>/alerts</code>, we redirect them to
 			<code>/pricing?gate=alerts</code>. The <code>gate</code> search param gets surfaced as a banner
-			at the top of the page: "Alerts are members-only — pick a plan below." It's a one-line check
-			that turns a 403 into a funnel.
+			at the top of the page: "Alerts are members-only — pick a plan below." It's a one-line check that
+			turns a 403 into a funnel.
 		</p>
 	</section>
 

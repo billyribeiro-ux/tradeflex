@@ -17,12 +17,11 @@
 	});
 
 	const groups = $derived.by(() => {
-		const map = new Map<string, typeof data.rows>();
+		const byGroup: Record<string, typeof data.rows> = {};
 		for (const r of data.rows) {
-			if (!map.has(r.group)) map.set(r.group, []);
-			map.get(r.group)!.push(r);
+			(byGroup[r.group] ??= []).push(r);
 		}
-		return Array.from(map.entries());
+		return Object.entries(byGroup);
 	});
 </script>
 
@@ -87,19 +86,13 @@
 								/>
 								<div class="btns">
 									<button class="btn-primary" type="submit">Save</button>
-									<button
-										class="btn-ghost"
-										type="button"
-										onclick={() => (editing = null)}>Cancel</button
+									<button class="btn-ghost" type="button" onclick={() => (editing = null)}
+										>Cancel</button
 									>
 								</div>
 							</form>
 						{:else}
-							<button
-								class="btn-ghost"
-								type="button"
-								onclick={() => (editing = row.key)}
-							>
+							<button class="btn-ghost" type="button" onclick={() => (editing = row.key)}>
 								{row.configured ? 'Rotate' : 'Set'}
 							</button>
 						{/if}

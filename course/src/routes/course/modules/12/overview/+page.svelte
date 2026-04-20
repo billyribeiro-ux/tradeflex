@@ -15,12 +15,12 @@
 		<h2>Two-lane mental model</h2>
 		<ul>
 			<li>
-				<strong>PR lane (ci.yml).</strong> Lint, typecheck, unit tests, migration dry-run on a
-				throwaway Neon branch, Vercel preview build, Playwright on the preview URL.
+				<strong>PR lane (ci.yml).</strong> Lint, typecheck, unit tests, migration dry-run on a throwaway
+				Neon branch, Vercel preview build, Playwright on the preview URL.
 			</li>
 			<li>
-				<strong>Main lane (deploy.yml).</strong> Apply migrations to production Neon, deploy to
-				Vercel production, smoke-test.
+				<strong>Main lane (deploy.yml).</strong> Apply migrations to production Neon, deploy to Vercel
+				production, smoke-test.
 			</li>
 		</ul>
 		<Aside type="tip">
@@ -35,7 +35,7 @@
 	<section>
 		<h2>PR lane — ci.yml</h2>
 		<CodeBlock title=".github/workflows/ci.yml" lang="yaml">
-{`name: CI
+			{`name: CI
 on:
   pull_request:
     branches: [main]
@@ -68,7 +68,7 @@ jobs:
 	<section>
 		<h2>Main lane — deploy.yml</h2>
 		<CodeBlock title=".github/workflows/deploy.yml" lang="yaml">
-{`name: Deploy
+			{`name: Deploy
 on:
   push:
     branches: [main]
@@ -97,9 +97,9 @@ jobs:
 		</CodeBlock>
 		<Aside type="tip">
 			<p>
-				Migrations go <em>before</em> the deploy, not after. A forward-compatible migration means
-				the old app works against the new schema — so you run migrate first, then ship code.
-				Backward-incompatible migrations (column drops) happen in two PRs, never one.
+				Migrations go <em>before</em> the deploy, not after. A forward-compatible migration means the
+				old app works against the new schema — so you run migrate first, then ship code. Backward-incompatible
+				migrations (column drops) happen in two PRs, never one.
 			</p>
 		</Aside>
 	</section>
@@ -111,7 +111,7 @@ jobs:
 			into it, run, then it's deleted on PR close. Your production data never touches CI.
 		</p>
 		<CodeBlock title="neonctl in a composite action" lang="bash">
-{`neonctl branches create --name pr-$PR_NUMBER --parent main --output json \\
+			{`neonctl branches create --name pr-$PR_NUMBER --parent main --output json \\
   | jq -r '.connection_uris[0].connection_uri' > .neon-url
 
 pnpm drizzle-kit migrate  # uses DATABASE_URL from .neon-url
@@ -129,7 +129,7 @@ neonctl branches delete pr-$PR_NUMBER`}
 			migrations are forward-compatible, the older deploy still works against the new schema.
 		</p>
 		<CodeBlock title="rollback" lang="bash">
-{`vercel ls tradeflex --token "$VERCEL_TOKEN"
+			{`vercel ls tradeflex --token "$VERCEL_TOKEN"
 vercel promote <deployment-url> --token "$VERCEL_TOKEN"`}
 		</CodeBlock>
 	</section>

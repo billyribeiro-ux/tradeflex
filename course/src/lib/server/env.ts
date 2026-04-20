@@ -6,9 +6,7 @@ const serverSchema = z.object({
 	NODE_ENV: z.enum(['development', 'test', 'production']).default('development'),
 	DATABASE_URL: z.string().url('DATABASE_URL must be a valid postgres URL'),
 	DATABASE_URL_DIRECT: z.string().url().optional(),
-	BETTER_AUTH_SECRET: z
-		.string()
-		.min(32, 'BETTER_AUTH_SECRET must be at least 32 characters'),
+	BETTER_AUTH_SECRET: z.string().min(32, 'BETTER_AUTH_SECRET must be at least 32 characters'),
 	APP_ENCRYPTION_KEY: z
 		.string()
 		.regex(/^[0-9a-f]{64}$/i, 'APP_ENCRYPTION_KEY must be 32 bytes hex-encoded (64 chars)')
@@ -32,7 +30,11 @@ const publicSchema = z.object({
 export type ServerEnv = z.infer<typeof serverSchema>;
 export type PublicEnv = z.infer<typeof publicSchema>;
 
-function parseOrDie<T>(name: string, schema: z.ZodType<T>, raw: Record<string, string | undefined>): T {
+function parseOrDie<T>(
+	name: string,
+	schema: z.ZodType<T>,
+	raw: Record<string, string | undefined>
+): T {
 	const result = schema.safeParse(raw);
 	if (!result.success) {
 		const formatted = result.error.issues

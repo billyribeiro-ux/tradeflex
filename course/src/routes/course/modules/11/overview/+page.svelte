@@ -15,8 +15,12 @@
 		<h2>The pyramid we actually use</h2>
 		<ul>
 			<li><strong>Unit (Vitest).</strong> Pure-function services. Fast. Run on every save.</li>
-			<li><strong>Integration (Vitest + live Neon branch).</strong> Service → DB round-trip. Run on PR.</li>
-			<li><strong>E2E (Playwright).</strong> Auth, CRUD, checkout redirect. Run on every preview deploy.</li>
+			<li>
+				<strong>Integration (Vitest + live Neon branch).</strong> Service → DB round-trip. Run on PR.
+			</li>
+			<li>
+				<strong>E2E (Playwright).</strong> Auth, CRUD, checkout redirect. Run on every preview deploy.
+			</li>
 		</ul>
 		<Aside type="tip">
 			<p>
@@ -29,7 +33,7 @@
 	<section>
 		<h2>Unit: a services test</h2>
 		<CodeBlock title="src/lib/server/services/subscriptions.test.ts" lang="ts">
-{`import { describe, it, expect } from 'vitest';
+			{`import { describe, it, expect } from 'vitest';
 
 describe('hasActiveEntitlement rule', () => {
   const rule = (sub: { status: string; graceUntil: Date | null } | null) => {
@@ -52,7 +56,7 @@ describe('hasActiveEntitlement rule', () => {
 	<section>
 		<h2>Integration: a Drizzle round-trip</h2>
 		<CodeBlock title="src/lib/server/services/customers.integration.test.ts" lang="ts">
-{`import { describe, it, expect, beforeAll } from 'vitest';
+			{`import { describe, it, expect, beforeAll } from 'vitest';
 import { db } from '$lib/server/db';
 import { customer, user } from '$lib/server/db/schema';
 import { customersService } from '$lib/server/services/customers';
@@ -77,11 +81,10 @@ describe('customersService', () => {
 		<h2>E2E: the checkout redirect</h2>
 		<p>
 			We don't test through Stripe's Checkout UI — that's Stripe's job. We assert that our POST
-			returns a 303 to a <code>checkout.stripe.com</code> URL. Anything past that is a third-party
-			surface.
+			returns a 303 to a <code>checkout.stripe.com</code> URL. Anything past that is a third-party surface.
 		</p>
 		<CodeBlock title="e2e/checkout.spec.ts" lang="ts">
-{`import { test, expect } from '@playwright/test';
+			{`import { test, expect } from '@playwright/test';
 
 test('signed-in user reaches Stripe checkout', async ({ page, request }) => {
   await page.goto('/login');
@@ -105,7 +108,7 @@ test('signed-in user reaches Stripe checkout', async ({ page, request }) => {
 	<section>
 		<h2>Commands</h2>
 		<CodeBlock title="pnpm scripts" lang="bash">
-{`pnpm test:unit              # vitest watch
+			{`pnpm test:unit              # vitest watch
 pnpm test:unit -- --run     # one-shot (CI)
 pnpm test:e2e               # playwright, uses preview URL
 pnpm test:integration       # vitest + real Neon branch`}

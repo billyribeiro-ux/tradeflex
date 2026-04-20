@@ -8,7 +8,9 @@
 <div class="grid">
 	<article class="card">
 		<h2>owner</h2>
-		<p class="sub">One person. Can grant any role, write encrypted settings, impersonate, refund.</p>
+		<p class="sub">
+			One person. Can grant any role, write encrypted settings, impersonate, refund.
+		</p>
 		<ul>
 			<li>All admin scopes</li>
 			<li>Encrypted setting writes (Stripe/Resend/Bunny secrets)</li>

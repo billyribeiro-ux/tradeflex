@@ -37,9 +37,18 @@
 			<h2>{c.title}</h2>
 			<p class="tag">{c.tagline}</p>
 			<dl>
-				<div><dt>Lessons</dt><dd>{c.lessons}</dd></div>
-				<div><dt>Watch time</dt><dd>{c.hours}h</dd></div>
-				<div><dt>Included</dt><dd>{c.included}</dd></div>
+				<div>
+					<dt>Lessons</dt>
+					<dd>{c.lessons}</dd>
+				</div>
+				<div>
+					<dt>Watch time</dt>
+					<dd>{c.hours}h</dd>
+				</div>
+				<div>
+					<dt>Included</dt>
+					<dd>{c.included}</dd>
+				</div>
 			</dl>
 			<div class="cta">
 				<a class="btn-primary" href="/register">Subscribe — $49/mo</a>

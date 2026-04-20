@@ -14,17 +14,20 @@
 	<section>
 		<h2>Create the product</h2>
 		<CodeBlock title="terminal" lang="sh">
-{`stripe products create \\
+			{`stripe products create \\
   --name "Trade Flex Membership" \\
   --description "Real-time alerts, both courses, macOS companion."`}
 		</CodeBlock>
-		<p>Response includes <code>id: prod_…</code>. Keep the terminal open; we'll reference it in the next two commands.</p>
+		<p>
+			Response includes <code>id: prod_…</code>. Keep the terminal open; we'll reference it in the
+			next two commands.
+		</p>
 	</section>
 
 	<section>
 		<h2>Create the prices</h2>
 		<CodeBlock lang="sh">
-{`# Monthly: $49/mo
+			{`# Monthly: $49/mo
 stripe prices create \\
   --product prod_xxx \\
   --unit-amount 4900 \\
@@ -44,9 +47,11 @@ stripe prices create \\
 		</CodeBlock>
 		<Aside type="tip">
 			<p>
-				<strong>Lookup keys are the contract.</strong> Code looks up <code>tradeflex_monthly</code>, not
-				<code>price_1Qb…</code>. When you rotate a price (new amount, new terms), you create a new price
-				object, swap the lookup key onto it, and every code path Just Works. No redeploy needed.
+				<strong>Lookup keys are the contract.</strong> Code looks up <code>tradeflex_monthly</code>,
+				not
+				<code>price_1Qb…</code>. When you rotate a price (new amount, new terms), you create a new
+				price object, swap the lookup key onto it, and every code path Just Works. No redeploy
+				needed.
 			</p>
 		</Aside>
 	</section>
@@ -54,7 +59,7 @@ stripe prices create \\
 	<section>
 		<h2>Verify</h2>
 		<CodeBlock lang="sh">
-{`stripe prices list --lookup-keys tradeflex_monthly --expand data.product
+			{`stripe prices list --lookup-keys tradeflex_monthly --expand data.product
 
 # Expected: a single price, unit_amount 4900, currency usd, recurring.interval=month,
 # product.name="Trade Flex Membership".`}
@@ -69,7 +74,7 @@ stripe prices create \\
 	<section>
 		<h2>How our code uses this</h2>
 		<CodeBlock title="src/lib/server/services/billing.ts" lang="ts">
-{`async listPlans(): Promise<PlanSnapshot[]> {
+			{`async listPlans(): Promise<PlanSnapshot[]> {
   const prices = await stripe.listActivePrices();
   return prices.map(p => ({
     priceId: p.id,

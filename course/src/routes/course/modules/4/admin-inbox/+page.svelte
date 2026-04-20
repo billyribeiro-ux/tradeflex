@@ -14,7 +14,7 @@
 	<section>
 		<h2>The load function</h2>
 		<CodeBlock title="src/routes/admin/marketing/+page.server.ts" lang="ts">
-{`export const load: PageServerLoad = async ({ locals, url }) => {
+			{`export const load: PageServerLoad = async ({ locals, url }) => {
   const page = Math.max(parseInt(url.searchParams.get('page') ?? '1', 10) || 1, 1);
   const pageSize = 50;
   const contacts = await contactsService.list(locals.caller, {
@@ -26,8 +26,8 @@
 		</CodeBlock>
 		<Aside type="tip">
 			<p>
-				Authorization is inside the service, not the load. If we ever add a CLI, a scheduled job, or a
-				remote function that lists contacts, the role check travels with the caller — we can't
+				Authorization is inside the service, not the load. If we ever add a CLI, a scheduled job, or
+				a remote function that lists contacts, the role check travels with the caller — we can't
 				accidentally forget it in the route.
 			</p>
 		</Aside>
@@ -36,7 +36,7 @@
 	<section>
 		<h2>The unsubscribe action</h2>
 		<CodeBlock title="same file" lang="ts">
-{`const idSchema = z.object({ id: z.string().min(1) });
+			{`const idSchema = z.object({ id: z.string().min(1) });
 
 export const actions: Actions = {
   unsubscribe: async ({ request, locals }) => {
@@ -53,7 +53,7 @@ export const actions: Actions = {
 	<section>
 		<h2>The service side of unsubscribe</h2>
 		<CodeBlock title="contactsService.unsubscribe" lang="ts">
-{`async unsubscribe(caller: Caller, id: string) {
+			{`async unsubscribe(caller: Caller, id: string) {
   assertRole(caller, 'owner', 'admin', 'support');
   await db.update(contact)
     .set({ optedIn: false, unsubscribedAt: new Date() })

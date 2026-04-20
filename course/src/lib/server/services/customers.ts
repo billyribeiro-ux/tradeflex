@@ -22,13 +22,10 @@ export const customersService = {
 		stripeCustomerId: string,
 		actor: Caller | null
 	): Promise<void> {
-		await db
-			.insert(customer)
-			.values({ userId, stripeCustomerId })
-			.onConflictDoUpdate({
-				target: customer.userId,
-				set: { stripeCustomerId }
-			});
+		await db.insert(customer).values({ userId, stripeCustomerId }).onConflictDoUpdate({
+			target: customer.userId,
+			set: { stripeCustomerId }
+		});
 		if (actor) {
 			await writeAudit(actor, {
 				action: 'customer.upsert',

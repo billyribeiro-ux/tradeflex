@@ -69,13 +69,17 @@ const client = postgres(env.DATABASE_URL);`;
 	<section>
 		<h2>The problem with <code>process.env</code></h2>
 		<p>
-			SvelteKit exposes env vars via <code>$env/dynamic/private</code> and <code>$env/static/private</code>.
-			Both give you <code>Record&lt;string, string | undefined&gt;</code>. Every consumer has to
-			decide what to do if the value is missing — and most forget.
+			SvelteKit exposes env vars via <code>$env/dynamic/private</code> and
+			<code>$env/static/private</code>. Both give you
+			<code>Record&lt;string, string | undefined&gt;</code>. Every consumer has to decide what to do
+			if the value is missing — and most forget.
 		</p>
 		<p>The classic bug:</p>
-		<CodeBlock lang="ts" code={`// This compiles. This runs. This is broken.
-const client = postgres(process.env.DATABASE_URL!);  // ← the bang hides a time bomb`} />
+		<CodeBlock
+			lang="ts"
+			code={`// This compiles. This runs. This is broken.
+const client = postgres(process.env.DATABASE_URL!);  // ← the bang hides a time bomb`}
+		/>
 		<p>
 			The <code>!</code> lies to the compiler. In production, if <code>DATABASE_URL</code> is unset
 			or misspelled, <code>postgres(undefined)</code> throws deep inside a query — which your error
@@ -87,8 +91,8 @@ const client = postgres(process.env.DATABASE_URL!);  // ← the bang hides a tim
 		<h2>The fix: parse once, at boot</h2>
 		<p>
 			We use a Zod schema to validate every variable the server needs, and we run it at import time.
-			If anything is missing or malformed, the module throws, and SvelteKit refuses to serve a single
-			request. You see the error in your dev terminal — not in Sentry.
+			If anything is missing or malformed, the module throws, and SvelteKit refuses to serve a
+			single request. You see the error in your dev terminal — not in Sentry.
 		</p>
 		<CodeBlock lang="ts" title="src/lib/server/env.ts" code={envSchema} />
 	</section>
@@ -96,7 +100,8 @@ const client = postgres(process.env.DATABASE_URL!);  // ← the bang hides a tim
 	<section>
 		<h2>Why <code>$env/dynamic/private</code> and not <code>static</code></h2>
 		<p>
-			SvelteKit offers two flavors. <code>static</code> is evaluated at build time; <code>dynamic</code>
+			SvelteKit offers two flavors. <code>static</code> is evaluated at build time;
+			<code>dynamic</code>
 			is read from <code>process.env</code> at runtime. We want dynamic because:
 		</p>
 		<ul>
@@ -108,16 +113,16 @@ const client = postgres(process.env.DATABASE_URL!);  // ← the bang hides a tim
 				(see <code>settings.ts</code>). A build-time snapshot would defeat that.
 			</li>
 			<li>
-				<strong>Vercel preview deployments</strong> inject env per-environment at runtime. Dynamic
-				picks that up; static does not.
+				<strong>Vercel preview deployments</strong> inject env per-environment at runtime. Dynamic picks
+				that up; static does not.
 			</li>
 		</ul>
 		<Aside type="caution" title="Client-side env = public only">
 			<p>
-				<code>PUBLIC_*</code> variables are the only ones you can read in browser code. Anything else
-				stays server-side. That's why the schema is split into <code>serverSchema</code> and
-				<code>publicSchema</code>. Put a secret under <code>PUBLIC_</code> by mistake and it ships
-				to every page-view.
+				<code>PUBLIC_*</code> variables are the only ones you can read in browser code. Anything
+				else stays server-side. That's why the schema is split into <code>serverSchema</code> and
+				<code>publicSchema</code>. Put a secret under <code>PUBLIC_</code> by mistake and it ships to
+				every page-view.
 			</p>
 		</Aside>
 	</section>
@@ -132,9 +137,8 @@ const client = postgres(process.env.DATABASE_URL!);  // ← the bang hides a tim
 			later module. <code>.env</code> is a bootstrap fallback for local dev only.
 		</p>
 		<p>
-			The rule of thumb: if the app cannot serve a 200 from <code>/</code> without the value, it's
-			required. If it can degrade — showing a banner like "Stripe is not configured yet" — it's
-			optional.
+			The rule of thumb: if the app cannot serve a 200 from <code>/</code> without the value, it's required.
+			If it can degrade — showing a banner like "Stripe is not configured yet" — it's optional.
 		</p>
 	</section>
 
@@ -163,8 +167,8 @@ const client = postgres(process.env.DATABASE_URL!);  // ← the bang hides a tim
 		<CodeBlock lang="ts" code={usage} />
 		<p>
 			Everywhere else in the codebase, import <code>env</code> from <code>$lib/server/env</code>.
-			Never touch <code>process.env</code> or <code>$env/dynamic/private</code> directly outside of
-			that file — grep for it in code review.
+			Never touch <code>process.env</code> or <code>$env/dynamic/private</code> directly outside of that
+			file — grep for it in code review.
 		</p>
 	</section>
 
@@ -172,8 +176,13 @@ const client = postgres(process.env.DATABASE_URL!);  // ← the bang hides a tim
 		<h2>Recap</h2>
 		<ul>
 			<li>Parse env at boot with Zod; treat the app as unusable if required values are missing.</li>
-			<li>Use <code>dynamic</code>, not <code>static</code>, so secrets can rotate and admin-settings can override.</li>
-			<li>Optional keys belong to integrations managed from the admin UI; <code>.env</code> is dev bootstrap.</li>
+			<li>
+				Use <code>dynamic</code>, not <code>static</code>, so secrets can rotate and admin-settings
+				can override.
+			</li>
+			<li>
+				Optional keys belong to integrations managed from the admin UI; <code>.env</code> is dev bootstrap.
+			</li>
 			<li><code>env</code> is the only thing downstream code should import.</li>
 		</ul>
 

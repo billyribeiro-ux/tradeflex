@@ -18,9 +18,18 @@
 				<span class="status" data-status={c.status}>{c.status}</span>
 			</div>
 			<dl>
-				<div><dt>Price</dt><dd>${c.priceUsd}</dd></div>
-				<div><dt>Lessons</dt><dd>{c.lessons}</dd></div>
-				<div><dt>Students</dt><dd>{c.students}</dd></div>
+				<div>
+					<dt>Price</dt>
+					<dd>${c.priceUsd}</dd>
+				</div>
+				<div>
+					<dt>Lessons</dt>
+					<dd>{c.lessons}</dd>
+				</div>
+				<div>
+					<dt>Students</dt>
+					<dd>{c.students}</dd>
+				</div>
 			</dl>
 			<div class="actions">
 				<button disabled>Edit curriculum</button>

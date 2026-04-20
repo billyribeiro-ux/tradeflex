@@ -23,8 +23,7 @@
 {:else if !data.webhookConfigured}
 	<div class="callout warn">
 		<strong>Webhook secret missing.</strong> Deliveries here are accepted but flagged
-		<code>unverified-signature</code>. Set <code>STRIPE_WEBHOOK_SECRET</code> to harden the
-		endpoint.
+		<code>unverified-signature</code>. Set <code>STRIPE_WEBHOOK_SECRET</code> to harden the endpoint.
 	</div>
 {:else}
 	<div class="callout ok">
@@ -55,8 +54,11 @@
 	{/each}
 	{#if data.events.length === 0}
 		<div class="empty">
-			No webhook deliveries yet. Run <code>stripe listen --forward-to
-			{' '}your-domain/api/stripe/webhook</code> and trigger an event with
+			No webhook deliveries yet. Run <code
+				>stripe listen --forward-to
+				{' '}your-domain/api/stripe/webhook</code
+			>
+			and trigger an event with
 			<code>stripe trigger checkout.session.completed</code>.
 		</div>
 	{/if}

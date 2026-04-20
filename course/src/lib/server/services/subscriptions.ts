@@ -43,9 +43,7 @@ export const subscriptionsService = {
 		actor: Caller | null
 	): Promise<void> {
 		const price = data.items?.data?.[0]?.price;
-		const periodEnd = data.current_period_end
-			? new Date(data.current_period_end * 1000)
-			: null;
+		const periodEnd = data.current_period_end ? new Date(data.current_period_end * 1000) : null;
 
 		await db
 			.insert(subscription)
@@ -101,11 +99,7 @@ export const subscriptionsService = {
 		});
 	},
 
-	async adminGrantGrace(
-		actor: Caller,
-		stripeSubscriptionId: string,
-		days: number
-	): Promise<void> {
+	async adminGrantGrace(actor: Caller, stripeSubscriptionId: string, days: number): Promise<void> {
 		assertAuthenticated(actor);
 		const graceUntil = new Date(Date.now() + days * 24 * 60 * 60 * 1000);
 		await db

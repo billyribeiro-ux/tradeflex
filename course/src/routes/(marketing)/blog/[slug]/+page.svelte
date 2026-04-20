@@ -16,7 +16,11 @@
 
 	<header>
 		<time datetime={p.publishedAt}>
-			{new Date(p.publishedAt).toLocaleDateString(undefined, { year: 'numeric', month: 'long', day: 'numeric' })}
+			{new Date(p.publishedAt).toLocaleDateString(undefined, {
+				year: 'numeric',
+				month: 'long',
+				day: 'numeric'
+			})}
 		</time>
 		<h1>{p.title}</h1>
 		<p class="meta">
@@ -25,8 +29,16 @@
 	</header>
 
 	<div class="body">
-		{#each paragraphs as para}
-			<p>{@html para.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')}</p>
+		{#each paragraphs as para, i (i)}
+			<p>
+				{#each para.split(/(\*\*[^*]+\*\*)/g) as part, j (j)}
+					{#if part.startsWith('**') && part.endsWith('**')}
+						<strong>{part.slice(2, -2)}</strong>
+					{:else}
+						{part}
+					{/if}
+				{/each}
+			</p>
 		{/each}
 	</div>
 

@@ -11,33 +11,33 @@ Before any code ships, we freeze the dependency set to avoid drift mid-build. Th
 
 Locked to the following for v1:
 
-| Layer             | Tool                                  |
-| ----------------- | ------------------------------------- |
-| Framework         | SvelteKit 2 + Svelte 5                |
-| Language          | TypeScript (strict)                   |
-| Runtime           | Node 24                               |
-| Package manager   | pnpm                                  |
-| Bundler           | Vite                                  |
-| Host              | Vercel (`@sveltejs/adapter-vercel`)   |
-| Database          | Neon Postgres                         |
-| ORM + migrations  | Drizzle ORM + drizzle-kit             |
-| Auth              | Better Auth (email/password + GitHub) |
-| Payments          | Stripe (hosted Checkout in v1)        |
-| Email             | Resend (outbound)                     |
-| Styling           | PE7 CSS (**not** Tailwind)            |
-| Validation        | Zod                                   |
-| Forms             | SvelteKit Superforms                  |
-| Icons             | Phosphor via Iconify                  |
-| Motion            | GSAP + Motion + Svelte transitions    |
-| GPU effects       | Motion GPU (WGSL shaders)             |
-| Dev inspector     | Svelte Agentation (dev-only)          |
-| Testing           | Vitest + Playwright                   |
-| Lint + format     | ESLint + Prettier                     |
-| Blob storage      | Vercel Blob (avatars)                 |
-| Video (gated)     | Bunny Stream (signed URLs)            |
-| Video (public)    | YouTube (`youtube-nocookie.com`)      |
-| macOS wrapper     | Tauri                                 |
-| Course authoring  | MDsveX                                |
+| Layer            | Tool                                  |
+| ---------------- | ------------------------------------- |
+| Framework        | SvelteKit 2 + Svelte 5                |
+| Language         | TypeScript (strict)                   |
+| Runtime          | Node 24                               |
+| Package manager  | pnpm                                  |
+| Bundler          | Vite                                  |
+| Host             | Vercel (`@sveltejs/adapter-vercel`)   |
+| Database         | Neon Postgres                         |
+| ORM + migrations | Drizzle ORM + drizzle-kit             |
+| Auth             | Better Auth (email/password + GitHub) |
+| Payments         | Stripe (hosted Checkout in v1)        |
+| Email            | Resend (outbound)                     |
+| Styling          | PE7 CSS (**not** Tailwind)            |
+| Validation       | Zod                                   |
+| Forms            | SvelteKit Superforms                  |
+| Icons            | Phosphor via Iconify                  |
+| Motion           | GSAP + Motion + Svelte transitions    |
+| GPU effects      | Motion GPU (WGSL shaders)             |
+| Dev inspector    | Svelte Agentation (dev-only)          |
+| Testing          | Vitest + Playwright                   |
+| Lint + format    | ESLint + Prettier                     |
+| Blob storage     | Vercel Blob (avatars)                 |
+| Video (gated)    | Bunny Stream (signed URLs)            |
+| Video (public)   | YouTube (`youtube-nocookie.com`)      |
+| macOS wrapper    | Tauri                                 |
+| Course authoring | MDsveX                                |
 
 ## Not chosen, and why
 

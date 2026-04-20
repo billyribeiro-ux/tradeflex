@@ -17,14 +17,17 @@
 			<li>Add the <code>contact</code> table to <code>src/lib/server/db/schema.ts</code>.</li>
 			<li>Push the schema to your Neon dev branch with <code>pnpm db:push</code>.</li>
 			<li>Write <code>contactsService.captureLead</code> (idempotent, validated).</li>
-			<li>Wire <code>POST /api/leads</code> that calls the service, returns 200 whether the contact is new or already existed.</li>
+			<li>
+				Wire <code>POST /api/leads</code> that calls the service, returns 200 whether the contact is new
+				or already existed.
+			</li>
 		</Steps>
 	</section>
 
 	<section>
 		<h2>The table</h2>
 		<CodeBlock title="src/lib/server/db/schema.ts" lang="ts">
-{`export const contact = pgTable('contact', {
+			{`export const contact = pgTable('contact', {
   id: text('id').primaryKey(),
   email: text('email').notNull(),
   source: text('source').notNull(),
@@ -38,10 +41,10 @@
 		</CodeBlock>
 		<Aside type="tip">
 			<p>
-				<strong>No unique index on email</strong> at the schema level — dedup logic lives in the service
-				so that we can record a <code>domain_event</code> for the duplicate attempt instead of letting
-				Postgres raise. It is also one less migration to manage if we ever allow the same email in
-				multiple sources (ebook vs podcast) under separate rows.
+				<strong>No unique index on email</strong> at the schema level — dedup logic lives in the
+				service so that we can record a <code>domain_event</code> for the duplicate attempt instead of
+				letting Postgres raise. It is also one less migration to manage if we ever allow the same email
+				in multiple sources (ebook vs podcast) under separate rows.
 			</p>
 		</Aside>
 	</section>
@@ -49,7 +52,7 @@
 	<section>
 		<h2>The service</h2>
 		<CodeBlock title="src/lib/server/services/contacts.ts" lang="ts">
-{`export const contactsService = {
+			{`export const contactsService = {
   async captureLead(input: CaptureLeadInput) {
     const email = input.email.trim().toLowerCase();
     if (!/^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/.test(email)) {
@@ -77,7 +80,7 @@
 	<section>
 		<h2>The endpoint</h2>
 		<CodeBlock title="src/routes/api/leads/+server.ts" lang="ts">
-{`export const POST: RequestHandler = async ({ request, getClientAddress }) => {
+			{`export const POST: RequestHandler = async ({ request, getClientAddress }) => {
   const body = await readBody(request);
   const result = await contactsService.captureLead({
     email: body.email,
@@ -103,7 +106,10 @@
 		<h2>Recap</h2>
 		<ul>
 			<li>Schema first. Service second. Routes last.</li>
-			<li>Idempotency lives in the service, not the table — so duplicates can be observed, not errored.</li>
+			<li>
+				Idempotency lives in the service, not the table — so duplicates can be observed, not
+				errored.
+			</li>
 			<li>The public endpoint is thin: read body, call service, return JSON.</li>
 		</ul>
 		<h3>Next up</h3>

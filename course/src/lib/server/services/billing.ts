@@ -17,7 +17,8 @@ export const billingService = {
 		try {
 			const prices = await stripe.listActivePrices();
 			return prices.map((p) => {
-				const product = typeof p.product === 'string' ? { id: p.product, name: p.product } : p.product;
+				const product =
+					typeof p.product === 'string' ? { id: p.product, name: p.product } : p.product;
 				return {
 					priceId: p.id,
 					productName: product.name,

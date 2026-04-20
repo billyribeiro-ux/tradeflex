@@ -104,7 +104,8 @@ const pages: CoursePage[] = [
 		module: 'module-2',
 		moduleOrder: 2,
 		order: 2,
-		summary: 'One Drizzle instance, server-only imports, and the Caller that travels with every call.'
+		summary:
+			'One Drizzle instance, server-only imports, and the Caller that travels with every call.'
 	},
 	{
 		slug: 'module-2-request-pipeline',
@@ -113,7 +114,8 @@ const pages: CoursePage[] = [
 		module: 'module-2',
 		moduleOrder: 2,
 		order: 3,
-		summary: 'hooks.server.ts: request id, logging, Caller resolution, and load functions that use them.'
+		summary:
+			'hooks.server.ts: request id, logging, Caller resolution, and load functions that use them.'
 	},
 	{
 		slug: 'module-2-remote-functions',
@@ -122,7 +124,8 @@ const pages: CoursePage[] = [
 		module: 'module-2',
 		moduleOrder: 2,
 		order: 4,
-		summary: 'When to reach for a form action, when to reach for a remote function, and why never a REST endpoint.'
+		summary:
+			'When to reach for a form action, when to reach for a remote function, and why never a REST endpoint.'
 	},
 	{
 		slug: 'module-3-overview',
@@ -140,7 +143,8 @@ const pages: CoursePage[] = [
 		module: 'module-3',
 		moduleOrder: 3,
 		order: 1,
-		summary: 'Two route groups, email/password, GitHub OAuth, real Better Auth API calls, real errors.'
+		summary:
+			'Two route groups, email/password, GitHub OAuth, real Better Auth API calls, real errors.'
 	},
 	{
 		slug: 'module-3-route-guards',
@@ -149,7 +153,8 @@ const pages: CoursePage[] = [
 		module: 'module-3',
 		moduleOrder: 3,
 		order: 2,
-		summary: 'Gating authenticated pages, the account layout, and the profile editor on service + audit.'
+		summary:
+			'Gating authenticated pages, the account layout, and the profile editor on service + audit.'
 	},
 	{
 		slug: 'module-3-sessions-and-signout',
@@ -167,7 +172,8 @@ const pages: CoursePage[] = [
 		module: 'module-4',
 		moduleOrder: 4,
 		order: 0,
-		summary: 'From auth to a first real feature: contacts / leads, end-to-end, service-layer all the way.'
+		summary:
+			'From auth to a first real feature: contacts / leads, end-to-end, service-layer all the way.'
 	},
 	{
 		slug: 'module-4-schema-and-service',
@@ -176,7 +182,8 @@ const pages: CoursePage[] = [
 		module: 'module-4',
 		moduleOrder: 4,
 		order: 1,
-		summary: 'A Drizzle table for leads, a service that dedupes by email, and the public POST endpoint.'
+		summary:
+			'A Drizzle table for leads, a service that dedupes by email, and the public POST endpoint.'
 	},
 	{
 		slug: 'module-4-admin-inbox',
@@ -194,7 +201,8 @@ const pages: CoursePage[] = [
 		module: 'module-5',
 		moduleOrder: 5,
 		order: 0,
-		summary: 'Stripe mental model: products, prices, customers, subscriptions, events. Ten terms, then code.'
+		summary:
+			'Stripe mental model: products, prices, customers, subscriptions, events. Ten terms, then code.'
 	},
 	{
 		slug: 'module-5-dashboard-and-cli',
@@ -203,7 +211,8 @@ const pages: CoursePage[] = [
 		module: 'module-5',
 		moduleOrder: 5,
 		order: 1,
-		summary: 'Create a test-mode account, install the Stripe CLI, authenticate, and watch events stream.'
+		summary:
+			'Create a test-mode account, install the Stripe CLI, authenticate, and watch events stream.'
 	},
 	{
 		slug: 'module-5-products-and-prices',
@@ -212,7 +221,8 @@ const pages: CoursePage[] = [
 		module: 'module-5',
 		moduleOrder: 5,
 		order: 2,
-		summary: 'Why prices are the thing you reference in code, not products — and why lookup keys save your life.'
+		summary:
+			'Why prices are the thing you reference in code, not products — and why lookup keys save your life.'
 	},
 	{
 		slug: 'module-6-overview',
@@ -230,7 +240,8 @@ const pages: CoursePage[] = [
 		module: 'module-6',
 		moduleOrder: 6,
 		order: 1,
-		summary: 'POST /api/billing/checkout that redirects to Stripe, POST /api/stripe/webhook that signs + stores.'
+		summary:
+			'POST /api/billing/checkout that redirects to Stripe, POST /api/stripe/webhook that signs + stores.'
 	},
 	{
 		slug: 'module-7-overview',
@@ -239,7 +250,8 @@ const pages: CoursePage[] = [
 		module: 'module-7',
 		moduleOrder: 7,
 		order: 0,
-		summary: 'Turning webhook rows into subscription state — customers, subscriptions, grace periods, portal.'
+		summary:
+			'Turning webhook rows into subscription state — customers, subscriptions, grace periods, portal.'
 	},
 	{
 		slug: 'module-7-entitlements',
@@ -248,7 +260,8 @@ const pages: CoursePage[] = [
 		module: 'module-7',
 		moduleOrder: 7,
 		order: 1,
-		summary: 'One entitlement function, a redirect gate on /alerts, and membership state surfaced on /account.'
+		summary:
+			'One entitlement function, a redirect gate on /alerts, and membership state surfaced on /account.'
 	},
 	{
 		slug: 'module-9-trials-and-test-clocks',
@@ -257,7 +270,8 @@ const pages: CoursePage[] = [
 		module: 'module-9',
 		moduleOrder: 9,
 		order: 0,
-		summary: 'Two trial flavors (card upfront 14d, no-card 7d) + using Stripe test clocks to replay a 21-day dunning cycle in seconds.'
+		summary:
+			'Two trial flavors (card upfront 14d, no-card 7d) + using Stripe test clocks to replay a 21-day dunning cycle in seconds.'
 	},
 	{
 		slug: 'module-10-tier-gating',
@@ -266,7 +280,8 @@ const pages: CoursePage[] = [
 		module: 'module-10',
 		moduleOrder: 10,
 		order: 0,
-		summary: 'Three rules: pages redirect, endpoints 402, services stay tier-blind. One entitlement function, used everywhere.'
+		summary:
+			'Three rules: pages redirect, endpoints 402, services stay tier-blind. One entitlement function, used everywhere.'
 	},
 	{
 		slug: 'module-8-overview',
@@ -275,7 +290,8 @@ const pages: CoursePage[] = [
 		module: 'module-8',
 		moduleOrder: 8,
 		order: 0,
-		summary: 'Stripe is the source of truth for amounts; lookup keys (not price IDs) live in code; form POST + 303 into checkout.'
+		summary:
+			'Stripe is the source of truth for amounts; lookup keys (not price IDs) live in code; form POST + 303 into checkout.'
 	},
 	{
 		slug: 'module-11-overview',
@@ -284,7 +300,8 @@ const pages: CoursePage[] = [
 		module: 'module-11',
 		moduleOrder: 11,
 		order: 0,
-		summary: 'Three layers (unit, integration, E2E), each with one job — no layer fakes another layer.'
+		summary:
+			'Three layers (unit, integration, E2E), each with one job — no layer fakes another layer.'
 	},
 	{
 		slug: 'module-12-overview',
@@ -293,7 +310,8 @@ const pages: CoursePage[] = [
 		module: 'module-12',
 		moduleOrder: 12,
 		order: 0,
-		summary: 'Two lanes (PR + main), Neon branch per PR, forward-compatible migrations, one-liner rollback.'
+		summary:
+			'Two lanes (PR + main), Neon branch per PR, forward-compatible migrations, one-liner rollback.'
 	},
 	{
 		slug: 'module-13-overview',
@@ -302,7 +320,8 @@ const pages: CoursePage[] = [
 		module: 'module-13',
 		moduleOrder: 13,
 		order: 0,
-		summary: 'Toasts that survive redirects, preserved next= intent, Stripe branding, reduced-motion-first animation.'
+		summary:
+			'Toasts that survive redirects, preserved next= intent, Stripe branding, reduced-motion-first animation.'
 	},
 	{
 		slug: 'module-bonus-custom-checkout',
@@ -311,7 +330,8 @@ const pages: CoursePage[] = [
 		module: 'module-bonus',
 		moduleOrder: 99,
 		order: 0,
-		summary: 'Tabbed Sign in → Billing → Payment, persistent cart sidebar w/ recurring-totals split, Stripe Payment Element.'
+		summary:
+			'Tabbed Sign in → Billing → Payment, persistent cart sidebar w/ recurring-totals split, Stripe Payment Element.'
 	}
 ];
 

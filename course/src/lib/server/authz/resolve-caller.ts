@@ -1,4 +1,4 @@
-import { and, eq } from 'drizzle-orm';
+import { eq } from 'drizzle-orm';
 import { db } from '$lib/server/db';
 import { roleAssignment } from '$lib/server/db/schema';
 import type { Caller, Role } from './caller';

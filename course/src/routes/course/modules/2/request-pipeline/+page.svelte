@@ -113,20 +113,19 @@ export const load = async ({ locals, url }) => {
 	<section>
 		<h2>What hooks.server.ts is</h2>
 		<p>
-			In SvelteKit, <code>src/hooks.server.ts</code> exports a <code>handle</code> function that
-			wraps every server request. It's the one place guaranteed to run before any route, any load,
-			any form action, any remote function. That makes it the natural home for cross-cutting
-			concerns.
+			In SvelteKit, <code>src/hooks.server.ts</code> exports a <code>handle</code> function that wraps
+			every server request. It's the one place guaranteed to run before any route, any load, any form
+			action, any remote function. That makes it the natural home for cross-cutting concerns.
 		</p>
 		<p>We stack four handlers, in order:</p>
 		<ol>
 			<li>
-				<strong>handleRequestId</strong> — generate or reuse a request id, attach a placeholder
-				anonymous Caller, and echo the id back on the response.
+				<strong>handleRequestId</strong> — generate or reuse a request id, attach a placeholder anonymous
+				Caller, and echo the id back on the response.
 			</li>
 			<li>
-				<strong>handleLogging</strong> — wrap the rest of the pipeline in a try/catch so every
-				request produces exactly one structured log line, even on error.
+				<strong>handleLogging</strong> — wrap the rest of the pipeline in a try/catch so every request
+				produces exactly one structured log line, even on error.
 			</li>
 			<li>
 				<strong>handleBetterAuth</strong> — resolve the session; populate <code>locals.user</code>.
@@ -144,8 +143,9 @@ export const load = async ({ locals, url }) => {
 		<Aside type="tip" title="Why sequence() order matters">
 			<p>
 				Request id must be first so every downstream log line has it. Logging wraps auth so auth
-				failures are still logged. Auth runs before Caller because Caller reads <code>locals.user</code>.
-				If you reorder, you'll see <code>requestId: undefined</code> in logs — a classic symptom.
+				failures are still logged. Auth runs before Caller because Caller reads <code
+					>locals.user</code
+				>. If you reorder, you'll see <code>requestId: undefined</code> in logs — a classic symptom.
 			</p>
 		</Aside>
 	</section>
@@ -154,8 +154,8 @@ export const load = async ({ locals, url }) => {
 		<h2>App.Locals is a contract</h2>
 		<p>
 			The shape of <code>locals</code> is declared once, in <code>src/app.d.ts</code>. Making
-			<code>caller</code> and <code>requestId</code> <em>non-optional</em> is deliberate — by the
-			time any route runs, the pipeline guarantees both are present. No route needs to check.
+			<code>caller</code> and <code>requestId</code> <em>non-optional</em> is deliberate — by the time
+			any route runs, the pipeline guarantees both are present. No route needs to check.
 		</p>
 		<CodeBlock lang="ts" code={appLocals} />
 	</section>
@@ -165,8 +165,8 @@ export const load = async ({ locals, url }) => {
 		<p>
 			Every request produces one JSON line. Pipe it into <code>jq</code> locally, or into your log
 			backend of choice in prod (Axiom, Datadog, Loki — see the observability plan). The
-			<code>requestId</code> matches the one we echo in the response header, so a user quoting an
-			error id gets you straight to the log row.
+			<code>requestId</code> matches the one we echo in the response header, so a user quoting an error
+			id gets you straight to the log row.
 		</p>
 		<CodeBlock lang="json" code={logLine} />
 	</section>
@@ -181,7 +181,9 @@ export const load = async ({ locals, url }) => {
 		<p>Three rules for every load:</p>
 		<ol>
 			<li>
-				<strong>Never import <code>$lib/server/db</code> or a service from <code>+page.ts</code>.</strong>
+				<strong
+					>Never import <code>$lib/server/db</code> or a service from <code>+page.ts</code>.</strong
+				>
 				The <code>.ts</code> (no <code>.server</code>) variant runs on the client too — the build
 				will block the import, but keep the rule in your head.
 			</li>
@@ -189,8 +191,8 @@ export const load = async ({ locals, url }) => {
 				<strong>Pass <code>locals.caller</code> to the service.</strong> Never re-derive identity.
 			</li>
 			<li>
-				<strong>Throw <code>redirect</code> or <code>error</code>, don't return them.</strong> They
-				are special: returning would send the response literal to the client.
+				<strong>Throw <code>redirect</code> or <code>error</code>, don't return them.</strong> They are
+				special: returning would send the response literal to the client.
 			</li>
 		</ol>
 	</section>
@@ -213,10 +215,20 @@ export const load = async ({ locals, url }) => {
 	<section>
 		<h2>Recap</h2>
 		<ul>
-			<li><code>hooks.server.ts</code> stacks four handlers: request id → logging → Better Auth → Caller.</li>
-			<li><code>locals.caller</code> and <code>locals.requestId</code> are non-optional by contract.</li>
-			<li>Every request emits exactly one structured log line; every error carries a request id the user can quote.</li>
-			<li>Load functions read via services; they never touch the DB directly and never re-derive identity.</li>
+			<li>
+				<code>hooks.server.ts</code> stacks four handlers: request id → logging → Better Auth → Caller.
+			</li>
+			<li>
+				<code>locals.caller</code> and <code>locals.requestId</code> are non-optional by contract.
+			</li>
+			<li>
+				Every request emits exactly one structured log line; every error carries a request id the
+				user can quote.
+			</li>
+			<li>
+				Load functions read via services; they never touch the DB directly and never re-derive
+				identity.
+			</li>
 		</ul>
 
 		<h3>Next up</h3>

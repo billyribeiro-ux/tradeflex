@@ -34,6 +34,7 @@ export const contactsService = {
 ```
 
 All services:
+
 - Accept a `Caller` argument first (never infer from globals).
 - Return typed rows (inferred from Drizzle schema).
 - Emit `audit_event` rows for state-changing ops.

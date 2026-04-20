@@ -58,18 +58,12 @@
 	>
 		<label class="field">
 			<span>Display name</span>
-			<input
-				name="displayName"
-				required
-				value={prevValues.displayName || (p?.displayName ?? '')}
-			/>
+			<input name="displayName" required value={prevValues.displayName || (p?.displayName ?? '')} />
 		</label>
 
 		<label class="field">
 			<span>Bio</span>
-			<textarea name="bio" rows="3" maxlength="500"
-				>{prevValues.bio || (p?.bio ?? '')}</textarea
-			>
+			<textarea name="bio" rows="3" maxlength="500">{prevValues.bio || (p?.bio ?? '')}</textarea>
 		</label>
 
 		<label class="field">
@@ -86,12 +80,7 @@
 			<div class="radio-row">
 				{#each ['system', 'light', 'dark'] as t}
 					<label class="radio">
-						<input
-							type="radio"
-							name="theme"
-							value={t}
-							checked={(p?.theme ?? 'system') === t}
-						/>
+						<input type="radio" name="theme" value={t} checked={(p?.theme ?? 'system') === t} />
 						<span>{t}</span>
 					</label>
 				{/each}
@@ -120,7 +109,9 @@
 	{#if data.subscription}
 		<p class="muted">
 			Status <strong>{data.subscription.status}</strong>
-			{#if data.subscription.priceLookupKey}· plan <strong>{data.subscription.priceLookupKey}</strong>{/if}
+			{#if data.subscription.priceLookupKey}· plan <strong
+					>{data.subscription.priceLookupKey}</strong
+				>{/if}
 			{#if data.subscription.currentPeriodEnd}
 				· renews {new Date(data.subscription.currentPeriodEnd).toLocaleDateString()}
 			{/if}

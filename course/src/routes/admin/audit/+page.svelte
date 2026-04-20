@@ -35,7 +35,9 @@
 		</article>
 	{/each}
 	{#if data.events.length === 0}
-		<div class="empty">No audit events yet. Take any action through the admin and it lands here.</div>
+		<div class="empty">
+			No audit events yet. Take any action through the admin and it lands here.
+		</div>
 	{/if}
 </div>
 
