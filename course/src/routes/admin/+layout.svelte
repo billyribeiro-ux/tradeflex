@@ -2,6 +2,7 @@
 	import type { Snippet } from 'svelte';
 	import { page } from '$app/state';
 	import Logo from '$lib/components/brand/Logo.svelte';
+	import NotificationBell from '$lib/components/admin/NotificationBell.svelte';
 	import type { LayoutData } from './$types';
 
 	let { data, children }: { data: LayoutData; children: Snippet } = $props();
@@ -83,6 +84,9 @@
 	</aside>
 
 	<main class="main">
+		<div class="topbar">
+			<NotificationBell />
+		</div>
 		{@render children()}
 	</main>
 </div>
@@ -180,6 +184,13 @@
 		padding: var(--space-7) var(--space-6);
 		max-width: 1280px;
 		width: 100%;
+	}
+	.topbar {
+		display: flex;
+		justify-content: flex-end;
+		margin: calc(var(--space-7) * -1) calc(var(--space-6) * -1) var(--space-5);
+		padding: var(--space-3) var(--space-6);
+		border-bottom: 1px solid var(--color-border);
 	}
 
 	@media (max-width: 900px) {
