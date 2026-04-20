@@ -364,6 +364,16 @@ const pages: CoursePage[] = [
 			'App-wide toast store, the flash-cookie pattern for toasts that survive redirects, and the open-redirect guard on next=.'
 	},
 	{
+		slug: 'module-13-command-palette',
+		href: '/course/modules/13/command-palette',
+		title: '13.3 · Command palette (⌘K)',
+		module: 'module-13',
+		moduleOrder: 13,
+		order: 2,
+		summary:
+			'Listbox semantics, ArrowUp/Down/Enter nav, reduced-motion-safe entrance — from zero to a keyboard-first palette.'
+	},
+	{
 		slug: 'module-bonus-custom-checkout',
 		href: '/course/modules/bonus/custom-checkout',
 		title: 'B.1 · Custom multi-step checkout',
