@@ -1,6 +1,6 @@
 {
 	"$schema": "https://openapi.vercel.sh/vercel.json",
-	"buildCommand": "cd course && npx -y pnpm@10.33.0 install --frozen-lockfile && npx -y pnpm@10.33.0 build",
+	"buildCommand": "corepack enable pnpm && cd course && pnpm install --frozen-lockfile && pnpm build",
 	"installCommand": "echo noop — install runs inside course/",
 	"outputDirectory": "course/.vercel/output",
 	"framework": null,
