@@ -314,6 +314,16 @@ const pages: CoursePage[] = [
 			'Three rules: pages redirect, endpoints 402, services stay tier-blind. One entitlement function, used everywhere.'
 	},
 	{
+		slug: 'module-7-grace-period',
+		href: '/course/modules/7/grace-period',
+		title: '7.3 · Grace period',
+		module: 'module-7',
+		moduleOrder: 7,
+		order: 2,
+		summary:
+			'One column (<code>grace_until</code>), two event handlers, one entitlement function: how a failed charge becomes a second chance instead of a hard logout.'
+	},
+	{
 		slug: 'module-8-overview',
 		href: '/course/modules/8/overview',
 		title: '8.1 · Products + pricing page',
@@ -352,6 +362,16 @@ const pages: CoursePage[] = [
 		order: 1,
 		summary:
 			'Two-assertion Playwright tests that run on every preview deploy — the canary for each Vercel URL.'
+	},
+	{
+		slug: 'module-11-browser-tests',
+		href: '/course/modules/11/browser-tests',
+		title: '11.3 · Component tests in a real browser',
+		module: 'module-11',
+		moduleOrder: 11,
+		order: 2,
+		summary:
+			'Why `.svelte.test.ts` boots Chromium while plain `.test.ts` runs in Node — and why `toBeFocused` only tells the truth in a real browser.'
 	},
 	{
 		slug: 'module-12-overview',
