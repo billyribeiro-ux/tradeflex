@@ -364,6 +364,16 @@ const pages: CoursePage[] = [
 			'Two-assertion Playwright tests that run on every preview deploy — the canary for each Vercel URL.'
 	},
 	{
+		slug: 'module-11-browser-tests',
+		href: '/course/modules/11/browser-tests',
+		title: '11.3 · Component tests in a real browser',
+		module: 'module-11',
+		moduleOrder: 11,
+		order: 2,
+		summary:
+			'Why `.svelte.test.ts` boots Chromium while plain `.test.ts` runs in Node — and why `toBeFocused` only tells the truth in a real browser.'
+	},
+	{
 		slug: 'module-12-overview',
 		href: '/course/modules/12/overview',
 		title: '12.1 · CI/CD + production',

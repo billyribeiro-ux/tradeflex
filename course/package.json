@@ -56,5 +56,9 @@
 		"@fontsource-variable/inter": "^5.2.8",
 		"@fontsource-variable/jetbrains-mono": "^5.2.8",
 		"zod": "^4.3.6"
+	},
+	"pnpm": {
+		"ignoredBuiltDependencies": ["@prisma/client", "better-sqlite3"],
+		"onlyBuiltDependencies": ["esbuild", "@tailwindcss/oxide", "sharp"]
 	}
 }
