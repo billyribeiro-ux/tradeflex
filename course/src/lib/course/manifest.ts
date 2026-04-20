@@ -324,6 +324,16 @@ const pages: CoursePage[] = [
 			'Two lanes (PR + main), Neon branch per PR, forward-compatible migrations, one-liner rollback.'
 	},
 	{
+		slug: 'module-12-neon-branches-and-rollback',
+		href: '/course/modules/12/neon-branches-and-rollback',
+		title: '12.2 · Neon branches + rollback',
+		module: 'module-12',
+		moduleOrder: 12,
+		order: 1,
+		summary:
+			'Branch per PR, forward-compatible migrations, rollback = revert (never down-migrations), audit-driven replay for data bugs.'
+	},
+	{
 		slug: 'module-13-overview',
 		href: '/course/modules/13/overview',
 		title: '13.1 · UX extras',
