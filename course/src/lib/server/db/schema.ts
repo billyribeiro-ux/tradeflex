@@ -118,6 +118,20 @@ export const customer = pgTable('customer', {
 	createdAt: timestamp('created_at').notNull().defaultNow()
 });
 
+export const impersonation = pgTable('impersonation', {
+	id: text('id').primaryKey(),
+	impersonatorUserId: text('impersonator_user_id')
+		.notNull()
+		.references(() => user.id, { onDelete: 'cascade' }),
+	targetUserId: text('target_user_id')
+		.notNull()
+		.references(() => user.id, { onDelete: 'cascade' }),
+	reason: text('reason').notNull(),
+	issuedAt: timestamp('issued_at').notNull().defaultNow(),
+	expiresAt: timestamp('expires_at').notNull(),
+	revokedAt: timestamp('revoked_at')
+});
+
 export const refundRequest = pgTable('refund_request', {
 	id: text('id').primaryKey(),
 	stripePaymentIntentId: text('stripe_payment_intent_id').notNull(),

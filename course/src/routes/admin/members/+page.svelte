@@ -16,6 +16,7 @@
 
 	let grantFor = $state<string | null>(null);
 	let chosenRole = $state<(typeof allRoles)[number]>('support');
+	let impersonateFor = $state<string | null>(null);
 </script>
 
 <svelte:head><title>Members — Admin</title></svelte:head>
@@ -72,8 +73,16 @@
 						<button type="submit" class="btn-primary">Grant</button>
 						<button type="button" onclick={() => (grantFor = null)}>Cancel</button>
 					</form>
+				{:else if impersonateFor === m.userId}
+					<form method="POST" action="?/impersonate" use:enhance class="grant">
+						<input type="hidden" name="targetUserId" value={m.userId} />
+						<input name="reason" placeholder="Reason (audited)" required minlength="5" />
+						<button type="submit" class="btn-primary">Start</button>
+						<button type="button" onclick={() => (impersonateFor = null)}>Cancel</button>
+					</form>
 				{:else}
 					<button onclick={() => (grantFor = m.userId)}>+ role</button>
+					<button onclick={() => (impersonateFor = m.userId)}>impersonate</button>
 				{/if}
 			</div>
 		</div>
