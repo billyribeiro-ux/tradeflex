@@ -196,4 +196,21 @@ export const subscription = pgTable('subscription', {
 	updatedAt: timestamp('updated_at').notNull().defaultNow()
 });
 
+export const emailMessage = pgTable('email_message', {
+	id: text('id').primaryKey(),
+	direction: text('direction').notNull(),
+	toAddress: text('to_address').notNull(),
+	fromAddress: text('from_address').notNull(),
+	subject: text('subject').notNull(),
+	text: text('text').notNull(),
+	html: text('html'),
+	resendId: text('resend_id'),
+	threadKey: text('thread_key').notNull(),
+	sentByUserId: text('sent_by_user_id'),
+	status: text('status').notNull(),
+	errorReason: text('error_reason'),
+	metadata: jsonb('metadata').notNull().default({}),
+	createdAt: timestamp('created_at').notNull().defaultNow()
+});
+
 export * from './auth.schema';
