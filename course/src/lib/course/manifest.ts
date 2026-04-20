@@ -159,6 +159,33 @@ const pages: CoursePage[] = [
 		moduleOrder: 3,
 		order: 3,
 		summary: 'How Better Auth sessions work, cookie lifecycle, sign-out, and "remember me" sanity.'
+	},
+	{
+		slug: 'module-4-overview',
+		href: '/course/modules/4/overview',
+		title: '4.1 · Overview',
+		module: 'module-4',
+		moduleOrder: 4,
+		order: 0,
+		summary: 'From auth to a first real feature: contacts / leads, end-to-end, service-layer all the way.'
+	},
+	{
+		slug: 'module-4-schema-and-service',
+		href: '/course/modules/4/schema-and-service',
+		title: '4.2 · Schema + service',
+		module: 'module-4',
+		moduleOrder: 4,
+		order: 1,
+		summary: 'A Drizzle table for leads, a service that dedupes by email, and the public POST endpoint.'
+	},
+	{
+		slug: 'module-4-admin-inbox',
+		href: '/course/modules/4/admin-inbox',
+		title: '4.3 · Admin inbox + unsubscribe',
+		module: 'module-4',
+		moduleOrder: 4,
+		order: 2,
+		summary: 'Paginated staff view, role-gated unsubscribe action, and every change audited.'
 	}
 ];
 
