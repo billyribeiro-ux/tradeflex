@@ -21,6 +21,17 @@
 			stop: 'SPY 492.50',
 			target: '485.00',
 			sizing: '1 contract per 50k'
+		},
+		{
+			symbol: 'NVDA',
+			kind: 'options',
+			direction: 'long',
+			thesis:
+				'Bull put credit spread below a well-tested 3-month demand zone. Collects premium while defined risk stays inside the zone.',
+			entry: '820/810 put spread, 35DTE @ $2.85 credit',
+			stop: 'NVDA daily close below 812',
+			target: '0.05 buy-to-close or expiration',
+			sizing: '1 spread per $7.15 buying power'
 		}
 	];
 </script>
@@ -36,7 +47,7 @@
 </section>
 
 <section class="list">
-	{#each samples as a}
+	{#each samples as a (a.symbol)}
 		<article class="alert">
 			<header>
 				<span class="sym">{a.symbol}</span>
