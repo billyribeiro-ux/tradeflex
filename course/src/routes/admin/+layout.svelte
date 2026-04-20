@@ -22,7 +22,8 @@
 			label: 'Commerce',
 			items: [
 				{ href: '/admin/subscriptions', label: 'Subscriptions' },
-				{ href: '/admin/payments', label: 'Payments' }
+				{ href: '/admin/payments', label: 'Payments' },
+				{ href: '/admin/billing/refunds', label: 'Refunds' }
 			]
 		},
 		{
