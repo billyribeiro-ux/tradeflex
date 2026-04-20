@@ -304,6 +304,16 @@ const pages: CoursePage[] = [
 			'Three layers (unit, integration, E2E), each with one job — no layer fakes another layer.'
 	},
 	{
+		slug: 'module-11-e2e-smoke',
+		href: '/course/modules/11/e2e-smoke',
+		title: '11.2 · E2E smoke tests',
+		module: 'module-11',
+		moduleOrder: 11,
+		order: 1,
+		summary:
+			'Two-assertion Playwright tests that run on every preview deploy — the canary for each Vercel URL.'
+	},
+	{
 		slug: 'module-12-overview',
 		href: '/course/modules/12/overview',
 		title: '12.1 · CI/CD + production',
