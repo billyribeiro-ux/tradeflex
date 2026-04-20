@@ -344,6 +344,16 @@ const pages: CoursePage[] = [
 			'Branch per PR, forward-compatible migrations, rollback = revert (never down-migrations), audit-driven replay for data bugs.'
 	},
 	{
+		slug: 'module-12-vercel-monorepo',
+		href: '/course/modules/12/vercel-monorepo',
+		title: '12.3 · Vercel + pnpm monorepo',
+		module: 'module-12',
+		moduleOrder: 12,
+		order: 2,
+		summary:
+			'Three failures, three fixes: vercel.json root-mapping, a pinned packageManager, and a clean workflow without the version-collision trap.'
+	},
+	{
 		slug: 'module-13-overview',
 		href: '/course/modules/13/overview',
 		title: '13.1 · UX extras',
