@@ -6,15 +6,26 @@
 	let { data, form }: { data: PageData; form: ActionData } = $props();
 
 	let cancellingId = $state<string | null>(null);
+	let executingId = $state<string | null>(null);
 	let note = $state('');
+	let confirmText = $state('');
 
 	$effect(() => {
-		if (form && 'success' in form && form.success) {
+		if (!form || !('success' in form) || !form.success) return;
+		if ('cancelledId' in form && form.cancelledId) {
 			toast.success('Deletion cancelled.');
 			cancellingId = null;
 			note = '';
+		} else if ('executedId' in form && form.executedId) {
+			toast.success('Account hard-deleted.');
+			executingId = null;
+			confirmText = '';
 		}
 	});
+
+	function isPastGrace(scheduledFor: Date | string) {
+		return new Date(scheduledFor).getTime() <= Date.now();
+	}
 
 	function daysLeft(scheduledFor: Date | string) {
 		const ms = new Date(scheduledFor).getTime() - Date.now();
@@ -28,7 +39,9 @@
 	<h1>Compliance</h1>
 	<p class="muted">
 		Pending account deletions. Users get a 30-day grace window — admins can override and cancel with
-		a note (audited). Admins cannot cancel their own pending deletion.
+		a note (audited). Once past grace, owners can hard-delete the row; this cascades to all data
+		FK'd to the user (profile, sessions, subscriptions, etc.) but preserves financial records and
+		audit trails as dangling references.
 	</p>
 </header>
 
@@ -90,17 +103,54 @@
 									back
 								</button>
 							</form>
+						{:else if executingId === r.id}
+							<form method="post" action="?/executeDeletion" use:enhance class="cancel-form">
+								<input type="hidden" name="id" value={r.id} />
+								<input
+									name="confirm"
+									bind:value={confirmText}
+									placeholder="Type HARD-DELETE to confirm"
+									required
+								/>
+								<button class="btn-danger" type="submit" disabled={confirmText !== 'HARD-DELETE'}>
+									Hard-delete now
+								</button>
+								<button
+									class="btn-link"
+									type="button"
+									onclick={() => {
+										executingId = null;
+										confirmText = '';
+									}}
+								>
+									back
+								</button>
+							</form>
 						{:else}
-							<button
-								class="btn-ghost"
-								type="button"
-								onclick={() => {
-									cancellingId = r.id;
-									note = '';
-								}}
-							>
-								Cancel deletion
-							</button>
+							<div class="action-row">
+								<button
+									class="btn-ghost"
+									type="button"
+									onclick={() => {
+										cancellingId = r.id;
+										note = '';
+									}}
+								>
+									Cancel deletion
+								</button>
+								{#if isPastGrace(r.scheduledFor)}
+									<button
+										class="btn-danger"
+										type="button"
+										onclick={() => {
+											executingId = r.id;
+											confirmText = '';
+										}}
+									>
+										Execute (owner only)
+									</button>
+								{/if}
+							</div>
 						{/if}
 					</td>
 				</tr>
@@ -174,6 +224,11 @@
 	}
 	.action-cell {
 		min-width: 220px;
+	}
+	.action-row {
+		display: flex;
+		gap: var(--space-2);
+		flex-wrap: wrap;
 	}
 	.cancel-form {
 		display: flex;

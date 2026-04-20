@@ -204,6 +204,54 @@ export const complianceService = {
 	},
 
 	/**
+	 * Hard-delete a past-grace pending row. Relies on `user.id` CASCADE FKs for
+	 * profile/session/account/customer/subscription/impersonation/roleAssignment/
+	 * accountDeletion itself. Financial + audit records are intentionally NOT
+	 * FK'd to user.id and survive as dangling references.
+	 *
+	 * Guarded: owner-only, row must be past `scheduledFor`, not already resolved,
+	 * and the caller cannot execute their own row (same accountability rule as
+	 * adminCancel).
+	 */
+	async executeDeletion(caller: Caller, params: { id: string }): Promise<void> {
+		assertRole(caller, 'owner');
+		const [row] = await db
+			.select()
+			.from(accountDeletion)
+			.where(eq(accountDeletion.id, params.id))
+			.limit(1);
+		if (!row) throw new ComplianceError('not found', 404);
+		if (row.cancelledAt || row.executedAt) {
+			throw new ComplianceError('already resolved', 409);
+		}
+		if (row.scheduledFor.getTime() > Date.now()) {
+			throw new ComplianceError('still in grace window', 409);
+		}
+		if (row.userId === caller.userId) {
+			throw new AuthzError('cannot execute your own account deletion');
+		}
+
+		await db.transaction(async (tx) => {
+			const updated = await tx
+				.update(accountDeletion)
+				.set({ executedAt: new Date() })
+				.where(and(eq(accountDeletion.id, row.id), isNull(accountDeletion.executedAt)))
+				.returning();
+			if (updated.length === 0) {
+				throw new ComplianceError('row state changed during execution', 409);
+			}
+			await tx.delete(user).where(eq(user.id, row.userId));
+		});
+
+		await writeAudit(caller, {
+			action: 'compliance.deletion.execute',
+			targetKind: 'user',
+			targetId: row.userId,
+			metadata: { id: row.id, scheduledFor: row.scheduledFor, reason: row.reason ?? null }
+		});
+	},
+
+	/**
 	 * Pending deletions by the caller's own userId that are still in the grace
 	 * window. Surfaced on /account so the user sees the countdown.
 	 */

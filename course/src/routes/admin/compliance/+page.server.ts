@@ -12,6 +12,13 @@ const cancelSchema = z.object({
 	note: z.string().min(3, 'note must be at least 3 characters').max(500)
 });
 
+const executeSchema = z.object({
+	id: z.string().min(1),
+	confirm: z.string().refine((v) => v === 'HARD-DELETE', {
+		message: 'type HARD-DELETE to confirm'
+	})
+});
+
 export const load: PageServerLoad = async ({ locals }) => {
 	assertRole(locals.caller, 'owner', 'admin', 'support');
 	const pending = await complianceService.listPending(locals.caller);
@@ -46,6 +53,25 @@ export const actions: Actions = {
 		try {
 			await complianceService.adminCancel(locals.caller, parsed.data);
 			return { success: true, cancelledId: parsed.data.id };
+		} catch (err) {
+			if (err instanceof AuthzError) return fail(403, { message: err.message });
+			if (err instanceof ComplianceError) return fail(err.httpStatus, { message: err.message });
+			throw err;
+		}
+	},
+
+	executeDeletion: async ({ request, locals }) => {
+		const fd = await request.formData();
+		const parsed = executeSchema.safeParse({
+			id: fd.get('id')?.toString() ?? '',
+			confirm: fd.get('confirm')?.toString() ?? ''
+		});
+		if (!parsed.success) {
+			return fail(400, { message: parsed.error.issues[0]?.message ?? 'Invalid input.' });
+		}
+		try {
+			await complianceService.executeDeletion(locals.caller, { id: parsed.data.id });
+			return { success: true, executedId: parsed.data.id };
 		} catch (err) {
 			if (err instanceof AuthzError) return fail(403, { message: err.message });
 			if (err instanceof ComplianceError) return fail(err.httpStatus, { message: err.message });
