@@ -235,6 +235,16 @@ const pages: CoursePage[] = [
 			'Why prices are the thing you reference in code, not products — and why lookup keys save your life.'
 	},
 	{
+		slug: 'module-5-archive-and-cleanup',
+		href: '/course/modules/5/archive-and-cleanup',
+		title: '5.4 · Archive + cleanup',
+		module: 'module-5',
+		moduleOrder: 5,
+		order: 3,
+		summary:
+			'Stripe prices are immutable. <code>--transfer-lookup-keys</code> rotates the key atomically; existing subscriptions keep their old price ID until you migrate them explicitly.'
+	},
+	{
 		slug: 'module-6-overview',
 		href: '/course/modules/6/overview',
 		title: '6.1 · Stripe + SvelteKit',
@@ -302,6 +312,16 @@ const pages: CoursePage[] = [
 		order: 1,
 		summary:
 			'Stripe-hosted portal in one redirect, grace_until pattern for payment_failed retries, and a test-clock replay of the full 21-day cycle.'
+	},
+	{
+		slug: 'module-9-cancel-and-refund',
+		href: '/course/modules/9/cancel-and-refund',
+		title: '9.3 · Cancel + refund',
+		module: 'module-9',
+		moduleOrder: 9,
+		order: 2,
+		summary:
+			'Four knobs (when, refund, proration credit, entitlement) and the two real patterns: self-serve cancel-at-period-end vs admin-initiated cancel-and-refund with a two-person rule above $500.'
 	},
 	{
 		slug: 'module-10-tier-gating',
