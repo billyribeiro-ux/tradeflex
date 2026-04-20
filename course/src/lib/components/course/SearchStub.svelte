@@ -52,6 +52,25 @@
 		query = '';
 		goto(href);
 	}
+
+	function highlight(text: string, q: string): Array<{ t: string; hit: boolean }> {
+		const needle = q.trim().toLowerCase();
+		if (needle.length === 0) return [{ t: text, hit: false }];
+		const out: Array<{ t: string; hit: boolean }> = [];
+		const lower = text.toLowerCase();
+		let i = 0;
+		while (i < text.length) {
+			const idx = lower.indexOf(needle, i);
+			if (idx === -1) {
+				out.push({ t: text.slice(i), hit: false });
+				break;
+			}
+			if (idx > i) out.push({ t: text.slice(i, idx), hit: false });
+			out.push({ t: text.slice(idx, idx + needle.length), hit: true });
+			i = idx + needle.length;
+		}
+		return out;
+	}
 </script>
 
 <button type="button" class="trigger" onclick={() => (open = true)} aria-label="Search (⌘K)">
@@ -100,8 +119,18 @@
 				{#each results as r, i (r.href)}
 					<li class:active={i === active} role="option" aria-selected={i === active}>
 						<button type="button" onclick={() => pick(r.href)} onmouseenter={() => (active = i)}>
-							<span class="title">{r.title}</span>
-							{#if r.summary}<span class="summary">{r.summary}</span>{/if}
+							<span class="title">
+								{#each highlight(r.title, query) as seg, j (j)}
+									{#if seg.hit}<mark>{seg.t}</mark>{:else}{seg.t}{/if}
+								{/each}
+							</span>
+							{#if r.summary}
+								<span class="summary">
+									{#each highlight(r.summary, query) as seg, j (j)}
+										{#if seg.hit}<mark>{seg.t}</mark>{:else}{seg.t}{/if}
+									{/each}
+								</span>
+							{/if}
 						</button>
 					</li>
 				{:else}
@@ -218,6 +247,13 @@
 	.results .title {
 		font-size: var(--fs-md);
 		font-weight: 500;
+	}
+
+	.results mark {
+		background: color-mix(in oklab, var(--color-accent) 30%, transparent);
+		color: inherit;
+		padding: 0 1px;
+		border-radius: 2px;
 	}
 
 	.results .summary {
