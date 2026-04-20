@@ -12,9 +12,18 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     environment: production
+    # Only tip-of-main matters for prod. Superseding is safe because:
+    #  - drizzle-kit wraps each migration in a transaction, so SIGTERM
+    #    rolls back cleanly — the next run re-applies idempotently.
+    #  - Vercel deploys are immutable snapshots; a cancelled deploy leaves
+    #    the previous READY alias in place. The newer commit deploys fresh.
     concurrency:
       group: deploy-production
-      cancel-in-progress: false
+      cancel-in-progress: true
+    # Hard ceiling so a hung Vercel CLI cannot hold the concurrency group
+    # forever (the 2026-04-20 incident: 5 queued deploys behind a run whose
+    # `vercel deploy --prod` hung after Vercel's log stream exceeded 4 MB).
+    timeout-minutes: 15
     env:
       HAS_PROD_DB_URL: ${{ secrets.PROD_DATABASE_URL != '' }}
     steps:
@@ -57,10 +66,72 @@ jobs:
       - name: Install Vercel CLI
         run: pnpm add -g vercel@latest
 
-      - name: Deploy to Vercel (build runs on Vercel)
+      # Upload-only (--no-wait). The CLI returns the deployment URL as soon
+      # as Vercel accepts the upload, so we are not subject to Vercel's
+      # server-side log stream or the CLI's 4 MB log buffer — both of which
+      # have caused indefinite hangs in prior runs (2026-04-20 incident).
+      - name: Upload to Vercel
+        id: upload
         working-directory: .
+        timeout-minutes: 5
         env:
           VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
           VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
           VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
-        run: vercel deploy --prod --yes --token "$VERCEL_TOKEN"
+        run: |
+          set -euo pipefail
+          # The CLI writes progress to stderr and the final URL to stdout.
+          url=$(vercel deploy --prod --yes --no-wait --token "$VERCEL_TOKEN" \
+            | grep -oE 'https://[a-zA-Z0-9.-]+\.vercel\.app' \
+            | tail -n1)
+          if [[ ! "$url" =~ ^https:// ]]; then
+            echo "::error::vercel deploy did not return a deployment URL"
+            exit 1
+          fi
+          echo "url=$url" >> "$GITHUB_OUTPUT"
+          echo "Deployment URL: $url"
+
+      # Poll the Vercel REST API for readyState. We don't reuse `vercel
+      # inspect` because its human output is unversioned; the API is stable.
+      - name: Wait for deployment READY
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+          URL: ${{ steps.upload.outputs.url }}
+        run: |
+          set -euo pipefail
+          host=${URL#https://}
+          api="https://api.vercel.com/v13/deployments/$host?teamId=$VERCEL_ORG_ID"
+          deadline=$(( $(date +%s) + 600 ))  # 10 min inner budget
+          transient=0
+          while [ "$(date +%s)" -lt "$deadline" ]; do
+            body=$(curl -fsS -H "Authorization: Bearer $VERCEL_TOKEN" "$api" || echo "")
+            if [ -z "$body" ]; then
+              transient=$((transient+1))
+              if [ $transient -ge 5 ]; then
+                echo "::error::5 consecutive Vercel API failures"
+                exit 1
+              fi
+              sleep 15
+              continue
+            fi
+            transient=0
+            state=$(echo "$body" | jq -r '.readyState // empty')
+            case "$state" in
+              READY)
+                echo "✓ $URL is READY"
+                exit 0
+                ;;
+              ERROR|CANCELED)
+                echo "::error::Deployment $URL ended in state: $state"
+                echo "$body" | jq '.errorMessage // .error // .' >&2 || true
+                exit 1
+                ;;
+              *)
+                echo "readyState=$state, polling…"
+                sleep 15
+                ;;
+            esac
+          done
+          echo "::error::Deployment $URL did not reach READY within 10 minutes"
+          exit 1
