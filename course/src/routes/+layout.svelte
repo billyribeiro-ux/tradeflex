@@ -2,6 +2,7 @@
 	import '$lib/styles/index.css';
 	import favicon from '$lib/assets/favicon.svg';
 	import ToastHost from '$lib/components/toast/ToastHost.svelte';
+	import ImpersonationBanner from '$lib/components/admin/ImpersonationBanner.svelte';
 	import { toast } from '$lib/toast/store.svelte';
 	import type { Snippet } from 'svelte';
 	import type { LayoutData } from './$types';
@@ -19,6 +20,12 @@
 </svelte:head>
 
 <a href="#main-content" class="skip-link">Skip to main content</a>
+{#if data.impersonation}
+	<ImpersonationBanner
+		impersonatorUserId={data.impersonation.impersonatorUserId}
+		targetUserId={data.impersonation.targetUserId}
+	/>
+{/if}
 <div id="main-content">
 	{@render children()}
 </div>

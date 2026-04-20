@@ -4,6 +4,7 @@ import { auth } from '$lib/server/auth';
 import { svelteKitHandler } from 'better-auth/svelte-kit';
 import { anonymousCaller } from '$lib/server/authz/caller';
 import { resolveCaller } from '$lib/server/authz/resolve-caller';
+import { impersonationService, IMPERSONATION_COOKIE } from '$lib/server/services/impersonation';
 import { log, reportError } from '$lib/server/log';
 
 function newRequestId(): string {
@@ -30,8 +31,25 @@ const handleBetterAuth: Handle = async ({ event, resolve }) => {
 };
 
 const handleCaller: Handle = async ({ event, resolve }) => {
-	const userId = event.locals.user?.id ?? null;
-	event.locals.caller = await resolveCaller(userId, event.locals.requestId);
+	const realUserId = event.locals.user?.id ?? null;
+	const impCookie = event.cookies.get(IMPERSONATION_COOKIE);
+	let effectiveUserId = realUserId;
+	let impersonatorUserId: string | null = null;
+	if (realUserId && impCookie) {
+		const row = await impersonationService.resolveFromCookie(realUserId, impCookie);
+		if (row) {
+			effectiveUserId = row.targetUserId;
+			impersonatorUserId = realUserId;
+		} else {
+			// Cookie is stale/revoked/expired — clear it so the admin sees a clean UI.
+			event.cookies.delete(IMPERSONATION_COOKIE, { path: '/' });
+		}
+	}
+	event.locals.caller = await resolveCaller(
+		effectiveUserId,
+		event.locals.requestId,
+		impersonatorUserId
+	);
 	return resolve(event);
 };
 
