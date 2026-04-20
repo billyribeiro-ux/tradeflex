@@ -40,7 +40,8 @@ function formEncode(obj: Record<string, unknown>, prefix = ''): string {
 async function stripeCall<T>(
 	method: string,
 	path: string,
-	body?: Record<string, unknown>
+	body?: Record<string, unknown>,
+	opts?: { idempotencyKey?: string }
 ): Promise<T> {
 	const key = await settingsService.get('STRIPE_SECRET_KEY');
 	if (!key) {
@@ -52,6 +53,7 @@ async function stripeCall<T>(
 		Authorization: `Bearer ${key}`,
 		'Stripe-Version': '2024-12-18.acacia'
 	};
+	if (opts?.idempotencyKey) headers['Idempotency-Key'] = opts.idempotencyKey;
 	let url = `${API}${path}`;
 	let payload: string | undefined;
 	if (body && method !== 'GET') {
@@ -105,6 +107,15 @@ export interface StripePortalSession {
 	url: string;
 }
 
+export interface StripeRefund {
+	id: string;
+	amount: number;
+	currency: string;
+	payment_intent: string | null;
+	charge: string | null;
+	status: string;
+}
+
 export const stripe = {
 	async listActivePrices(): Promise<StripePrice[]> {
 		const res = await stripeCall<{ data: StripePrice[] }>('GET', '/prices', {
@@ -148,5 +159,23 @@ export const stripe = {
 			customer: params.customerId,
 			return_url: params.returnUrl
 		});
+	},
+
+	async createRefund(
+		params: {
+			paymentIntentId: string;
+			amountCents?: number;
+			reason?: 'duplicate' | 'fraudulent' | 'requested_by_customer';
+			metadata?: Record<string, string>;
+		},
+		opts: { idempotencyKey: string }
+	): Promise<StripeRefund> {
+		const body: Record<string, unknown> = {
+			payment_intent: params.paymentIntentId,
+			amount: params.amountCents,
+			reason: params.reason,
+			metadata: params.metadata
+		};
+		return stripeCall<StripeRefund>('POST', '/refunds', body, opts);
 	}
 };

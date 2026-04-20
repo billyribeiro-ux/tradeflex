@@ -118,6 +118,25 @@ export const customer = pgTable('customer', {
 	createdAt: timestamp('created_at').notNull().defaultNow()
 });
 
+export const refundRequest = pgTable('refund_request', {
+	id: text('id').primaryKey(),
+	stripePaymentIntentId: text('stripe_payment_intent_id').notNull(),
+	stripeChargeId: text('stripe_charge_id'),
+	stripeCustomerId: text('stripe_customer_id'),
+	subjectUserId: text('subject_user_id'),
+	amountCents: integer('amount_cents').notNull(),
+	currency: text('currency').notNull(),
+	reason: text('reason').notNull(),
+	status: text('status').notNull().default('pending'),
+	requestedByUserId: text('requested_by_user_id').notNull(),
+	requestedAt: timestamp('requested_at').notNull().defaultNow(),
+	decidedByUserId: text('decided_by_user_id'),
+	decidedAt: timestamp('decided_at'),
+	decisionNote: text('decision_note'),
+	stripeRefundId: text('stripe_refund_id'),
+	idempotencyKey: text('idempotency_key').notNull().unique()
+});
+
 export const subscription = pgTable('subscription', {
 	id: text('id').primaryKey(),
 	userId: text('user_id')
