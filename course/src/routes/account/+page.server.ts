@@ -5,6 +5,7 @@ import { customersService } from '$lib/server/services/customers';
 import { subscriptionsService } from '$lib/server/services/subscriptions';
 import { billingService } from '$lib/server/services/billing';
 import { MissingConfigError } from '$lib/server/services/settings';
+import { setFlash } from '$lib/server/flash';
 import type { Actions, PageServerLoad } from './$types';
 
 const profileSchema = z.object({
@@ -59,7 +60,7 @@ export const actions: Actions = {
 		return { success: true, savedAt: new Date().toISOString() };
 	},
 
-	portal: async ({ locals, url }) => {
+	portal: async ({ locals, url, cookies }) => {
 		if (!locals.caller.userId) return fail(401, { message: 'Not signed in.' });
 		const customer = await customersService.forCaller(locals.caller);
 		if (!customer)
@@ -75,6 +76,7 @@ export const actions: Actions = {
 			const msg = err instanceof Error ? err.message : 'Portal unavailable.';
 			return fail(400, { message: msg });
 		}
+		setFlash(cookies, { kind: 'info', message: 'Opening Stripe billing portal…' });
 		throw redirect(303, portalUrl);
 	}
 };
