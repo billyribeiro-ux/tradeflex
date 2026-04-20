@@ -324,6 +324,16 @@ const pages: CoursePage[] = [
 			'One column (<code>grace_until</code>), two event handlers, one entitlement function: how a failed charge becomes a second chance instead of a hard logout.'
 	},
 	{
+		slug: 'module-10-response-patterns',
+		href: '/course/modules/10/response-patterns',
+		title: '10.2 · Response patterns',
+		module: 'module-10',
+		moduleOrder: 10,
+		order: 1,
+		summary:
+			'Three patterns cover every denial surface: redirect on page loads, HTTP 402 on endpoints, and graceful degrade on mixed pages — with a shared client handler that turns any 402 into a toast + upgrade CTA.'
+	},
+	{
 		slug: 'module-8-overview',
 		href: '/course/modules/8/overview',
 		title: '8.1 · Products + pricing page',
