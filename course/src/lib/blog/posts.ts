@@ -11,6 +11,23 @@ export interface BlogPost {
 
 export const posts: BlogPost[] = [
 	{
+		slug: 'cmd-k-the-right-way',
+		title: 'Shipping ⌘K the right way',
+		excerpt:
+			'A command palette is five hundred lines of good intentions or fifty lines of discipline. Here is the fifty-line version, and why every detail matters.',
+		publishedAt: '2026-04-20',
+		author: 'Billy',
+		readingMinutes: 4,
+		tags: ['engineering', 'a11y'],
+		body: `Most command palettes I've used start great and quietly rot. They forget to trap focus, they let the mouse and keyboard drift out of sync, they use the wrong ARIA role, and before long you can feel the cognitive load every time you hit ⌘K.
+
+We shipped ours this week. The state is three variables — **open**, **query**, **active** — and the palette derives everything else. When the query changes, active resets to zero. When ArrowDown fires, active clamps at **results.length - 1**. When the mouse hovers a row, active snaps to match. Keyboard and pointer always agree.
+
+The accessibility story is equally short. The scrim is **role="dialog" aria-modal="true"**. The results list is **role="listbox"**, each row is **role="option"** with **aria-selected** tied to the active index. Svelte's compiler catches the common mistake — aria-selected on a plain **<li>** doesn't work — before it reaches the browser.
+
+We wrote a course page the same afternoon documenting the whole thing. That's the Trade Flex rhythm: ship the feature, then teach it. Both live in the same repo because one without the other would be half the point.`
+	},
+	{
 		slug: 'why-risk-first',
 		title: 'Why every alert starts with the stop',
 		excerpt:
