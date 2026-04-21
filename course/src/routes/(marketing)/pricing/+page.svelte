@@ -92,7 +92,7 @@
 						Use custom checkout →
 					</a>
 				{:else}
-					<a class="btn-primary" href={resolve(plan.cta.href)}>{plan.cta.label}</a>
+					<a class="btn-primary" href={plan.cta.href}>{plan.cta.label}</a>
 				{/if}
 				<ul>
 					{#each plan.features as f (f)}

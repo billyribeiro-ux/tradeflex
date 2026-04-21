@@ -54,8 +54,7 @@
 			</dl>
 			<div class="cta">
 				<a class="btn-primary" href={resolve('/register')}>Subscribe — $49/mo</a>
-				<a class="btn-ghost" href={resolve(`/checkout/course/${c.slug}`)}>Buy course · ${c.price}</a
-				>
+				<a class="btn-ghost" href="/checkout/course/{c.slug}">Buy course · ${c.price}</a>
 			</div>
 		</article>
 	{/each}

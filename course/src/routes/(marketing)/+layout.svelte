@@ -21,7 +21,7 @@
 		<a class="brand" href={resolve('/')}><Logo variant="lockup" /></a>
 		<nav>
 			{#each nav as item (item.href)}
-				<a href={resolve(item.href)} class:active={current.startsWith(item.href)}>{item.label}</a>
+				<a href={item.href} class:active={current.startsWith(item.href)}>{item.label}</a>
 			{/each}
 		</nav>
 		<div class="cta">

@@ -85,7 +85,7 @@
 				<header class="thread-head">
 					<h2>{data.openThread[0].subject}</h2>
 					<p class="muted">to {data.openThread[0].toAddress}</p>
-					<a class="close" href={resolve(page.url.pathname)}>Close</a>
+					<a class="close" href={page.url.pathname}>Close</a>
 				</header>
 				<ul class="messages">
 					{#each data.openThread as m (m.id)}

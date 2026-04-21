@@ -53,7 +53,7 @@
 
 <p class="foot">
 	No account yet? <a href={resolve('/register')}>Create one →</a><br />
-	<a class="muted" href={resolve('/forgot')}>Forgot password?</a>
+	<a class="muted" href="/forgot">Forgot password?</a>
 </p>
 
 <style>

@@ -73,7 +73,7 @@
 					<a
 						class="nav-item"
 						class:active={current === item.href || current.startsWith(item.href + '/')}
-						href={resolve(item.href)}
+						href={item.href}
 					>
 						{item.label}
 					</a>

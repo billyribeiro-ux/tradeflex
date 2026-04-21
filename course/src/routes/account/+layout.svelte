@@ -10,7 +10,7 @@
 		<nav>
 			<a href={resolve('/alerts')}>Alerts</a>
 			<a href={resolve('/account')} class="active">Account</a>
-			<a href={resolve('/account/billing')}>Billing</a>
+			<a href="/account/billing">Billing</a>
 			<a href={resolve('/course')}>Build log</a>
 		</nav>
 	</header>
