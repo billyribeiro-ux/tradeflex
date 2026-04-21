@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { enhance } from '$app/forms';
 	import type { ActionData, PageData } from './$types';
+	import LessonVideoUpload from '$lib/components/admin/LessonVideoUpload.svelte';
 
 	let { data, form }: { data: PageData; form: ActionData } = $props();
 
@@ -134,6 +135,9 @@
 								<button type="submit">Save</button>
 								<button type="button" onclick={() => (editingLessonId = null)}>Cancel</button>
 							</form>
+							<div class="upload-slot">
+								<LessonVideoUpload lessonId={l.id} existingGuid={l.bunnyVideoGuid} />
+							</div>
 						{:else}
 							<strong>{l.title}</strong>
 							<div class="slug">/{l.slug}</div>
@@ -401,6 +405,11 @@
 	}
 	tr.editing td {
 		background: color-mix(in oklab, var(--color-accent) 6%, transparent);
+	}
+	.upload-slot {
+		margin-top: var(--space-3);
+		padding-top: var(--space-3);
+		border-top: 1px dashed var(--color-border);
 	}
 	.enroll-form {
 		display: flex;
