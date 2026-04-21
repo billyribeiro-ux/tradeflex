@@ -95,5 +95,69 @@ export const bunnyService = {
 	): Promise<{ url: string; expiresAt: number }> {
 		if (!VIDEO_GUID_RE.test(videoGuid)) throw new BunnyError('invalid video guid');
 		return signForAuthorizedCaller(videoGuid, opts);
+	},
+
+	/**
+	 * Creates a video record in the configured Bunny Stream library. Returns
+	 * the assigned GUID. The caller then streams the actual bytes to
+	 * `uploadVideoStream(guid, stream)`.
+	 */
+	async createVideoRecord(params: { title: string }): Promise<{ guid: string }> {
+		const libraryId = await settingsService.require('BUNNY_STREAM_LIBRARY_ID');
+		const accessKey = await settingsService.require('BUNNY_STREAM_API_KEY');
+		const res = await fetch(`https://video.bunnycdn.com/library/${libraryId}/videos`, {
+			method: 'POST',
+			headers: {
+				AccessKey: accessKey,
+				'Content-Type': 'application/json',
+				Accept: 'application/json'
+			},
+			body: JSON.stringify({ title: params.title })
+		});
+		if (!res.ok) {
+			throw new BunnyError(
+				`Bunny createVideo failed (${res.status}): ${await res.text()}`,
+				res.status === 401 ? 503 : 502
+			);
+		}
+		const json = (await res.json()) as { guid: string };
+		if (!VIDEO_GUID_RE.test(json.guid)) {
+			throw new BunnyError('Bunny returned an invalid GUID', 502);
+		}
+		return { guid: json.guid };
+	},
+
+	/**
+	 * Uploads the bytes of a video to a previously created Bunny video record.
+	 * Streams the request body through without buffering in memory.
+	 */
+	async uploadVideoStream(
+		videoGuid: string,
+		body: ReadableStream<Uint8Array> | ArrayBuffer | Blob,
+		contentType = 'application/octet-stream'
+	): Promise<void> {
+		if (!VIDEO_GUID_RE.test(videoGuid)) throw new BunnyError('invalid video guid');
+		const libraryId = await settingsService.require('BUNNY_STREAM_LIBRARY_ID');
+		const accessKey = await settingsService.require('BUNNY_STREAM_API_KEY');
+		const init: RequestInit & { duplex?: 'half' } = {
+			method: 'PUT',
+			headers: {
+				AccessKey: accessKey,
+				'Content-Type': contentType,
+				Accept: 'application/json'
+			},
+			body: body as BodyInit,
+			duplex: 'half'
+		};
+		const res = await fetch(
+			`https://video.bunnycdn.com/library/${libraryId}/videos/${videoGuid}`,
+			init as RequestInit
+		);
+		if (!res.ok) {
+			throw new BunnyError(
+				`Bunny upload failed (${res.status}): ${await res.text()}`,
+				res.status === 401 ? 503 : 502
+			);
+		}
 	}
 };
