@@ -2,12 +2,21 @@
 	import { onMount } from 'svelte';
 
 	interface Props {
-		videoGuid: string;
+		videoGuid?: string;
+		/**
+		 * Endpoint that returns `{ url, expiresAt }`. Defaults to the
+		 * membership-gated `/api/video/[guid]/signed-url`; lesson pages pass
+		 * a course-enrollment-aware override.
+		 */
+		endpoint?: string;
 		title?: string;
 		aspect?: number;
 	}
 
-	let { videoGuid, title = 'Video', aspect = 16 / 9 }: Props = $props();
+	let { videoGuid, endpoint, title = 'Video', aspect = 16 / 9 }: Props = $props();
+	const resolvedEndpoint = $derived(
+		endpoint ?? (videoGuid ? `/api/video/${encodeURIComponent(videoGuid)}/signed-url` : '')
+	);
 
 	type State =
 		| { kind: 'loading' }
@@ -19,8 +28,12 @@
 
 	async function fetchSignedUrl() {
 		state = { kind: 'loading' };
+		if (!resolvedEndpoint) {
+			state = { kind: 'blocked', status: 0, message: 'No video configured' };
+			return;
+		}
 		try {
-			const res = await fetch(`/api/video/${encodeURIComponent(videoGuid)}/signed-url`, {
+			const res = await fetch(resolvedEndpoint, {
 				headers: { accept: 'application/json' }
 			});
 			if (!res.ok) {

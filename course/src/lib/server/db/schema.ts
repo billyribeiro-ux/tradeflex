@@ -240,4 +240,49 @@ export const supportTicketMessage = pgTable('support_ticket_message', {
 	createdAt: timestamp('created_at').notNull().defaultNow()
 });
 
+export const course = pgTable('course', {
+	id: text('id').primaryKey(),
+	slug: text('slug').notNull().unique(),
+	title: text('title').notNull(),
+	tagline: text('tagline').notNull().default(''),
+	summary: text('summary').notNull().default(''),
+	coverBlobKey: text('cover_blob_key'),
+	priceCents: integer('price_cents').notNull().default(0),
+	status: text('status').notNull().default('draft'),
+	position: integer('position').notNull().default(0),
+	createdAt: timestamp('created_at').notNull().defaultNow(),
+	updatedAt: timestamp('updated_at').notNull().defaultNow(),
+	publishedAt: timestamp('published_at')
+});
+
+export const lesson = pgTable('lesson', {
+	id: text('id').primaryKey(),
+	courseId: text('course_id')
+		.notNull()
+		.references(() => course.id, { onDelete: 'cascade' }),
+	slug: text('slug').notNull(),
+	title: text('title').notNull(),
+	summary: text('summary').notNull().default(''),
+	bunnyVideoGuid: text('bunny_video_guid'),
+	durationSeconds: integer('duration_seconds').notNull().default(0),
+	position: integer('position').notNull().default(0),
+	status: text('status').notNull().default('draft'),
+	createdAt: timestamp('created_at').notNull().defaultNow(),
+	updatedAt: timestamp('updated_at').notNull().defaultNow()
+});
+
+export const courseEnrollment = pgTable('course_enrollment', {
+	id: text('id').primaryKey(),
+	userId: text('user_id')
+		.notNull()
+		.references(() => user.id, { onDelete: 'cascade' }),
+	courseId: text('course_id')
+		.notNull()
+		.references(() => course.id, { onDelete: 'cascade' }),
+	source: text('source').notNull().default('purchase'),
+	grantedByUserId: text('granted_by_user_id'),
+	grantedAt: timestamp('granted_at').notNull().defaultNow(),
+	accessExpiresAt: timestamp('access_expires_at')
+});
+
 export * from './auth.schema';
