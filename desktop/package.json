@@ -1,0 +1,14 @@
+{
+	"name": "tradeflex-desktop",
+	"private": true,
+	"version": "0.1.0",
+	"description": "Trade Flex macOS companion app (Tauri 2 wrapper over the web app).",
+	"scripts": {
+		"dev": "tauri dev",
+		"build": "tauri build",
+		"build:universal": "tauri build --target universal-apple-darwin"
+	},
+	"devDependencies": {
+		"@tauri-apps/cli": "^2.9.0"
+	}
+}
