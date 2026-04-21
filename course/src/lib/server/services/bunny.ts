@@ -159,5 +159,37 @@ export const bunnyService = {
 				res.status === 401 ? 503 : 502
 			);
 		}
+	},
+
+	/**
+	 * Issues a short-lived TUS credential for a freshly created video record.
+	 * The browser uses tus-js-client to upload directly to Bunny, bypassing
+	 * Vercel's ~4.5 MB request-body ingress cap. Signature is HMAC-free —
+	 * Bunny documents it as:
+	 *   sha256_hex(libraryId + apiKey + expires + videoGuid)
+	 * The caller is responsible for access control (role check + lesson load).
+	 */
+	async createDirectUploadTicket(params: { title: string; ttlSeconds?: number }): Promise<{
+		videoGuid: string;
+		libraryId: string;
+		endpoint: string;
+		authorizationSignature: string;
+		authorizationExpire: number;
+	}> {
+		const { guid } = await this.createVideoRecord({ title: params.title });
+		const libraryId = await settingsService.require('BUNNY_STREAM_LIBRARY_ID');
+		const accessKey = await settingsService.require('BUNNY_STREAM_API_KEY');
+		const ttl = Math.min(Math.max(params.ttlSeconds ?? 60 * 60 * 6, 60 * 5), 60 * 60 * 24);
+		const expires = Math.floor(Date.now() / 1000) + ttl;
+		const authorizationSignature = createHash('sha256')
+			.update(`${libraryId}${accessKey}${expires}${guid}`)
+			.digest('hex');
+		return {
+			videoGuid: guid,
+			libraryId,
+			endpoint: 'https://video.bunnycdn.com/tusupload',
+			authorizationSignature,
+			authorizationExpire: expires
+		};
 	}
 };

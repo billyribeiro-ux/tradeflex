@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { invalidateAll } from '$app/navigation';
+	import * as tus from 'tus-js-client';
 
 	interface Props {
 		lessonId: string;
@@ -12,6 +13,13 @@
 	let progress = $state(0);
 	let message = $state<string | null>(null);
 
+	/**
+	 * Vercel's edge ingress caps request bodies around 4.5 MB. Anything below
+	 * the threshold uses the simple streaming endpoint; everything above goes
+	 * through TUS direct-to-Bunny so the bytes never touch our server.
+	 */
+	const SERVER_STREAM_LIMIT = 4 * 1024 * 1024;
+
 	async function upload() {
 		const file = fileEl?.files?.[0];
 		if (!file) {
@@ -22,27 +30,81 @@
 		progress = 0;
 		message = null;
 
-		const xhr = new XMLHttpRequest();
-		xhr.open('POST', `/api/admin/lesson/${encodeURIComponent(lessonId)}/video`);
-		xhr.setRequestHeader('Content-Type', file.type || 'application/octet-stream');
-		xhr.upload.onprogress = (ev) => {
-			if (ev.lengthComputable) progress = Math.round((ev.loaded / ev.total) * 100);
-		};
-		xhr.onerror = () => {
-			status = 'error';
-			message = 'Network error during upload.';
-		};
-		xhr.onload = async () => {
-			if (xhr.status >= 200 && xhr.status < 300) {
-				status = 'done';
-				message = 'Upload complete. Bunny is transcoding in the background.';
-				await invalidateAll();
+		try {
+			if (file.size <= SERVER_STREAM_LIMIT) {
+				await uploadViaServer(file);
 			} else {
-				status = 'error';
-				message = xhr.responseText || `Upload failed (${xhr.status})`;
+				await uploadViaTus(file);
 			}
+			status = 'done';
+			message = 'Upload complete. Bunny is transcoding in the background.';
+			await invalidateAll();
+		} catch (err) {
+			status = 'error';
+			message = err instanceof Error ? err.message : String(err);
+		}
+	}
+
+	function uploadViaServer(file: File): Promise<void> {
+		return new Promise((resolve, reject) => {
+			const xhr = new XMLHttpRequest();
+			xhr.open('POST', `/api/admin/lesson/${encodeURIComponent(lessonId)}/video`);
+			xhr.setRequestHeader('Content-Type', file.type || 'application/octet-stream');
+			xhr.upload.onprogress = (ev) => {
+				if (ev.lengthComputable) progress = Math.round((ev.loaded / ev.total) * 100);
+			};
+			xhr.onerror = () => reject(new Error('Network error during upload.'));
+			xhr.onload = () => {
+				if (xhr.status >= 200 && xhr.status < 300) resolve();
+				else reject(new Error(xhr.responseText || `Upload failed (${xhr.status})`));
+			};
+			xhr.send(file);
+		});
+	}
+
+	async function uploadViaTus(file: File): Promise<void> {
+		const presignRes = await fetch(
+			`/api/admin/lesson/${encodeURIComponent(lessonId)}/video/direct`,
+			{
+				method: 'POST',
+				headers: { 'Content-Type': 'application/json' },
+				body: JSON.stringify({ title: file.name })
+			}
+		);
+		if (!presignRes.ok) {
+			throw new Error((await presignRes.text()) || `Presign failed (${presignRes.status})`);
+		}
+		const ticket = (await presignRes.json()) as {
+			videoGuid: string;
+			libraryId: string;
+			endpoint: string;
+			authorizationSignature: string;
+			authorizationExpire: number;
 		};
-		xhr.send(file);
+
+		await new Promise<void>((resolve, reject) => {
+			const upload = new tus.Upload(file, {
+				endpoint: ticket.endpoint,
+				retryDelays: [0, 1000, 3000, 5000, 10_000],
+				chunkSize: 8 * 1024 * 1024,
+				headers: {
+					AuthorizationSignature: ticket.authorizationSignature,
+					AuthorizationExpire: String(ticket.authorizationExpire),
+					VideoId: ticket.videoGuid,
+					LibraryId: ticket.libraryId
+				},
+				metadata: {
+					filetype: file.type || 'application/octet-stream',
+					title: file.name
+				},
+				onError: (error) => reject(error),
+				onProgress: (bytesUploaded, bytesTotal) => {
+					progress = Math.round((bytesUploaded / bytesTotal) * 100);
+				},
+				onSuccess: () => resolve()
+			});
+			upload.start();
+		});
 	}
 </script>
 
@@ -75,6 +137,10 @@
 	{:else if status === 'error'}
 		<p class="err">{message}</p>
 	{/if}
+	<p class="meta hint">
+		Files under 4 MB stream through the server; larger files upload directly to Bunny via TUS
+		(resumable).
+	</p>
 </div>
 
 <style>
@@ -106,6 +172,10 @@
 		margin: 0;
 		color: var(--color-text-muted);
 		font-size: var(--fs-sm);
+	}
+	.meta.hint {
+		font-size: var(--fs-xs);
+		opacity: 0.8;
 	}
 	.meta code {
 		background: var(--color-surface-2);
