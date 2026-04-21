@@ -45,11 +45,31 @@ export function signEmbedUrl(args: SignArgs): string {
 	return `https://iframe.mediadelivery.net/embed/${args.libraryId}/${args.videoGuid}?${params.toString()}`;
 }
 
+/**
+ * Signs an embed URL with no authorization — callers are expected to have
+ * already decided the caller is allowed to see the video. Used by the
+ * lesson endpoint where `coursesService.assertLessonAccess` already
+ * covered the access check.
+ */
+async function signForAuthorizedCaller(
+	videoGuid: string,
+	opts: { ttlSeconds?: number } = {}
+): Promise<{ url: string; expiresAt: number }> {
+	const libraryId = await settingsService.require('BUNNY_STREAM_LIBRARY_ID');
+	const securityKey = await settingsService.require('BUNNY_STREAM_API_KEY');
+
+	const ttl = Math.min(Math.max(opts.ttlSeconds ?? DEFAULT_TTL_SECONDS, 30), 60 * 60 * 24);
+	const expires = Math.floor(Date.now() / 1000) + ttl;
+	const url = signEmbedUrl({ videoGuid, libraryId, securityKey, expires });
+	return { url, expiresAt: expires };
+}
+
 export const bunnyService = {
 	/**
 	 * Resolves a signed embed URL for a caller if they hold an active
-	 * subscription. Reads the library id + security key from settings so
-	 * admins can rotate keys without a redeploy.
+	 * membership. For course-enrolled-but-not-subscribed callers, use the
+	 * lesson-scoped endpoint which delegates to `signForPreAuthorizedCaller`
+	 * after its own access check.
 	 */
 	async signedEmbedUrlFor(
 		caller: Caller,
@@ -61,14 +81,19 @@ export const bunnyService = {
 		if (!entitled) {
 			throw new AuthzError('active membership required');
 		}
+		return signForAuthorizedCaller(videoGuid, opts);
+	},
 
-		const libraryId = await settingsService.require('BUNNY_STREAM_LIBRARY_ID');
-		const securityKey = await settingsService.require('BUNNY_STREAM_API_KEY');
-
-		const ttl = Math.min(Math.max(opts.ttlSeconds ?? DEFAULT_TTL_SECONDS, 30), 60 * 60 * 24);
-		const expires = Math.floor(Date.now() / 1000) + ttl;
-
-		const url = signEmbedUrl({ videoGuid, libraryId, securityKey, expires });
-		return { url, expiresAt: expires };
+	/**
+	 * For callers already authorized by a different path (e.g. single-course
+	 * purchase via courseEnrollment). The caller of this method is responsible
+	 * for the access check; this only signs.
+	 */
+	async signForPreAuthorizedCaller(
+		videoGuid: string,
+		opts: { ttlSeconds?: number } = {}
+	): Promise<{ url: string; expiresAt: number }> {
+		if (!VIDEO_GUID_RE.test(videoGuid)) throw new BunnyError('invalid video guid');
+		return signForAuthorizedCaller(videoGuid, opts);
 	}
 };
