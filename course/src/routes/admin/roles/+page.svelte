@@ -1,8 +1,16 @@
+<script lang="ts">
+	import { resolve } from '$app/paths';
+</script>
+
 <svelte:head><title>Roles — Admin</title></svelte:head>
 
 <header class="hd">
 	<h1>Roles</h1>
-	<p>What each staff role can do. Granted per-user under <a href="/admin/members">Members</a>.</p>
+	<p>
+		What each staff role can do. Granted per-user under <a href={resolve('/admin/members')}
+			>Members</a
+		>.
+	</p>
 </header>
 
 <div class="grid">

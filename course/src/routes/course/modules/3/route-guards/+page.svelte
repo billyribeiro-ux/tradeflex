@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { resolve } from '$app/paths';
 	import CoursePage from '$lib/components/course/CoursePage.svelte';
 	import Aside from '$lib/components/course/Aside.svelte';
 	import CodeBlock from '$lib/components/course/CodeBlock.svelte';
@@ -106,6 +107,8 @@ export const load = async ({ locals, url }) => {
 		</ul>
 
 		<h3>Next up</h3>
-		<p><a href="/course/modules/3/sessions-and-signout">3.4 · Sessions + sign-out →</a></p>
+		<p>
+			<a href={resolve('/course/modules/3/sessions-and-signout')}>3.4 · Sessions + sign-out →</a>
+		</p>
 	</section>
 </CoursePage>

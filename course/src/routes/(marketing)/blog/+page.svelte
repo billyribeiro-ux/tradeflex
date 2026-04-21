@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { resolve } from '$app/paths';
 	import { posts } from '$lib/blog/posts';
 </script>
 
@@ -11,9 +12,9 @@
 	</header>
 
 	<ul class="list">
-		{#each posts as p}
+		{#each posts as p (p.slug)}
 			<li>
-				<a href="/blog/{p.slug}">
+				<a href={resolve(`/blog/${p.slug}`)}>
 					<time datetime={p.publishedAt}>
 						{new Date(p.publishedAt).toLocaleDateString(undefined, {
 							year: 'numeric',
@@ -27,7 +28,7 @@
 						<span>{p.author}</span>
 						<span>·</span>
 						<span>{p.readingMinutes} min read</span>
-						{#each p.tags as tag}
+						{#each p.tags as tag (tag)}
 							<span class="tag">{tag}</span>
 						{/each}
 					</div>

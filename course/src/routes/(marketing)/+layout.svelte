@@ -1,6 +1,7 @@
 <script lang="ts">
 	import type { Snippet } from 'svelte';
 	import { page } from '$app/state';
+	import { resolve } from '$app/paths';
 	import Logo from '$lib/components/brand/Logo.svelte';
 	let { children }: { children: Snippet } = $props();
 
@@ -17,15 +18,15 @@
 
 <div class="mkt">
 	<header class="top">
-		<a class="brand" href="/"><Logo variant="lockup" /></a>
+		<a class="brand" href={resolve('/')}><Logo variant="lockup" /></a>
 		<nav>
-			{#each nav as item}
+			{#each nav as item (item.href)}
 				<a href={item.href} class:active={current.startsWith(item.href)}>{item.label}</a>
 			{/each}
 		</nav>
 		<div class="cta">
-			<a href="/login" class="btn-ghost">Sign in</a>
-			<a href="/register" class="btn-primary">Get started</a>
+			<a href={resolve('/login')} class="btn-ghost">Sign in</a>
+			<a href={resolve('/register')} class="btn-primary">Get started</a>
 		</div>
 	</header>
 
@@ -39,21 +40,21 @@
 			</div>
 			<div>
 				<h4>Product</h4>
-				<a href="/pricing">Pricing</a>
-				<a href="/alerts-preview">Alerts</a>
-				<a href="/courses">Courses</a>
+				<a href={resolve('/pricing')}>Pricing</a>
+				<a href={resolve('/alerts-preview')}>Alerts</a>
+				<a href={resolve('/courses')}>Courses</a>
 			</div>
 			<div>
 				<h4>Company</h4>
-				<a href="/about">About</a>
-				<a href="/blog">Blog</a>
-				<a href="/contact">Contact</a>
+				<a href={resolve('/about')}>About</a>
+				<a href={resolve('/blog')}>Blog</a>
+				<a href={resolve('/contact')}>Contact</a>
 			</div>
 			<div>
 				<h4>Legal</h4>
-				<a href="/legal/terms">Terms</a>
-				<a href="/legal/privacy">Privacy</a>
-				<a href="/legal/disclaimer">Risk disclaimer</a>
+				<a href={resolve('/legal/terms')}>Terms</a>
+				<a href={resolve('/legal/privacy')}>Privacy</a>
+				<a href={resolve('/legal/disclaimer')}>Risk disclaimer</a>
 			</div>
 		</div>
 		<div class="small">© {new Date().getFullYear()} Trade Flex. Trading involves risk.</div>

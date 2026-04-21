@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { enhance } from '$app/forms';
+	import { resolve } from '$app/paths';
 	import type { ActionData } from './$types';
 
 	let { form }: { form: ActionData } = $props();
@@ -54,7 +55,7 @@
 						<strong>{form.created ? "Thanks — you're on the list." : 'Welcome back.'}</strong>
 					</p>
 					<p>Your download is ready.</p>
-					<a class="btn-primary" href={form.downloadUrl}>Download PDF →</a>
+					<a class="btn-primary" href={form.downloadUrl} rel="external">Download PDF →</a>
 				</div>
 			{:else}
 				<form
@@ -97,8 +98,8 @@
 						{submitting ? 'Sending…' : 'Get the ebook'}
 					</button>
 					<p class="note">
-						By signing up you agree to our <a href="/legal/privacy">privacy policy</a>. We don't
-						share your email.
+						By signing up you agree to our <a href={resolve('/legal/privacy')}>privacy policy</a>.
+						We don't share your email.
 					</p>
 				</form>
 			{/if}

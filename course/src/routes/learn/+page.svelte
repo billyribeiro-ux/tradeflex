@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { resolve } from '$app/paths';
 	import type { PageData } from './$types';
 	let { data }: { data: PageData } = $props();
 </script>
@@ -11,26 +12,26 @@
 		<p class="status">You have full access through your Trade Flex membership.</p>
 	{:else if data.signedIn}
 		<p class="status muted">
-			Your individual enrollments are shown below. <a href="/pricing">Upgrade to a membership</a> for
-			full access.
+			Your individual enrollments are shown below.
+			<a href={resolve('/pricing')}>Upgrade to a membership</a> for full access.
 		</p>
 	{:else}
-		<p class="status muted"><a href="/login">Sign in</a> to access your courses.</p>
+		<p class="status muted"><a href={resolve('/login')}>Sign in</a> to access your courses.</p>
 	{/if}
 </header>
 
 <div class="grid">
-	{#each data.courses as c}
+	{#each data.courses as c (c.slug)}
 		<article class="card" class:locked={!c.hasAccess}>
 			<h2>{c.title}</h2>
 			<p class="tagline">{c.tagline}</p>
 			{#if c.summary}<p class="summary">{c.summary}</p>{/if}
 			<footer>
 				{#if c.hasAccess}
-					<a class="btn primary" href="/learn/{c.slug}">Start lesson</a>
+					<a class="btn primary" href={resolve(`/learn/${c.slug}`)}>Start lesson</a>
 				{:else}
 					<span class="price">${(c.priceCents / 100).toFixed(0)}</span>
-					<a class="btn" href="/learn/{c.slug}">Preview curriculum</a>
+					<a class="btn" href={resolve(`/learn/${c.slug}`)}>Preview curriculum</a>
 				{/if}
 			</footer>
 		</article>

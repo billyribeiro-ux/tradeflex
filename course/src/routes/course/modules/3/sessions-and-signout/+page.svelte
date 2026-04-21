@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { resolve } from '$app/paths';
 	import CoursePage from '$lib/components/course/CoursePage.svelte';
 	import Aside from '$lib/components/course/Aside.svelte';
 	import CodeBlock from '$lib/components/course/CodeBlock.svelte';
@@ -107,7 +108,7 @@ export const actions = {
 
 		<h3>Next up</h3>
 		<p>
-			<a href="/course/modules/4/overview">4.1 · Contacts CRUD overview →</a>
+			<a href={resolve('/course/modules/4/overview')}>4.1 · Contacts CRUD overview →</a>
 			<em>(arrives next turn)</em>
 		</p>
 	</section>

@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { enhance } from '$app/forms';
+	import { resolve } from '$app/paths';
 	import type { ActionData, PageData } from './$types';
 	import LessonVideoUpload from '$lib/components/admin/LessonVideoUpload.svelte';
 
@@ -13,7 +14,7 @@
 
 <header class="hd">
 	<div>
-		<a class="back" href="/admin/courses">← All courses</a>
+		<a class="back" href={resolve('/admin/courses')}>← All courses</a>
 		<h1>{data.course.title}</h1>
 	</div>
 	<div class="status-row">
@@ -119,7 +120,7 @@
 			</tr>
 		</thead>
 		<tbody>
-			{#each data.lessons as l}
+			{#each data.lessons as l (l.id)}
 				{@const editing = editingLessonId === l.id}
 				<tr class:editing>
 					<td>{l.position}</td>
@@ -204,7 +205,7 @@
 			</tr>
 		</thead>
 		<tbody>
-			{#each data.enrollments as e}
+			{#each data.enrollments as e (e.id)}
 				<tr>
 					<td>{e.email ?? e.userId}</td>
 					<td>{e.source}</td>

@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { resolve } from '$app/paths';
 	import CoursePage from '$lib/components/course/CoursePage.svelte';
 	import Aside from '$lib/components/course/Aside.svelte';
 </script>
@@ -67,6 +68,6 @@
 			</li>
 		</ul>
 		<h3>Next up</h3>
-		<p><a href="/course/modules/4/schema-and-service">4.2 · Schema + service →</a></p>
+		<p><a href={resolve('/course/modules/4/schema-and-service')}>4.2 · Schema + service →</a></p>
 	</section>
 </CoursePage>

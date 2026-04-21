@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { resolve } from '$app/paths';
 	import type { PageData } from './$types';
 	let { data }: { data: PageData } = $props();
 
@@ -12,7 +13,7 @@
 </svelte:head>
 
 <article class="wrap">
-	<a class="back" href="/blog">← Back to blog</a>
+	<a class="back" href={resolve('/blog')}>← Back to blog</a>
 
 	<header>
 		<time datetime={p.publishedAt}>
@@ -45,7 +46,7 @@
 	<footer>
 		<p class="cta">
 			Enjoyed this? Trade Flex is where we put these ideas into practice.
-			<a href="/pricing">See the membership →</a>
+			<a href={resolve('/pricing')}>See the membership →</a>
 		</p>
 	</footer>
 </article>

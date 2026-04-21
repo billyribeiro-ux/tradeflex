@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { resolve } from '$app/paths';
 	import Logo from '$lib/components/brand/Logo.svelte';
 	import Sidebar from '$lib/components/course/Sidebar.svelte';
 	import ThemeToggle from '$lib/components/course/ThemeToggle.svelte';
@@ -21,7 +22,7 @@
 			>
 				<span aria-hidden="true">☰</span>
 			</button>
-			<a href="/course" class="brand" aria-label="Trade Flex course home">
+			<a href={resolve('/course')} class="brand" aria-label="Trade Flex course home">
 				<Logo variant="lockup" size={24} />
 			</a>
 			<span class="tag">Course</span>

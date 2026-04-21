@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
+	import { resolve } from '$app/paths';
 
 	interface Props {
 		videoGuid?: string;
@@ -86,12 +87,12 @@
 		<div class="panel">
 			<strong>Member-only video.</strong>
 			<span>This lesson unlocks with an active Trade Flex membership.</span>
-			<a href="/pricing">See plans</a>
+			<a href={resolve('/pricing')}>See plans</a>
 		</div>
 	{:else if state.kind === 'blocked' && state.status === 401}
 		<div class="panel">
 			<strong>Sign in required.</strong>
-			<a href="/login">Log in</a>
+			<a href={resolve('/login')}>Log in</a>
 		</div>
 	{:else if state.kind === 'blocked' && state.status === 503}
 		<div class="panel">

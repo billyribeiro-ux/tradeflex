@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { resolve } from '$app/paths';
 	import CoursePage from '$lib/components/course/CoursePage.svelte';
 	import CodeBlock from '$lib/components/course/CodeBlock.svelte';
 	import Aside from '$lib/components/course/Aside.svelte';
@@ -113,6 +114,6 @@
 			<li>The public endpoint is thin: read body, call service, return JSON.</li>
 		</ul>
 		<h3>Next up</h3>
-		<p><a href="/course/modules/4/admin-inbox">4.3 · Admin inbox + unsubscribe →</a></p>
+		<p><a href={resolve('/course/modules/4/admin-inbox')}>4.3 · Admin inbox + unsubscribe →</a></p>
 	</section>
 </CoursePage>

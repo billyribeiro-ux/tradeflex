@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { resolve } from '$app/paths';
 	import CoursePage from '$lib/components/course/CoursePage.svelte';
 	import Aside from '$lib/components/course/Aside.svelte';
 	import CodeBlock from '$lib/components/course/CodeBlock.svelte';
@@ -233,7 +234,7 @@ export const load = async ({ locals, url }) => {
 
 		<h3>Next up</h3>
 		<p>
-			<a href="/course/modules/2/remote-functions">2.5 · Remote functions + actions →</a>
+			<a href={resolve('/course/modules/2/remote-functions')}>2.5 · Remote functions + actions →</a>
 		</p>
 	</section>
 </CoursePage>

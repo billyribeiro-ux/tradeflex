@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { enhance } from '$app/forms';
+	import { resolve } from '$app/paths';
 	import type { PageData, ActionData } from './$types';
 
 	let { data, form }: { data: PageData; form: ActionData } = $props();
@@ -82,7 +83,7 @@
 		<ul>
 			{#each data.tickets as t (t.id)}
 				<li>
-					<a href={`/account/support/${t.id}`}>
+					<a href={resolve(`/account/support/${t.id}`)}>
 						<div class="row-subj">{t.subject}</div>
 						<div class="row-meta">
 							<span class="pill status-{t.status}">{t.status.replace('_', ' ')}</span>

@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { resolve } from '$app/paths';
 	import type { PageData } from './$types';
 	let { data }: { data: PageData } = $props();
 
@@ -66,7 +67,7 @@
 </section>
 
 <section class="grid">
-	{#each data.plans as plan}
+	{#each data.plans as plan (plan.id)}
 		{@const p = priceOf(plan)}
 		{#if p}
 			<div class="plan" class:featured={plan.id === 'yearly' && billing === 'year'}>
@@ -87,12 +88,14 @@
 						<input type="hidden" name="priceId" value={plan.cta.priceId} />
 						<button type="submit" class="btn-primary">{plan.cta.label}</button>
 					</form>
-					<a class="btn-alt" href="/checkout?add={plan.cta.priceId}"> Use custom checkout → </a>
+					<a class="btn-alt" href={resolve(`/checkout?add=${plan.cta.priceId}`)}>
+						Use custom checkout →
+					</a>
 				{:else}
 					<a class="btn-primary" href={plan.cta.href}>{plan.cta.label}</a>
 				{/if}
 				<ul>
-					{#each plan.features as f}
+					{#each plan.features as f (f)}
 						<li>{f}</li>
 					{/each}
 				</ul>
@@ -104,7 +107,7 @@
 <section class="faq">
 	<h2>Questions</h2>
 	<div class="faq-grid">
-		{#each faqs as faq}
+		{#each faqs as faq (faq.q)}
 			<details>
 				<summary>{faq.q}</summary>
 				<p>{faq.a}</p>

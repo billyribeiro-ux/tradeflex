@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { resolve } from '$app/paths';
 	import CoursePage from '$lib/components/course/CoursePage.svelte';
 	import Aside from '$lib/components/course/Aside.svelte';
 	import CodeBlock from '$lib/components/course/CodeBlock.svelte';
@@ -178,7 +179,9 @@
 
 		<h3>Next up</h3>
 		<p>
-			<a href="/course/modules/1/profiles-and-authorization">1.5 · Profiles + authorization →</a>
+			<a href={resolve('/course/modules/1/profiles-and-authorization')}
+				>1.5 · Profiles + authorization →</a
+			>
 		</p>
 	</section>
 </CoursePage>

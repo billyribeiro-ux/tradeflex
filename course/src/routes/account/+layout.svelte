@@ -1,16 +1,17 @@
 <script lang="ts">
 	import Logo from '$lib/components/brand/Logo.svelte';
+	import { resolve } from '$app/paths';
 	let { children } = $props();
 </script>
 
 <div class="shell">
 	<header class="top">
-		<a class="brand" href="/"><Logo /></a>
+		<a class="brand" href={resolve('/')}><Logo /></a>
 		<nav>
-			<a href="/alerts">Alerts</a>
-			<a href="/account" class="active">Account</a>
+			<a href={resolve('/alerts')}>Alerts</a>
+			<a href={resolve('/account')} class="active">Account</a>
 			<a href="/account/billing">Billing</a>
-			<a href="/course">Build log</a>
+			<a href={resolve('/course')}>Build log</a>
 		</nav>
 	</header>
 	<main class="content">

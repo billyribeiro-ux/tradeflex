@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { resolve } from '$app/paths';
 	import CoursePage from '$lib/components/course/CoursePage.svelte';
 	import Aside from '$lib/components/course/Aside.svelte';
 	import FileTree from '$lib/components/course/FileTree.svelte';
@@ -122,7 +123,7 @@
 
 		<h3>Next up</h3>
 		<p>
-			<a href="/course/modules/2/typed-env">2.2 · Typed env with Zod →</a>
+			<a href={resolve('/course/modules/2/typed-env')}>2.2 · Typed env with Zod →</a>
 		</p>
 	</section>
 </CoursePage>

@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { resolve } from '$app/paths';
+
 	const features = [
 		{
 			title: 'Real-time alerts',
@@ -54,11 +56,11 @@
 			subscription.
 		</p>
 		<div class="cta-row">
-			<a href="/register" class="btn-primary-lg">Start for $49/mo</a>
-			<a href="/pricing" class="btn-ghost-lg">See pricing →</a>
+			<a href={resolve('/register')} class="btn-primary-lg">Start for $49/mo</a>
+			<a href={resolve('/pricing')} class="btn-ghost-lg">See pricing →</a>
 		</div>
 		<p class="sub">
-			Cancel anytime · 14-day trial option · <a href="/courses">See course library</a>
+			Cancel anytime · 14-day trial option · <a href={resolve('/courses')}>See course library</a>
 		</p>
 	</div>
 	<div class="hero-visual" aria-hidden="true">
@@ -85,7 +87,7 @@
 		</p>
 	</div>
 	<div class="feature-grid">
-		{#each features as f}
+		{#each features as f (f.title)}
 			<div class="feature">
 				<h3>{f.title}</h3>
 				<p>{f.body}</p>
@@ -99,7 +101,7 @@
 		<h2>What members say</h2>
 	</div>
 	<div class="t-grid">
-		{#each testimonials as t}
+		{#each testimonials as t (t.author)}
 			<figure class="t">
 				<blockquote>"{t.quote}"</blockquote>
 				<figcaption>
@@ -132,7 +134,7 @@
 <section class="final-cta">
 	<h2>Start today. See the next alert live.</h2>
 	<p>$49/month, $399/year (save $189), cancel anytime.</p>
-	<a href="/register" class="btn-primary-lg">Create account →</a>
+	<a href={resolve('/register')} class="btn-primary-lg">Create account →</a>
 </section>
 
 <style>

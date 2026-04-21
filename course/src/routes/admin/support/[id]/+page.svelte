@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { enhance } from '$app/forms';
+	import { resolve } from '$app/paths';
 	import type { PageData, ActionData } from './$types';
 
 	let { data, form }: { data: PageData; form: ActionData } = $props();
@@ -22,7 +23,7 @@
 
 <svelte:head><title>{data.ticket.subject} — Support</title></svelte:head>
 
-<div class="breadcrumb"><a href="/admin/support">← All tickets</a></div>
+<div class="breadcrumb"><a href={resolve('/admin/support')}>← All tickets</a></div>
 
 <header class="hd">
 	<div>

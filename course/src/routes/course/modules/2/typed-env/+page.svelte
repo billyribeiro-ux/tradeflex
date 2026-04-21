@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { resolve } from '$app/paths';
 	import CoursePage from '$lib/components/course/CoursePage.svelte';
 	import Aside from '$lib/components/course/Aside.svelte';
 	import CodeBlock from '$lib/components/course/CodeBlock.svelte';
@@ -188,7 +189,9 @@ const client = postgres(process.env.DATABASE_URL!);  // ← the bang hides a tim
 
 		<h3>Next up</h3>
 		<p>
-			<a href="/course/modules/2/drizzle-service-layer">2.3 · Drizzle client + service layer →</a>
+			<a href={resolve('/course/modules/2/drizzle-service-layer')}
+				>2.3 · Drizzle client + service layer →</a
+			>
 		</p>
 	</section>
 </CoursePage>

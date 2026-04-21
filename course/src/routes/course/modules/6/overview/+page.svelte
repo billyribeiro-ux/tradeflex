@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { resolve } from '$app/paths';
 	import CoursePage from '$lib/components/course/CoursePage.svelte';
 	import CodeBlock from '$lib/components/course/CodeBlock.svelte';
 	import Aside from '$lib/components/course/Aside.svelte';
@@ -72,9 +73,9 @@
 			>
 			with bracketed keys:
 		</p>
-		<CodeBlock lang="text">
-			{`line_items[0][price]=price_123&line_items[0][quantity]=1&mode=subscription`}
-		</CodeBlock>
+		<CodeBlock lang="text"
+			>line_items[0][price]=price_123&line_items[0][quantity]=1&mode=subscription</CodeBlock
+		>
 		<p>
 			Our <code>formEncode</code> recurses over objects + arrays and emits the bracketed form. It is
 			the only "clever" code in the client; everything else is straight <code>fetch</code>.
@@ -91,6 +92,8 @@
 			</li>
 		</ul>
 		<h3>Next up</h3>
-		<p><a href="/course/modules/6/checkout-and-webhook">6.2 · Checkout + webhook →</a></p>
+		<p>
+			<a href={resolve('/course/modules/6/checkout-and-webhook')}>6.2 · Checkout + webhook →</a>
+		</p>
 	</section>
 </CoursePage>

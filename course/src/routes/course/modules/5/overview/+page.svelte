@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { resolve } from '$app/paths';
 	import CoursePage from '$lib/components/course/CoursePage.svelte';
 	import Aside from '$lib/components/course/Aside.svelte';
 </script>
@@ -102,7 +103,7 @@
 			<li>Webhooks are idempotent on <code>event.id</code>. Store then process.</li>
 		</ul>
 		<h3>Next up</h3>
-		<p><a href="/course/modules/5/dashboard-and-cli">5.2 · Dashboard + CLI →</a></p>
+		<p><a href={resolve('/course/modules/5/dashboard-and-cli')}>5.2 · Dashboard + CLI →</a></p>
 	</section>
 </CoursePage>
 

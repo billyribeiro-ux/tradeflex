@@ -74,7 +74,7 @@
 			<fieldset class="field">
 				<legend>Enabled for roles</legend>
 				<div class="role-grid">
-					{#each ROLES as role}
+					{#each ROLES as role (role)}
 						<label class="role">
 							<input type="checkbox" name="enabledForRoles" value={role} />
 							<span>{role}</span>
@@ -115,7 +115,7 @@
 						<fieldset class="field">
 							<legend>Enabled for roles</legend>
 							<div class="role-grid">
-								{#each ROLES as role}
+								{#each ROLES as role (role)}
 									<label class="role">
 										<input
 											type="checkbox"

@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { resolve } from '$app/paths';
 	import CoursePage from '$lib/components/course/CoursePage.svelte';
 	import CodeBlock from '$lib/components/course/CodeBlock.svelte';
 	import Aside from '$lib/components/course/Aside.svelte';
@@ -101,8 +102,8 @@ stripe trigger invoice.paid
 stripe trigger customer.subscription.deleted`}
 		</CodeBlock>
 		<p>
-			Refresh <a href="/admin/payments">/admin/payments</a>. Three rows, green verification, event
-			types matching what you triggered.
+			Refresh <a href={resolve('/admin/payments')}>/admin/payments</a>. Three rows, green
+			verification, event types matching what you triggered.
 		</p>
 	</section>
 

@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { enhance } from '$app/forms';
+	import { resolve } from '$app/paths';
 	import type { ActionData, PageData } from './$types';
 	import { toast } from '$lib/toast/store.svelte';
 
@@ -125,7 +126,7 @@
 		<fieldset class="field">
 			<legend>Theme</legend>
 			<div class="radio-row">
-				{#each ['system', 'light', 'dark'] as t}
+				{#each ['system', 'light', 'dark'] as t (t)}
 					<label class="radio">
 						<input type="radio" name="theme" value={t} checked={(p?.theme ?? 'system') === t} />
 						<span>{t}</span>
@@ -178,7 +179,7 @@
 				<button class="btn-primary" type="submit">Open billing portal</button>
 			</form>
 		{:else}
-			<a class="btn-primary" href="/pricing">View plans</a>
+			<a class="btn-primary" href={resolve('/pricing')}>View plans</a>
 		{/if}
 	</div>
 </section>
@@ -205,8 +206,8 @@
 	{/if}
 
 	<div class="privacy-row">
-		<a class="btn-ghost" href="/account/support">Support tickets</a>
-		<a class="btn-ghost" href="/account/export" download>Export my data (JSON)</a>
+		<a class="btn-ghost" href={resolve('/account/support')}>Support tickets</a>
+		<a class="btn-ghost" href={resolve('/account/export')} download>Export my data (JSON)</a>
 
 		{#if !data.pendingDeletion}
 			{#if confirmingDeletion}

@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { resolve } from '$app/paths';
 	import Aside from '$lib/components/course/Aside.svelte';
 	import Badge from '$lib/components/course/Badge.svelte';
 	import CodeBlock from '$lib/components/course/CodeBlock.svelte';
@@ -377,8 +378,8 @@
 
 			<h3>Next up</h3>
 			<p>
-				<a href="/course">Back to the module overview →</a> — Module 1 begins with the project setup page:
-				we turn the existing scaffold into the Trade Flex repo and wire it to Neon.
+				<a href={resolve('/course')}>Back to the module overview →</a> — Module 1 begins with the project
+				setup page: we turn the existing scaffold into the Trade Flex repo and wire it to Neon.
 			</p>
 		</section>
 

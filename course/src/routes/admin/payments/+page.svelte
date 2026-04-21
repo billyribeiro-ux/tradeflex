@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { resolve } from '$app/paths';
 	import type { PageData } from './$types';
 
 	let { data }: { data: PageData } = $props();
@@ -18,7 +19,7 @@
 {#if !data.stripeConfigured}
 	<div class="callout warn">
 		<strong>Stripe key missing.</strong> Add <code>STRIPE_SECRET_KEY</code> in
-		<a href="/admin/settings/integrations">Integrations</a> before checkouts will work.
+		<a href={resolve('/admin/settings/integrations')}>Integrations</a> before checkouts will work.
 	</div>
 {:else if !data.webhookConfigured}
 	<div class="callout warn">
@@ -55,8 +56,7 @@
 	{#if data.events.length === 0}
 		<div class="empty">
 			No webhook deliveries yet. Run <code
-				>stripe listen --forward-to
-				{' '}your-domain/api/stripe/webhook</code
+				>stripe listen --forward-to your-domain/api/stripe/webhook</code
 			>
 			and trigger an event with
 			<code>stripe trigger checkout.session.completed</code>.
@@ -65,8 +65,10 @@
 </div>
 
 <nav class="pager">
-	{#if data.page > 1}<a href="?page={data.page - 1}">← prev</a>{/if}
-	{#if data.events.length === data.pageSize}<a href="?page={data.page + 1}">next →</a>{/if}
+	{#if data.page > 1}<a href={resolve(`/admin/payments?page=${data.page - 1}`)}>← prev</a>{/if}
+	{#if data.events.length === data.pageSize}
+		<a href={resolve(`/admin/payments?page=${data.page + 1}`)}>next →</a>
+	{/if}
 </nav>
 
 <style>

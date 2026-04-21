@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { resolve } from '$app/paths';
 	import type { PageData } from './$types';
 
 	let { data }: { data: PageData } = $props();
@@ -32,7 +33,9 @@
 		{#each filters as f (f.key)}
 			<a
 				class:active={data.filter === f.key}
-				href={f.key === 'all' ? '/admin/support' : `/admin/support?status=${f.key}`}
+				href={f.key === 'all'
+					? resolve('/admin/support')
+					: resolve(`/admin/support?status=${f.key}`)}
 			>
 				{f.label}
 			</a>
@@ -50,7 +53,7 @@
 		<div>Updated</div>
 	</div>
 	{#each data.tickets as t (t.id)}
-		<a class="row" href={`/admin/support/${t.id}`}>
+		<a class="row" href={resolve(`/admin/support/${t.id}`)}>
 			<div class="subj">{t.subject}</div>
 			<div class="muted">{t.contactEmail}</div>
 			<div><span class="pill">{t.category}</span></div>

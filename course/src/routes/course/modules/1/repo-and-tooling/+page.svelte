@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { resolve } from '$app/paths';
 	import CoursePage from '$lib/components/course/CoursePage.svelte';
 	import Aside from '$lib/components/course/Aside.svelte';
 	import CodeBlock from '$lib/components/course/CodeBlock.svelte';
@@ -170,7 +171,7 @@
 
 		<h3>Next up</h3>
 		<p>
-			<a href="/course/modules/1/neon-dev-branch">1.3 · Neon dev branch →</a>
+			<a href={resolve('/course/modules/1/neon-dev-branch')}>1.3 · Neon dev branch →</a>
 		</p>
 	</section>
 </CoursePage>

@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { resolve } from '$app/paths';
 	import BunnyPlayer from '$lib/components/video/BunnyPlayer.svelte';
 	import type { PageData } from './$types';
 
@@ -9,7 +10,7 @@
 
 <div class="shell">
 	<aside class="side">
-		<a class="back" href="/learn/{data.course.slug}">← {data.course.title}</a>
+		<a class="back" href={resolve(`/learn/${data.course.slug}`)}>← {data.course.title}</a>
 		<div class="lesson-head">
 			<span class="pos">Lesson {data.lesson.position + 1}</span>
 			<h1>{data.lesson.title}</h1>
@@ -24,7 +25,7 @@
 			<div class="gate">
 				<h2>This lesson is locked</h2>
 				<p>Unlock all lessons with a Trade Flex membership.</p>
-				<a class="btn primary" href="/pricing">See plans</a>
+				<a class="btn primary" href={resolve('/pricing')}>See plans</a>
 			</div>
 		{:else if data.lesson.bunnyVideoGuid}
 			<BunnyPlayer
@@ -40,7 +41,7 @@
 
 		<nav class="pager">
 			{#if data.prev}
-				<a href="/learn/{data.course.slug}/{data.prev.slug}">
+				<a href={resolve(`/learn/${data.course.slug}/${data.prev.slug}`)}>
 					<span class="label">Previous</span>
 					<span class="title">{data.prev.title}</span>
 				</a>
@@ -48,7 +49,7 @@
 				<span></span>
 			{/if}
 			{#if data.next}
-				<a class="next" href="/learn/{data.course.slug}/{data.next.slug}">
+				<a class="next" href={resolve(`/learn/${data.course.slug}/${data.next.slug}`)}>
 					<span class="label">Next</span>
 					<span class="title">{data.next.title}</span>
 				</a>
