@@ -1,0 +1,64 @@
+{
+	"$schema": "https://schema.tauri.app/config/2",
+	"productName": "Trade Flex",
+	"version": "0.1.0",
+	"identifier": "app.tradeflex.desktop",
+	"build": {
+		"beforeDevCommand": "",
+		"beforeBuildCommand": "",
+		"devUrl": "http://localhost:5173",
+		"frontendDist": "../dist-shim"
+	},
+	"app": {
+		"withGlobalTauri": false,
+		"windows": [
+			{
+				"label": "main",
+				"title": "Trade Flex",
+				"width": 1280,
+				"height": 820,
+				"minWidth": 960,
+				"minHeight": 640,
+				"resizable": true,
+				"fullscreen": false,
+				"titleBarStyle": "Overlay",
+				"hiddenTitle": true,
+				"transparent": false,
+				"url": "https://app.tradeflex.dev"
+			}
+		],
+		"security": {
+			"csp": null
+		},
+		"macOSPrivateApi": true
+	},
+	"bundle": {
+		"active": true,
+		"targets": ["dmg", "app"],
+		"icon": ["icons/32x32.png", "icons/128x128.png", "icons/128x128@2x.png", "icons/icon.png"],
+		"category": "Finance",
+		"shortDescription": "Trade Flex — real-time trade alerts + courses",
+		"longDescription": "Native macOS companion for Trade Flex. Receive alerts as desktop notifications, deep-link to alerts and lessons, and keep a persistent member session outside the browser.",
+		"macOS": {
+			"minimumSystemVersion": "11.0",
+			"signingIdentity": null,
+			"entitlements": null,
+			"hardenedRuntime": true
+		}
+	},
+	"plugins": {
+		"deep-link": {
+			"mobile": [],
+			"desktop": {
+				"schemes": ["tradeflex"]
+			}
+		},
+		"updater": {
+			"active": true,
+			"endpoints": [
+				"https://app.tradeflex.dev/api/desktop/updates/{{target}}/{{current_version}}"
+			],
+			"pubkey": "REPLACE_WITH_PRODUCTION_PUBKEY"
+		}
+	}
+}
