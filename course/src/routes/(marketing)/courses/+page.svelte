@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { resolve } from '$app/paths';
+
 	const courses = [
 		{
 			slug: 'price-action-simplified',
@@ -32,7 +34,7 @@
 </section>
 
 <section class="grid">
-	{#each courses as c}
+	{#each courses as c (c.slug)}
 		<article class="card">
 			<h2>{c.title}</h2>
 			<p class="tag">{c.tagline}</p>
@@ -51,8 +53,9 @@
 				</div>
 			</dl>
 			<div class="cta">
-				<a class="btn-primary" href="/register">Subscribe — $49/mo</a>
-				<a class="btn-ghost" href="/checkout/course/{c.slug}">Buy course · ${c.price}</a>
+				<a class="btn-primary" href={resolve('/register')}>Subscribe — $49/mo</a>
+				<a class="btn-ghost" href={resolve(`/checkout/course/${c.slug}`)}>Buy course · ${c.price}</a
+				>
 			</div>
 		</article>
 	{/each}

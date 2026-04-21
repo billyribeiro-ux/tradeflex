@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { enhance } from '$app/forms';
+	import { resolve } from '$app/paths';
 	import Avatar from '$lib/components/common/Avatar.svelte';
 	import type { PageData } from './$types';
 
@@ -30,7 +31,7 @@
 	<form class="search" method="get">
 		<input name="q" type="search" placeholder="Search by email…" value={data.q} />
 		<button type="submit" class="btn-primary">Search</button>
-		{#if data.q}<a class="clear" href="/admin/members">Clear</a>{/if}
+		{#if data.q}<a class="clear" href={resolve('/admin/members')}>Clear</a>{/if}
 	</form>
 </header>
 
@@ -57,7 +58,7 @@
 			</div>
 			<div class="roles">
 				{#if m.roles.length}
-					{#each m.roles as r}
+					{#each m.roles as r (r)}
 						<form method="POST" action="?/revoke" use:enhance class="pill pill-role">
 							<input type="hidden" name="userId" value={m.userId} />
 							<input type="hidden" name="role" value={r} />
@@ -75,7 +76,7 @@
 					<form method="POST" action="?/grant" use:enhance class="grant">
 						<input type="hidden" name="userId" value={m.userId} />
 						<select name="role" bind:value={chosenRole}>
-							{#each allRoles as r}
+							{#each allRoles as r (r)}
 								<option value={r}>{r}</option>
 							{/each}
 						</select>
@@ -103,10 +104,10 @@
 
 <nav class="pager">
 	{#if data.page > 1}
-		<a href="?page={data.page - 1}">← prev</a>
+		<a href={resolve(`/admin/members?page=${data.page - 1}`)}>← prev</a>
 	{/if}
 	{#if data.members.length === data.pageSize}
-		<a href="?page={data.page + 1}">next →</a>
+		<a href={resolve(`/admin/members?page=${data.page + 1}`)}>next →</a>
 	{/if}
 </nav>
 

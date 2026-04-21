@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { resolve } from '$app/paths';
 	import type { PageData } from './$types';
 	let { data }: { data: PageData } = $props();
 
@@ -15,8 +16,8 @@
 			the charge as succeeded (usually within seconds).
 		</p>
 		<div class="actions">
-			<a class="primary" href="/learn">Start learning</a>
-			<a class="ghost" href="/account">View account</a>
+			<a class="primary" href={resolve('/learn')}>Start learning</a>
+			<a class="ghost" href={resolve('/account')}>View account</a>
 		</div>
 	{:else}
 		<h1>Payment status: {data.redirectStatus}</h1>
@@ -25,7 +26,7 @@
 			return to the checkout to try again.
 		</p>
 		<div class="actions">
-			<a class="primary" href="/checkout">Back to checkout</a>
+			<a class="primary" href={resolve('/checkout')}>Back to checkout</a>
 		</div>
 	{/if}
 	{#if data.paymentIntentId}

@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import { goto } from '$app/navigation';
+	import { resolve } from '$app/paths';
 	import { coursePages } from '$lib/course/manifest';
 
 	let open = $state(false);
@@ -50,7 +51,7 @@
 	function pick(href: string) {
 		open = false;
 		query = '';
-		goto(href);
+		goto(resolve(href));
 	}
 
 	function highlight(text: string, q: string): Array<{ t: string; hit: boolean }> {

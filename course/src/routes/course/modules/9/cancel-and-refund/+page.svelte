@@ -61,8 +61,8 @@
 		<p>
 			Stripe will deliver <code>customer.subscription.updated</code> with
 			<code>cancel_at_period_end: true</code>; your webhook handler writes that to the subscription
-			row, and the <code>/account</code> page shows "ends on {'{'}date{'}'}" with an "Undo
-			cancellation" button that flips the flag back.
+			row, and the <code>/account</code> page shows "ends on &#123;date&#125;" with an "Undo cancellation"
+			button that flips the flag back.
 		</p>
 	</section>
 
@@ -120,7 +120,7 @@
 			<code>canceled</code> but <code>currentPeriodEnd</code> is in the future, a "cancel at period
 			end" user still has access until that date. Immediate cancel with refund flips the
 			subscription to <code>canceled</code> and rolls <code>currentPeriodEnd</code> to now, and
-			entitlement goes to <code>{'{'}ok: false{'}'}</code>.
+			entitlement goes to <code>&#123;ok: false&#125;</code>.
 		</p>
 		<CodeBlock title="src/lib/server/billing/entitlement.ts (excerpt)" lang="ts">
 			{`if (sub.status === 'canceled') {

@@ -1,6 +1,7 @@
 <script lang="ts">
 	import type { Snippet } from 'svelte';
 	import { page } from '$app/state';
+	import { resolve } from '$app/paths';
 	import Logo from '$lib/components/brand/Logo.svelte';
 	import NotificationBell from '$lib/components/admin/NotificationBell.svelte';
 	import type { LayoutData } from './$types';
@@ -59,20 +60,20 @@
 
 <div class="admin-shell">
 	<aside class="side">
-		<a class="brand" href="/admin"><Logo /></a>
+		<a class="brand" href={resolve('/admin')}><Logo /></a>
 		<div class="who">
 			<div class="email">{data.email}</div>
 			<div class="roles">{data.caller.roles.join(', ') || 'no roles'}</div>
 		</div>
 
-		{#each navGroups as group}
+		{#each navGroups as group (group.label)}
 			<div class="group">
 				<div class="group-label">{group.label}</div>
-				{#each group.items as item}
+				{#each group.items as item (item.href)}
 					<a
 						class="nav-item"
 						class:active={current === item.href || current.startsWith(item.href + '/')}
-						href={item.href}
+						href={resolve(item.href)}
 					>
 						{item.label}
 					</a>

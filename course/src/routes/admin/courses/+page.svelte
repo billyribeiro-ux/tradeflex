@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { enhance } from '$app/forms';
+	import { resolve } from '$app/paths';
 	import type { ActionData, PageData } from './$types';
 
 	let { data, form }: { data: PageData; form: ActionData } = $props();
@@ -59,7 +60,7 @@
 </section>
 
 <div class="grid">
-	{#each data.courses as c}
+	{#each data.courses as c (c.id)}
 		<article class="card">
 			<div class="top">
 				<h2>{c.title}</h2>
@@ -81,7 +82,7 @@
 				</div>
 			</dl>
 			<div class="actions">
-				<a class="btn" href="/admin/courses/{c.id}">Open</a>
+				<a class="btn" href={resolve(`/admin/courses/${c.id}`)}>Open</a>
 			</div>
 		</article>
 	{/each}

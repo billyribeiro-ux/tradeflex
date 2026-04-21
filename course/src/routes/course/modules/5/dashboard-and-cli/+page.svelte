@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { resolve } from '$app/paths';
 	import CoursePage from '$lib/components/course/CoursePage.svelte';
 	import CodeBlock from '$lib/components/course/CodeBlock.svelte';
 	import Aside from '$lib/components/course/Aside.svelte';
@@ -28,7 +29,7 @@
 			</li>
 			<li>
 				Grab your test secret key from <strong>Developers → API keys</strong>. Paste into
-				<a href="/admin/settings/integrations">/admin/settings/integrations</a>.
+				<a href={resolve('/admin/settings/integrations')}>/admin/settings/integrations</a>.
 			</li>
 		</Steps>
 	</section>
@@ -36,7 +37,7 @@
 	<section>
 		<h2>Verify with `stripe listen`</h2>
 		<CodeBlock title="terminal" lang="sh">
-			{`stripe listen --forward-to http://localhost:5173/api/stripe/webhook`}
+			stripe listen --forward-to http://localhost:5173/api/stripe/webhook
 		</CodeBlock>
 		<p>Expected output:</p>
 		<CodeBlock lang="text">
@@ -55,13 +56,13 @@
 	<section>
 		<h2>Send a test event</h2>
 		<CodeBlock title="separate terminal" lang="sh">
-			{`stripe trigger checkout.session.completed`}
+			stripe trigger checkout.session.completed
 		</CodeBlock>
 		<p>
 			You should see a <code>checkout.session.completed</code> line in the
 			<code>stripe listen</code>
-			tab, and a matching row at <a href="/admin/payments">/admin/payments</a> with a green "verified"
-			indicator.
+			tab, and a matching row at <a href={resolve('/admin/payments')}>/admin/payments</a> with a green
+			"verified" indicator.
 		</p>
 	</section>
 
@@ -88,6 +89,6 @@ stripe payment_methods create --type card --card.token tok_visa`}
 			</li>
 		</ul>
 		<h3>Next up</h3>
-		<p><a href="/course/modules/5/products-and-prices">5.3 · Products + prices →</a></p>
+		<p><a href={resolve('/course/modules/5/products-and-prices')}>5.3 · Products + prices →</a></p>
 	</section>
 </CoursePage>

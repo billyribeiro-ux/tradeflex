@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { resolve } from '$app/paths';
 	import type { PageData } from './$types';
 	let { data }: { data: PageData } = $props();
 
@@ -15,14 +16,14 @@
 <svelte:head><title>{data.course.title} — Trade Flex</title></svelte:head>
 
 <header class="hd">
-	<a class="back" href="/learn">← All courses</a>
+	<a class="back" href={resolve('/learn')}>← All courses</a>
 	<h1>{data.course.title}</h1>
 	<p class="tagline">{data.course.tagline}</p>
 	{#if !data.hasAccess}
 		<div class="gate">
 			<strong>Preview mode.</strong>
 			Curriculum is visible; lessons unlock with a Trade Flex membership or an individual purchase.
-			<a href="/pricing">See plans</a>
+			<a href={resolve('/pricing')}>See plans</a>
 		</div>
 	{/if}
 </header>
@@ -36,10 +37,10 @@
 <section class="lessons">
 	<h2>Lessons ({data.lessons.length})</h2>
 	<ol>
-		{#each data.lessons as l}
+		{#each data.lessons as l (l.id)}
 			<li>
 				{#if data.hasAccess}
-					<a href="/learn/{data.course.slug}/{l.slug}">
+					<a href={resolve(`/learn/${data.course.slug}/${l.slug}`)}>
 						<span class="num">{l.position + 1}</span>
 						<span class="title">{l.title}</span>
 						{#if l.durationSeconds > 0}

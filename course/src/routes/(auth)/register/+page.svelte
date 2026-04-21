@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { enhance } from '$app/forms';
+	import { resolve } from '$app/paths';
 	import type { ActionData } from './$types';
 
 	let { form }: { form: ActionData } = $props();
@@ -49,7 +50,7 @@
 </form>
 
 <p class="foot">
-	Already have an account? <a href="/login">Sign in →</a>
+	Already have an account? <a href={resolve('/login')}>Sign in →</a>
 </p>
 
 <style>

@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { resolve } from '$app/paths';
 	import CoursePage from '$lib/components/course/CoursePage.svelte';
 	import Aside from '$lib/components/course/Aside.svelte';
 	import CodeBlock from '$lib/components/course/CodeBlock.svelte';
@@ -130,6 +131,6 @@ export const actions = {
 		</ul>
 
 		<h3>Next up</h3>
-		<p><a href="/course/modules/3/route-guards">3.3 · Route guards + account →</a></p>
+		<p><a href={resolve('/course/modules/3/route-guards')}>3.3 · Route guards + account →</a></p>
 	</section>
 </CoursePage>

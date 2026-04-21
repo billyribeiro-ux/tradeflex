@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { resolve } from '$app/paths';
 	import CoursePage from '$lib/components/course/CoursePage.svelte';
 	import Aside from '$lib/components/course/Aside.svelte';
 	import CodeBlock from '$lib/components/course/CodeBlock.svelte';
@@ -167,7 +168,7 @@ DATABASE_URL_DIRECT="postgresql://…neon.tech/neondb?sslmode=require"`}</CodeBl
 
 		<h3>Next up</h3>
 		<p>
-			<a href="/course/modules/1/better-auth-schema">1.4 · Better Auth schema →</a>
+			<a href={resolve('/course/modules/1/better-auth-schema')}>1.4 · Better Auth schema →</a>
 		</p>
 	</section>
 </CoursePage>

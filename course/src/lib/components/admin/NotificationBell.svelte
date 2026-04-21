@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { onMount, onDestroy } from 'svelte';
+	import { resolve } from '$app/paths';
 	import { notifications } from '$lib/notifications/store.svelte';
 
 	let open = $state(false);
@@ -64,7 +65,7 @@
 					{#each notifications.list as n (n.id)}
 						<li>
 							{#if n.href}
-								<a href={n.href} onclick={() => (open = false)}>
+								<a href={resolve(n.href)} onclick={() => (open = false)}>
 									<div class="title">{n.title}</div>
 									<div class="body">{n.body}</div>
 									<time>{formatWhen(n.at)}</time>

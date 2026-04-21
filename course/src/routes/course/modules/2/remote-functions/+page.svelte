@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { resolve } from '$app/paths';
 	import CoursePage from '$lib/components/course/CoursePage.svelte';
 	import Aside from '$lib/components/course/Aside.svelte';
 	import CodeBlock from '$lib/components/course/CodeBlock.svelte';
@@ -222,7 +223,7 @@ export const deleteAvatar = command(
 
 		<h3>Next up</h3>
 		<p>
-			<a href="/course/modules/3/overview">3.1 · User auth overview →</a>
+			<a href={resolve('/course/modules/3/overview')}>3.1 · User auth overview →</a>
 			&nbsp;<em>(lands in the next build turn)</em>
 		</p>
 	</section>

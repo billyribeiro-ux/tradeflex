@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { resolve } from '$app/paths';
 	import CoursePage from '$lib/components/course/CoursePage.svelte';
 	import Aside from '$lib/components/course/Aside.svelte';
 	import FileTree from '$lib/components/course/FileTree.svelte';
@@ -127,7 +128,7 @@
 
 		<h3>Next up</h3>
 		<p>
-			<a href="/course/modules/1/repo-and-tooling">1.2 · Repo + tooling →</a>
+			<a href={resolve('/course/modules/1/repo-and-tooling')}>1.2 · Repo + tooling →</a>
 		</p>
 	</section>
 </CoursePage>

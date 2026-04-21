@@ -35,11 +35,11 @@
 	</p>
 </header>
 
-{#each groups as [groupName, rows]}
+{#each groups as [groupName, rows] (groupName)}
 	<section class="group">
 		<h2>{groupName}</h2>
 		<div class="rows">
-			{#each rows as row}
+			{#each rows as row (row.key)}
 				<div class="row">
 					<div class="meta">
 						<div class="key">

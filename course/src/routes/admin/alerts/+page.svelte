@@ -109,7 +109,7 @@
 		<div>Published</div>
 		<div>Actions</div>
 	</div>
-	{#each data.alerts as a}
+	{#each data.alerts as a (a.id)}
 		<div class="row">
 			<div class="sym">{a.symbol}</div>
 			<div>{a.kind}</div>

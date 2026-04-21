@@ -1,12 +1,13 @@
 <script lang="ts">
 	import Logo from '$lib/components/brand/Logo.svelte';
+	import { resolve } from '$app/paths';
 
 	let { children } = $props();
 </script>
 
 <div class="auth-shell">
 	<aside class="panel">
-		<a class="brand" href="/"><Logo variant="lockup" /></a>
+		<a class="brand" href={resolve('/')}><Logo variant="lockup" /></a>
 		<h1>Trade smarter. Learn faster.</h1>
 		<p>
 			Trade Flex is the alerts + education platform engineered for serious traders. Members get
@@ -25,8 +26,8 @@
 			{@render children()}
 		</div>
 		<p class="legal">
-			By continuing you agree to the <a href="/legal/terms">Terms</a> and
-			<a href="/legal/privacy">Privacy Policy</a>.
+			By continuing you agree to the <a href={resolve('/legal/terms')}>Terms</a> and
+			<a href={resolve('/legal/privacy')}>Privacy Policy</a>.
 		</p>
 	</main>
 </div>

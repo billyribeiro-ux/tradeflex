@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { resolve } from '$app/paths';
 	import CoursePage from '$lib/components/course/CoursePage.svelte';
 	import CodeBlock from '$lib/components/course/CodeBlock.svelte';
 	import Aside from '$lib/components/course/Aside.svelte';
@@ -65,9 +66,9 @@ stripe prices create \\
 # product.name="Trade Flex Membership".`}
 		</CodeBlock>
 		<p>
-			Reload <a href="/pricing">/pricing</a>. If your Stripe key is in
-			<a href="/admin/settings/integrations">Integrations</a>, the CTAs become real checkout buttons
-			pointing at <code>/api/billing/checkout</code> with the live price id.
+			Reload <a href={resolve('/pricing')}>/pricing</a>. If your Stripe key is in
+			<a href={resolve('/admin/settings/integrations')}>Integrations</a>, the CTAs become real
+			checkout buttons pointing at <code>/api/billing/checkout</code> with the live price id.
 		</p>
 	</section>
 
@@ -101,6 +102,6 @@ stripe prices create \\
 			<li>Test mode has no quota: create and delete as many products as you need.</li>
 		</ul>
 		<h3>Next up</h3>
-		<p><a href="/course/modules/6/overview">6.1 · Stripe + SvelteKit →</a></p>
+		<p><a href={resolve('/course/modules/6/overview')}>6.1 · Stripe + SvelteKit →</a></p>
 	</section>
 </CoursePage>

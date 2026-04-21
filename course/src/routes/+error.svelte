@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { page } from '$app/state';
+	import { resolve } from '$app/paths';
 
 	const status = $derived(page.status);
 	const message = $derived(page.error?.message ?? 'Something went wrong.');
@@ -22,10 +23,10 @@
 	</p>
 
 	<nav class="links">
-		<a href="/">Home</a>
-		<a href="/pricing">Pricing</a>
-		<a href="/course">Course</a>
-		<a href="/contact">Contact</a>
+		<a href={resolve('/')}>Home</a>
+		<a href={resolve('/pricing')}>Pricing</a>
+		<a href={resolve('/course')}>Course</a>
+		<a href={resolve('/contact')}>Contact</a>
 	</nav>
 </main>
 

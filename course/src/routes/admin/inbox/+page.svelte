@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { enhance } from '$app/forms';
 	import { page } from '$app/state';
+	import { resolve } from '$app/paths';
 	import type { PageData, ActionData } from './$types';
 
 	let { data, form }: { data: PageData; form: ActionData } = $props();
@@ -39,7 +40,7 @@
 		<span class="chip ok">Resend ready · from <code>{data.fromAddress ?? 'default'}</code></span>
 	{:else}
 		<span class="chip warn">
-			Resend not configured — <a href="/admin/settings/integrations">add key</a>
+			Resend not configured — <a href={resolve('/admin/settings/integrations')}>add key</a>
 		</span>
 	{/if}
 </header>
@@ -61,7 +62,7 @@
 				{#each data.threads as t (t.threadKey)}
 					{@const active = data.openKey === t.threadKey}
 					<li class:active>
-						<a href="?thread={encodeURIComponent(t.threadKey)}">
+						<a href={resolve(`/admin/inbox?thread=${encodeURIComponent(t.threadKey)}`)}>
 							<div class="to">{t.toAddress}</div>
 							<div class="subject">{t.subject}</div>
 							<div class="meta">
@@ -84,7 +85,7 @@
 				<header class="thread-head">
 					<h2>{data.openThread[0].subject}</h2>
 					<p class="muted">to {data.openThread[0].toAddress}</p>
-					<a class="close" href={page.url.pathname}>Close</a>
+					<a class="close" href={resolve(page.url.pathname)}>Close</a>
 				</header>
 				<ul class="messages">
 					{#each data.openThread as m (m.id)}

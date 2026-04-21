@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { goto, invalidateAll } from '$app/navigation';
+	import { resolve } from '$app/paths';
 	import { page } from '$app/state';
 	import { loadStripe, type Stripe, type StripeElements } from '@stripe/stripe-js';
 	import type { PageData } from './$types';
@@ -152,7 +153,7 @@
 			errorMsg = stripeError.message ?? 'Payment failed.';
 		} else {
 			// Stripe will redirect on success via return_url.
-			await goto('/checkout/success');
+			await goto(resolve('/checkout/success'));
 		}
 	}
 </script>
@@ -163,7 +164,7 @@
 	<main class="main">
 		<h1>Checkout</h1>
 		<ol class="steps" aria-label="Checkout steps">
-			{#each stepLabels as s}
+			{#each stepLabels as s (s.id)}
 				<li
 					class:active={step === s.id}
 					class:done={stepLabels.findIndex((x) => x.id === step) > s.n - 1}
@@ -186,7 +187,8 @@
 				</label>
 				{#if !data.signedIn}
 					<p class="muted">
-						Already have an account? <a href="/login?next=/checkout">Sign in</a> first.
+						Already have an account?
+						<a href={resolve('/login?next=/checkout')}>Sign in</a> first.
 					</p>
 				{/if}
 				<div class="row">
@@ -238,7 +240,9 @@
 			<section class="panel">
 				<h2>Payment</h2>
 				{#if data.summary.empty}
-					<p class="muted">Your cart is empty. <a href="/pricing">Browse plans</a>.</p>
+					<p class="muted">
+						Your cart is empty. <a href={resolve('/pricing')}>Browse plans</a>.
+					</p>
 				{:else if status === 'loading_intent'}
 					<p class="muted">Preparing secure payment form…</p>
 				{:else if status === 'error'}
@@ -270,10 +274,10 @@
 	<aside class="cart" aria-label="Order summary">
 		<h2>Order</h2>
 		{#if data.summary.empty}
-			<p class="muted">No items yet. <a href="/pricing">Pick a plan</a>.</p>
+			<p class="muted">No items yet. <a href={resolve('/pricing')}>Pick a plan</a>.</p>
 		{:else}
 			<ul class="lines">
-				{#each data.summary.items as line}
+				{#each data.summary.items as line (line.priceId ?? line.productName)}
 					<li>
 						<div class="meta">
 							<div class="name">{line.productName}</div>

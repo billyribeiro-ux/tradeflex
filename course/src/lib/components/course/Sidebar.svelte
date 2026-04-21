@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { page } from '$app/state';
+	import { resolve } from '$app/paths';
 	import { courseModules } from '$lib/course/manifest';
 
 	const currentHref = $derived(page.url.pathname);
@@ -20,7 +21,7 @@
 						{#each m.pages as p (p.href)}
 							<li>
 								<a
-									href={p.href}
+									href={resolve(p.href)}
 									class:active={p.href === currentHref}
 									aria-current={p.href === currentHref ? 'page' : undefined}
 								>

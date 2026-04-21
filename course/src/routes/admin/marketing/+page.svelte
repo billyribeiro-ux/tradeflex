@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { enhance } from '$app/forms';
+	import { resolve } from '$app/paths';
 	import type { PageData } from './$types';
 
 	let { data }: { data: PageData } = $props();
@@ -53,8 +54,10 @@
 </div>
 
 <nav class="pager">
-	{#if data.page > 1}<a href="?page={data.page - 1}">← prev</a>{/if}
-	{#if data.contacts.length === data.pageSize}<a href="?page={data.page + 1}">next →</a>{/if}
+	{#if data.page > 1}<a href={resolve(`/admin/marketing?page=${data.page - 1}`)}>← prev</a>{/if}
+	{#if data.contacts.length === data.pageSize}
+		<a href={resolve(`/admin/marketing?page=${data.page + 1}`)}>next →</a>
+	{/if}
 </nav>
 
 <style>

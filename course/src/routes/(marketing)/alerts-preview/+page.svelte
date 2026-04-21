@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { resolve } from '$app/paths';
+
 	const samples = [
 		{
 			symbol: 'AAPL',
@@ -79,7 +81,7 @@
 
 <section class="cta">
 	<h2>See the next one live</h2>
-	<a href="/register" class="btn">Start membership — $49/mo →</a>
+	<a href={resolve('/register')} class="btn">Start membership — $49/mo →</a>
 </section>
 
 <style>

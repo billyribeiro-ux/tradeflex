@@ -1,5 +1,6 @@
 <script lang="ts">
 	import type { Snippet } from 'svelte';
+	import { resolve } from '$app/paths';
 
 	interface Props {
 		href: string;
@@ -11,18 +12,16 @@
 	let { href, variant = 'primary', external = false, children }: Props = $props();
 </script>
 
-<a
-	class="btn"
-	data-variant={variant}
-	{href}
-	target={external ? '_blank' : undefined}
-	rel={external ? 'noopener noreferrer' : undefined}
->
-	{@render children()}
-	{#if external}
+{#if external}
+	<a class="btn" data-variant={variant} {href} target="_blank" rel="external noopener noreferrer">
+		{@render children()}
 		<span class="ext" aria-hidden="true">↗</span>
-	{/if}
-</a>
+	</a>
+{:else}
+	<a class="btn" data-variant={variant} href={resolve(href)}>
+		{@render children()}
+	</a>
+{/if}
 
 <style>
 	.btn {

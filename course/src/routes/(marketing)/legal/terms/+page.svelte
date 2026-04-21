@@ -1,3 +1,7 @@
+<script lang="ts">
+	import { resolve } from '$app/paths';
+</script>
+
 <svelte:head><title>Terms — Trade Flex</title></svelte:head>
 
 <section class="wrap">
@@ -26,7 +30,7 @@
 	<h2>Risk disclaimer</h2>
 	<p>
 		Trading involves substantial risk of loss. Past performance does not guarantee future results.
-		See the <a href="/legal/disclaimer">full risk disclaimer</a>.
+		See the <a href={resolve('/legal/disclaimer')}>full risk disclaimer</a>.
 	</p>
 </section>
 

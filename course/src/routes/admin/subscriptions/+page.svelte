@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { enhance } from '$app/forms';
+	import { resolve } from '$app/paths';
 	import type { ActionData, PageData } from './$types';
 
 	let { data, form }: { data: PageData; form: ActionData } = $props();
@@ -30,14 +31,14 @@
 {#if !data.stripeConfigured}
 	<div class="callout">
 		<strong>Stripe not configured.</strong> Add <code>STRIPE_SECRET_KEY</code> under
-		<a href="/admin/settings">Settings</a>. Webhooks will still ingest events, but the Portal +
-		Checkout links need the key.
+		<a href={resolve('/admin/settings')}>Settings</a>. Webhooks will still ingest events, but the
+		Portal + Checkout links need the key.
 	</div>
 {/if}
 
 {#if data.summary.length}
 	<section class="summary">
-		{#each data.summary as s}
+		{#each data.summary as s (s.status)}
 			<div class="stat">
 				<span class="label">{s.status}</span>
 				<strong>{s.count}</strong>
@@ -69,7 +70,7 @@
 				</tr>
 			</thead>
 			<tbody>
-				{#each data.rows as row}
+				{#each data.rows as row (row.stripeSubscriptionId)}
 					<tr>
 						<td>
 							<span class="email">{row.userEmail ?? row.userId}</span>

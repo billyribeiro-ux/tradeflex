@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { resolve } from '$app/paths';
 	import type { PageData } from './$types';
 	let { data }: { data: PageData } = $props();
 </script>
@@ -15,12 +16,12 @@
 
 <div class="note">
 	Values below are read from the settings service. Wire the form actions from
-	<a href="/admin/settings/integrations">Integrations</a> as a reference — same pattern, just plain-text
-	writes. Editing UI lands alongside the feature-flag admin in Module 13.
+	<a href={resolve('/admin/settings/integrations')}>Integrations</a> as a reference — same pattern, just
+	plain-text writes. Editing UI lands alongside the feature-flag admin in Module 13.
 </div>
 
 <dl class="vals">
-	{#each data.values as v}
+	{#each data.values as v (v.key)}
 		<div class="row">
 			<dt>
 				<span class="label">{v.label}</span>

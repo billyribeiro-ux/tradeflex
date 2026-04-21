@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { page } from '$app/state';
+	import { resolve } from '$app/paths';
 	import { findAdjacent } from '$lib/course/manifest';
 
 	const adj = $derived(findAdjacent(page.url.pathname));
@@ -7,7 +8,7 @@
 
 <nav class="prevnext" aria-label="Course pagination">
 	{#if adj.prev}
-		<a class="cell prev" href={adj.prev.href}>
+		<a class="cell prev" href={resolve(adj.prev.href)}>
 			<span class="dir">← Previous</span>
 			<span class="title">{adj.prev.title}</span>
 		</a>
@@ -15,7 +16,7 @@
 		<span></span>
 	{/if}
 	{#if adj.next}
-		<a class="cell next" href={adj.next.href}>
+		<a class="cell next" href={resolve(adj.next.href)}>
 			<span class="dir">Next →</span>
 			<span class="title">{adj.next.title}</span>
 		</a>

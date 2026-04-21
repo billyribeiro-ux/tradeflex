@@ -1,5 +1,6 @@
 <script lang="ts">
 	import type { Snippet } from 'svelte';
+	import { resolve } from '$app/paths';
 
 	interface Props {
 		title?: string;
@@ -12,7 +13,7 @@
 </script>
 
 {#if href}
-	<a class="card" {href}>
+	<a class="card" href={resolve(href)}>
 		<div class="head">
 			{#if icon}<span class="icon" aria-hidden="true">{icon}</span>{/if}
 			{#if title}<h4>{title}</h4>{/if}

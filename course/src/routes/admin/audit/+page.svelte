@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { resolve } from '$app/paths';
 	import type { PageData } from './$types';
 
 	let { data }: { data: PageData } = $props();
@@ -13,7 +14,7 @@
 		if (data.filters.actor) parts.push(`actor=${encodeURIComponent(data.filters.actor)}`);
 		if (data.filters.target) parts.push(`target=${encodeURIComponent(data.filters.target)}`);
 		parts.push(`page=${n}`);
-		return `?${parts.join('&')}`;
+		return resolve(`/admin/audit?${parts.join('&')}`);
 	}
 </script>
 
@@ -39,7 +40,7 @@
 	</label>
 	<button type="submit" class="btn-primary">Filter</button>
 	{#if data.filters.action || data.filters.actor || data.filters.target}
-		<a class="clear" href="?">Clear</a>
+		<a class="clear" href={resolve('/admin/audit')}>Clear</a>
 	{/if}
 </form>
 
@@ -70,8 +71,10 @@
 </div>
 
 <nav class="pager">
-	{#if data.page > 1}<a href={pageHref(data.page - 1)}>← prev</a>{/if}
-	{#if data.events.length === data.pageSize}<a href={pageHref(data.page + 1)}>next →</a>{/if}
+	{#if data.page > 1}<a href={pageHref(data.page - 1)} rel="external">← prev</a>{/if}
+	{#if data.events.length === data.pageSize}
+		<a href={pageHref(data.page + 1)} rel="external">next →</a>
+	{/if}
 </nav>
 
 <style>

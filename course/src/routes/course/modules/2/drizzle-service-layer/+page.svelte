@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { resolve } from '$app/paths';
 	import CoursePage from '$lib/components/course/CoursePage.svelte';
 	import Aside from '$lib/components/course/Aside.svelte';
 	import CodeBlock from '$lib/components/course/CodeBlock.svelte';
@@ -214,7 +215,7 @@ export const load = async ({ locals }) => {
 
 		<h3>Next up</h3>
 		<p>
-			<a href="/course/modules/2/request-pipeline">2.4 · Request pipeline + load →</a>
+			<a href={resolve('/course/modules/2/request-pipeline')}>2.4 · Request pipeline + load →</a>
 		</p>
 	</section>
 </CoursePage>

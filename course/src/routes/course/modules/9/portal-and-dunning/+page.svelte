@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { resolve } from '$app/paths';
 	import CoursePage from '$lib/components/course/CoursePage.svelte';
 	import CodeBlock from '$lib/components/course/CodeBlock.svelte';
 	import Aside from '$lib/components/course/Aside.svelte';
@@ -111,13 +112,13 @@ stripe test_helpers test_clocks advance "$CLOCK" --frozen-time $(($(date +%s) + 
 		<ul>
 			<li>
 				<strong>First failure.</strong> Email: "We couldn't charge your card — we'll keep trying for
-				a week. <a href="/account">Update your card</a>." Banner on the dashboard with the same
-				message and a grace countdown.
+				a week. <a href={resolve('/account')}>Update your card</a>." Banner on the dashboard with
+				the same message and a grace countdown.
 			</li>
 			<li>
 				<strong>Final failure.</strong> Email: "Your subscription has been canceled because the card
-				on file failed. <a href="/pricing">Resubscribe any time</a>." Banner gone; alerts redirect
-				to pricing.
+				on file failed. <a href={resolve('/pricing')}>Resubscribe any time</a>." Banner gone; alerts
+				redirect to pricing.
 			</li>
 		</ul>
 		<p>
