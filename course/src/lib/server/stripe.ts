@@ -116,6 +116,30 @@ export interface StripeRefund {
 	status: string;
 }
 
+export interface StripeCustomer {
+	id: string;
+	email: string | null;
+}
+
+export interface StripePaymentIntent {
+	id: string;
+	status: string;
+	client_secret: string | null;
+	amount: number;
+	currency: string;
+	customer: string | null;
+}
+
+export interface StripeSubscription {
+	id: string;
+	status: string;
+	customer: string;
+	latest_invoice: null | {
+		id: string;
+		payment_intent: null | string | { id: string; client_secret: string | null; status: string };
+	};
+}
+
 export const stripe = {
 	async listActivePrices(): Promise<StripePrice[]> {
 		const res = await stripeCall<{ data: StripePrice[] }>('GET', '/prices', {
@@ -159,6 +183,63 @@ export const stripe = {
 			customer: params.customerId,
 			return_url: params.returnUrl
 		});
+	},
+
+	async createCustomer(
+		params: { email: string; name?: string; metadata?: Record<string, string> },
+		opts?: { idempotencyKey?: string }
+	): Promise<StripeCustomer> {
+		return stripeCall<StripeCustomer>(
+			'POST',
+			'/customers',
+			{ email: params.email, name: params.name, metadata: params.metadata },
+			opts
+		);
+	},
+
+	async createPaymentIntent(
+		params: {
+			amountCents: number;
+			currency: string;
+			customerId?: string;
+			receiptEmail?: string;
+			metadata?: Record<string, string>;
+			automaticPaymentMethods?: boolean;
+		},
+		opts: { idempotencyKey: string }
+	): Promise<StripePaymentIntent> {
+		const body: Record<string, unknown> = {
+			amount: params.amountCents,
+			currency: params.currency.toLowerCase(),
+			customer: params.customerId,
+			receipt_email: params.receiptEmail,
+			metadata: params.metadata
+		};
+		if (params.automaticPaymentMethods !== false) {
+			body.automatic_payment_methods = { enabled: 'true' };
+		}
+		return stripeCall<StripePaymentIntent>('POST', '/payment_intents', body, opts);
+	},
+
+	async createSubscription(
+		params: {
+			customerId: string;
+			priceIds: string[];
+			metadata?: Record<string, string>;
+			trialDays?: number;
+		},
+		opts: { idempotencyKey: string }
+	): Promise<StripeSubscription> {
+		const body: Record<string, unknown> = {
+			customer: params.customerId,
+			items: params.priceIds.map((p) => ({ price: p })),
+			payment_behavior: 'default_incomplete',
+			payment_settings: { save_default_payment_method: 'on_subscription' },
+			expand: ['latest_invoice.payment_intent'],
+			metadata: params.metadata,
+			trial_period_days: params.trialDays
+		};
+		return stripeCall<StripeSubscription>('POST', '/subscriptions', body, opts);
 	},
 
 	async createRefund(
