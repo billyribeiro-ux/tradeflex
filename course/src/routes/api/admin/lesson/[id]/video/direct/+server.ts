@@ -39,7 +39,7 @@ export const POST: RequestHandler = async ({ params, locals, request }) => {
 	try {
 		body = (await request.json()) as { title?: string };
 	} catch {
-		body = {};
+		// Empty body is fine — fall back to the lesson title below.
 	}
 	const title = (body.title && body.title.slice(0, 200)) || row.title;
 
