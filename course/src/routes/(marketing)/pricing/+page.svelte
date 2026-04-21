@@ -87,6 +87,7 @@
 						<input type="hidden" name="priceId" value={plan.cta.priceId} />
 						<button type="submit" class="btn-primary">{plan.cta.label}</button>
 					</form>
+					<a class="btn-alt" href="/checkout?add={plan.cta.priceId}"> Use custom checkout → </a>
 				{:else}
 					<a class="btn-primary" href={plan.cta.href}>{plan.cta.label}</a>
 				{/if}
@@ -255,6 +256,19 @@
 	}
 	.cta-form {
 		margin: 0;
+	}
+	.btn-alt {
+		display: inline-block;
+		text-align: center;
+		margin-top: var(--space-2);
+		padding: var(--space-2) var(--space-3);
+		color: var(--color-accent);
+		text-decoration: none;
+		font-size: var(--fs-sm);
+		font-weight: 500;
+	}
+	.btn-alt:hover {
+		text-decoration: underline;
 	}
 	.plan ul {
 		list-style: none;
